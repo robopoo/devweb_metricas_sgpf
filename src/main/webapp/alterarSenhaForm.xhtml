@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+	<ui:composition template="/templates/template-popup-lista.xhtml">
+	
+		<ui:define name="filtrocampos">
+    	 	<div id="conteudo">
+				<table border="0" width="100%">
+					<tr>
+						<td>
+							<h1 class="itemForm">#{messages['label.alteracao.senha']}</h1>
+						</td>
+					</tr>
+				</table>
+					
+				<table border="0">
+					<tr>
+						<td>
+							<h:outputLabel for="login" value="#{messages['label.login']} *" styleClass="labelForm" /> 
+					    	<h:inputText id="login" value="#{alterarSenhaBean.login}" label="#{messages['label.login']}" maxlength="10" size="20" styleClass="inputText" 
+					    	             required="true" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h:outputLabel for="senhaAtual" value="#{messages['label.senha.atual']} *" styleClass="labelForm" />							
+							<h:inputSecret id="senhaAtual" required="true" redisplay="true" value="#{alterarSenhaBean.senhaAntiga}"	label="#{messages['label.senha.atual']}" 
+										   maxlength="40" size="40" styleClass="inputText" />						
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h:outputLabel for="novaSenha" value="#{messages['label.nova.senha']} *" styleClass="labelForm" />							
+							<h:inputSecret id="novaSenha" required="true" redisplay="true" value="#{alterarSenhaBean.novaSenha}"	label="#{messages['label.nova.senha']}" 
+										   maxlength="40" size="40" styleClass="inputText" />						
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h:outputLabel for="repetirNovaSenha" value="#{messages['label.repetir.nova.senha']} *" styleClass="labelForm" />							
+							<h:inputSecret id="repetirNovaSenha" required="true" redisplay="true" value="#{alterarSenhaBean.repetirNovaSenha}"	label="#{messages['label.repetir.nova.senha']}" 
+										   maxlength="40" size="40" styleClass="inputText" />						
+						</td>
+					</tr>										
+				</table>			
+				
+				<table border="0" width="100%">
+					<tr>
+						<td align="center">
+							<a4j:commandButton id="salvar" value="#{messages['label.salvar']}" type="submit" 
+											   action="#{alterarSenhaBean.salvar()}" styleClass="inputBtn" 
+									   		   status="indicator" oncomplete="if(#{facesContext.maximumSeverity eq null}) closeLov();"/>										   		   		
+						</td>
+					</tr>
+				</table>				
+				
+    	 	</div>
+    	 </ui:define>
+		
+	</ui:composition>
+</html>

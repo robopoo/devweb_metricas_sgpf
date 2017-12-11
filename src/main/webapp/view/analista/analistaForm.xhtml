@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich" xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+
+<ui:composition template="/templates/template-form.xhtml">
+
+	<ui:define name="script">
+		<script type="text/javascript">
+			function aplicaMascara() {
+			}			
+		</script>
+		<a4j:outputPanel id="pnlJS" ajaxRendered="true">
+			<script type="text/javascript">
+				aplicaMascara();
+			</script>
+		</a4j:outputPanel>
+	</ui:define>
+
+
+	<ui:define name="breadcrumb">
+		<div id="breadcrumb">
+			<ul class="crumbs">
+				<li class="first"><a href="#" style="z-index: 3"> <span></span>#{messages['label.home']}
+				</a></li>
+				<li><a href="#" style="z-index: 2">#{messages['label.analista']}</a></li>
+				<li><a href="#" style="z-index: 1"> <h:outputText value="#{messages['label.visualizacao']}"
+							rendered="#{analistaBean.operacao == 'VISUALIZACAO'}" /> <h:outputText value="#{messages['label.inclusao']}"
+							rendered="#{analistaBean.operacao == 'INSERCAO'}" /> <h:outputText value="#{messages['label.alteracao']}"
+							rendered="#{analistaBean.operacao == 'ALTERACAO'}" />
+				</a></li>
+			</ul>
+		</div>
+	</ui:define>
+
+
+	<ui:define name="camposFormularioBase">
+		<a4j:outputPanel id="panelFormulario">
+			<div id="conteudo">
+				<h1 class="tituloForm">
+					<h:outputText value="#{messages['label.visualizar.analista']}"
+						rendered="#{analistaBean.operacao == 'VISUALIZACAO'}" />
+					<h:outputText value="#{messages['label.incluir.analista']}" rendered="#{analistaBean.operacao == 'INSERCAO'}" />
+					<h:outputText value="#{messages['label.alterar.analista']}" rendered="#{analistaBean.operacao == 'ALTERACAO'}" />
+				</h1>
+				<table border="0">
+
+					<tr>
+						<td colspan="2"><pdvix:label for="nome" value="#{messages['label.nome']}"
+								required="#{analistaBean.operacao == 'INSERCAO' or analistaBean.operacao == 'ALTERACAO'}" /> <h:inputText
+								id="nome" value="#{analistaTO.nomeAnalista}" label="#{messages['label.nome']}" size="100" styleClass="inputText"
+								maxlength="100" required="true"
+								disabled="#{analistaBean.operacao != 'INSERCAO' and analistaBean.operacao != 'ALTERACAO'}" /></td>
+					</tr>
+
+					<tr>
+
+						<td><pdvix:label required="true" for="empresasAtiva" value="#{messages['label.empresas']}" /> <h:selectOneMenu
+								id="empresasAtiva" value="#{analistaTO.empresaTO}" styleClass="selectOneMenu"
+								label="#{messages['label.empresa']}"
+								disabled="#{analistaBean.operacao != 'INSERCAO' and analistaBean.operacao != 'ALTERACAO'}" required="true">
+
+								<s:selectItems value="#{factoryEmpresasAtiva}" var="f" label="#{f.nmEmpresa}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEntity />
+
+								<a4j:support event="onchange" actionListener="#{analistaBean.actionAlterarEmpresa}"
+									reRender="tipoAnalista,panelTpAnalista" bypassUpdates="false" ajaxSingle="true" />
+
+
+
+							</h:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td colspan="2"><a4j:outputPanel id="panelTpAnalista">
+
+								<pdvix:label for="tipoAnalista" value="#{messages['label.tipo.analista']}"
+									required="#{analistaBean.operacao == 'INSERCAO' or analistaBean.operacao == 'ALTERACAO' }" />
+
+								<h:selectOneMenu id="tipoAnalista" value="#{analistaTO.tpAnalista}" styleClass="selectOneMenu"
+									label="#{messages['label.tipo.analista']}"
+									disabled="#{ (analistaBean.operacao != 'INSERCAO' and analistaBean.operacao != 'ALTERACAO') or !analistaBean.exibeTipoAnalista()}"
+									required="true">
+
+									<s:selectItems value="#{tipoAnalista}" var="t" label="#{t.descricao}" styleClass="rich-text-general"
+										noSelectionLabel="#{messages['label.selecione']}" />
+									<s:convertEnum />
+
+								</h:selectOneMenu>
+
+							</a4j:outputPanel></td>
+					</tr>
+
+
+					<tr>
+						<td colspan="2"><pdvix:label for="mail" value="E-mail"
+								required="#{(analistaBean.operacao == 'INSERCAO' or analistaBean.operacao == 'ALTERACAO') and analistaBean.emailRequerido() }" />
+
+							<h:inputText id="mail" value="#{analistaTO.dsMail}" label="E-mail" size="100" styleClass="inputText"
+								maxlength="100" required="false"
+								disabled="#{analistaBean.operacao != 'INSERCAO' and analistaBean.operacao != 'ALTERACAO'}">
+
+							</h:inputText></td>
+					</tr>
+
+				</table>
+
+				<table width="100%">
+					<tr>
+						<td align="center"><a4j:commandButton id="salvar" value="#{messages['label.salvar']}" type="submit"
+								action="#{analistaBean.gravar()}" styleClass="inputBtn" reRender="panelFormulario" status="indicator"
+								onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+								rendered="#{analistaBean.operacao == 'INSERCAO' or analistaBean.operacao == 'ALTERACAO'}" /> <a4j:commandButton
+								id="abandonar" value="#{messages['label.abandonar']}" type="submit" action="#{analistaBean.cancelar()}"
+								styleClass="inputBtn" reRender="panelFormulario" status="indicator"
+								onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;" immediate="true" /></td>
+					</tr>
+				</table>
+
+			</div>
+		</a4j:outputPanel>
+	</ui:define>
+
+</ui:composition>
+</html>

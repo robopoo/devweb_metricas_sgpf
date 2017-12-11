@@ -1,0 +1,28 @@
+/***************** Cabecalho ******************/
+
+#cabecalho {
+    width: 87%;
+    border: 1px solid #9A9A9A;
+    border-radius: 5px;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    box-shadow: 0 8px 9px rgba(0, 0, 0, 0.14), 0 0 0 0 rgba(0, 0, 0, 0.07);
+    background-color: #FFF294;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 30px;	
+}
+
+LABEL.labelCabecalho {
+	font-weight: bold;
+}
+
+SPAN.textCabecalho {
+	border: 1px red blue;
+}
+
+.tableCabecalho {
+}
+

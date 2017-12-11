@@ -1,0 +1,108 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+	<a4j:outputPanel id="pnlFormularioVisaoGeralSolucao">
+		<table border="0" width="100%">
+			<tr>
+				<td><a4j:commandLink id="incluir"
+						action="#{paramBean.funcaoDadosController.incluirContagemFuncaoDados()}"
+						type="submit"
+						rendered="#{paramBean.operacao == 'INSERCAO' or paramBean.operacao == 'ALTERACAO'}"
+						immediate="true" ajaxSingle="true">
+						<h:graphicImage value="/img/ico_plus.png"
+							styleClass="imgBtnImageText">
+						</h:graphicImage>
+						<h:outputText value="#{messages['label.funcao.dados.incluir']}" />
+					</a4j:commandLink></td>
+			</tr>
+		</table>
+		<!-- <a4j:outputPanel id="panelFuncaoDados"> -->
+		<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3"
+			cellspacing="1" border="0" width="100%" id="listagemFuncaoDados"
+			rows="10" var="registro" value="#{funcaoDadosProjetoTODataModel}">
+			<f:facet name="header">
+				<rich:columnGroup>
+					<rich:column style="text-align:center;" width="5%"
+						rendered="#{contagemProjetoBean.modoOperacao != 'LOV' and contagemProjetoBean.operacao != 'VISUALIZACAO'}" />
+					<rich:column style="text-align:left;">
+						<h:outputText value="#{messages['label.funcao.dados']}" />
+					</rich:column>
+					<rich:column style="text-align:left;">
+						<h:outputText value="#{messages['label.tipo']}" />
+					</rich:column>
+					<rich:column style="text-align:left;">
+						<h:outputText value="#{messages['label.elemento.contagem']}" />
+					</rich:column>
+					<rich:column style="text-align:left;">
+						<h:outputText value="#{messages['label.funcao.quantidade.tds']}" />
+					</rich:column>
+					<rich:column style="text-align:left;">
+						<h:outputText value="#{messages['label.funcao.quantidade.trs']}" />
+					</rich:column>
+					<rich:column style="text-align:left;">
+						<h:outputText value="#{messages['label.complexidade']}" />
+					</rich:column>
+					<rich:column style="text-align:left;">
+						<h:outputText value="#{messages['label.pf']}" />
+					</rich:column>
+					<rich:column style="text-align:left;">
+						<h:outputText value="#{messages['label.pf.local']}" />
+					</rich:column>
+					<rich:column style="text-align:left;">
+						<h:outputText value="#{messages['label.tr.descricao']}" />
+					</rich:column>
+				</rich:columnGroup>
+			</f:facet>
+			<rich:columnGroup>
+				<rich:column style="text-align:center;"
+					rendered="#{contagemProjetoBean.modoOperacao != 'LOV' and contagemProjetoBean.operacao != 'VISUALIZACAO'}">
+					<a4j:commandLink title="#{messages['label.alterar']}"
+						reRender="listagemFuncaoDados"
+						action="#{contagemProjetoBean.funcaoDadosController.editarFuncaoDado()}">
+						<h:graphicImage value="/img/ico_edit.png" styleClass="acoes" />
+					</a4j:commandLink>
+					<a4j:commandLink title="#{messages['label.excluir']}"
+						actionListener="#{contagemProjetoBean.funcaoDadosController.excluirFuncaoDado()}"
+						reRender="listagemFuncaoDados, #{paramIdElemTotais}"
+						onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+						<h:graphicImage value="/img/ico_del.png" styleClass="acoes" />
+					</a4j:commandLink>
+				</rich:column>
+				<rich:column style="text-align:left;">
+					<h:outputText value="#{registro.nome}" size="80" />
+				</rich:column>
+				<rich:column style="text-align:left;">
+					<h:outputText value="#{registro.tipoFuncaoDadosProjeto}" />
+				</rich:column>
+				<rich:column style="text-align:left;">
+					<h:outputText value="#{registro.codElementoContagem}" />
+				</rich:column>
+				<rich:column style="text-align:right;">
+					<h:outputText value="#{registro.qtTipoDados}" />
+				</rich:column>
+				<rich:column style="text-align:right;">
+					<h:outputText value="#{registro.qtTipoRegistro}" />
+				</rich:column>
+				<rich:column style="text-align:left;">
+					<h:outputText value="#{registro.complexidadeTP}" />
+				</rich:column>
+				<rich:column style="text-align:right;">
+					<h:outputText value="#{registro.valorPontoFuncao}" />
+				</rich:column>
+				<rich:column style="text-align:right;">
+					<h:outputText value="#{registro.valorPontoFuncaoLocal}" />
+				</rich:column>
+				<rich:column style="text-align:left;">
+					<h:outputText value="#{registro.descricaoTRs}"
+						style="word-wrap: break-word;" />
+				</rich:column>
+			</rich:columnGroup>
+		</rich:dataTable>
+		<!-- </a4j:outputPanel> -->
+	</a4j:outputPanel>
+</ui:composition>

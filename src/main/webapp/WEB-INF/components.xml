@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://jboss.com/products/seam/components"
+	xmlns:core="http://jboss.com/products/seam/core" xmlns:transaction="http://jboss.com/products/seam/transaction"
+	xmlns:persistence="http://jboss.com/products/seam/persistence"
+	xmlns:drools="http://jboss.com/products/seam/drools" xmlns:document="http://jboss.com/products/seam/document"
+	xmlns:bpm="http://jboss.com/products/seam/bpm" xmlns:security="http://jboss.com/products/seam/security"
+	xmlns:mail="http://jboss.com/products/seam/mail" xmlns:web="http://jboss.com/products/seam/web"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:international="http://jboss.com/products/seam/international"
+	xsi:schemaLocation="http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.2.xsd
+                 http://jboss.com/products/seam/transaction http://jboss.com/products/seam/transaction-2.2.xsd
+                 http://jboss.com/products/seam/persistence http://jboss.com/products/seam/persistence-2.2.xsd
+                 http://jboss.com/products/seam/drools http://jboss.com/products/seam/drools-2.2.xsd
+                 http://jboss.com/products/seam/document http://jboss.com/products/seam/document-2.2.xsd
+                 http://jboss.com/products/seam/bpm http://jboss.com/products/seam/bpm-2.2.xsd
+                 http://jboss.com/products/seam/security http://jboss.com/products/seam/security-2.2.xsd
+                 http://jboss.com/products/seam/mail http://jboss.com/products/seam/mail-2.2.xsd
+                 http://jboss.com/products/seam/web http://jboss.com/products/seam/web-2.2.xsd
+                 http://jboss.com/products/seam/components http://jboss.com/products/seam/components-2.2.xsd
+                 http://jboss.com/products/seam/international http://jboss.com/products/seam/international-2.2.xsd">
+
+	<core:init debug="false" security-enabled="true"
+		jndi-pattern="#{ejbName}/local" />
+
+	<core:manager concurrent-request-timeout="120000"
+		conversation-timeout="180000" conversation-id-parameter="cid"
+		parent-conversation-id-parameter="pid" default-flush-mode="MANUAL" />
+
+	<core:resource-loader>
+		<core:bundle-names>
+			<value>messages</value>
+		</core:bundle-names>
+	</core:resource-loader>
+	
+	<security:identity jaas-config-name="PDLDAP" 
+				remember-me="true" />	
+	
+	<document:document-store use-extensions="true" />
+
+	<!-- Make sure this URL pattern is the same as that used by the Faces Servlet -->
+	<web:hot-deploy-filter url-pattern="*.seam" />
+
+	<web:character-encoding-filter encoding="UTF-8"
+		override-client="true" url-pattern="*.seam" />
+
+	<web:multipart-filter create-temp-files="true"
+		max-request-size="1000000000" url-pattern="*.seam" />
+
+	<web:session invalidate-on-scheme-change="true" />
+
+	<web:exception-filter url-pattern="*.seam" />
+
+	<web:redirect-filter url-pattern="*.seam" />
+
+	<web:rewrite-filter view-mapping="*.seam" />
+
+	<persistence:managed-persistence-context
+		name="entityManager" auto-create="true"
+		persistence-unit-jndi-name="java:/pdmetricaEntityManagerFactory" />
+
+	<mail:mail-session host="localhost" port="25" />
+
+	<international:locale-config
+		default-locale="pt" supported-locales="pt en" />
+	<international:locale-selector
+		cookie-enabled="true" />
+
+	<factory name="hibernateSession" scope="stateless" auto-create="true"
+		value="#{entityManager.delegate}" />
+
+	<factory name="contextPath" scope="stateless" auto-create="true"
+		value="#{facesContext.externalContext.requestContextPath}" />
+
+</components>

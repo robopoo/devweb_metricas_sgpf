@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportFPA" language="groovy" pageWidth="878" pageHeight="623" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="838" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="282"/>
+	<style name="Titulo_Pagina" isDefault="false" mode="Opaque" fontName="Arial" fontSize="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="Label_Campo" isDefault="true" hAlign="Left" vAlign="Middle" fontName="Arial" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="Campo" isDefault="true" hAlign="Left" vAlign="Middle" fontName="Arial" fontSize="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="table" isDefault="false">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" isDefault="false" mode="Opaque" backcolor="#FFFF00">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" isDefault="false" mode="Opaque" backcolor="#FFFFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" isDefault="false" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style isDefault="false" style="table_TD" backcolor="#FFFFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 1" isDefault="false">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" isDefault="false" mode="Opaque" backcolor="#FFFF00">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" isDefault="false" mode="Opaque" backcolor="#FFFFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" isDefault="false" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style isDefault="false" style="table 1_TD" backcolor="#FFFFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 2" isDefault="false">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" isDefault="false" mode="Opaque" backcolor="#FFFF00">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" isDefault="false" mode="Opaque" backcolor="#FFFFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" isDefault="false" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style isDefault="false" style="table 2_TD" backcolor="#FFFFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\java\\workspace\\metrica\\src\\main\\webapp\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CABECALHO" class="br.com.sgpf.metrica.bean.CabecalhoRelatorio"/>
+	<parameter name="IMG_LOGO" class="java.lang.String"/>
+	<parameter name="DATA_EMISSAO" class="java.lang.String"/>
+	<parameter name="USUARIO_EMISSAO" class="java.lang.String"/>
+	<parameter name="DS_FUNCAO_DADOS" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="DS_FUNCAO_TRANSACAO" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="DS_SNM" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="FL_PROJETO" class="java.lang.Boolean"/>
+	<parameter name="TEMPLATE_DIR" class="java.lang.String"/>
+	<parameter name="FL_DETALHADO" class="java.lang.Boolean"/>
+	<variable name="cpage" class="java.lang.Integer" resetType="Page">
+		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
+	</variable>
+	<title>
+		<band height="200" splitType="Stretch">
+			<subreport>
+				<reportElement x="3" y="0" width="835" height="37"/>
+				<subreportParameter name="IMG_LOGO">
+					<subreportParameterExpression><![CDATA[$P{IMG_LOGO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{TEMPLATE_DIR} + "\\titulo_paisagem.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement style="Label_Campo" x="3" y="94" width="158" height="20"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fornecedor:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Label_Campo" x="3" y="134" width="158" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{FL_PROJETO}]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Projeto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Label_Campo" x="3" y="154" width="158" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{FL_PROJETO}]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Subprojeto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Label_Campo" x="3" y="114" width="158" height="20"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Sistema:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Label_Campo" x="3" y="174" width="158" height="20">
+					<printWhenExpression><![CDATA[$P{FL_PROJETO}]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Responsável - Analista Fornecedor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Campo" x="161" y="94" width="100" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CABECALHO}.getFornecedor()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Campo" x="161" y="134" width="100" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{FL_PROJETO}]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CABECALHO}.getProjeto()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Campo" x="161" y="154" width="100" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{FL_PROJETO}]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CABECALHO}.getSubProjeto()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Campo" x="161" y="114" width="100" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CABECALHO}.getSistema()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Campo" x="161" y="174" width="100" height="20">
+					<printWhenExpression><![CDATA[$P{FL_PROJETO}]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CABECALHO}.getAnalistaFornecedor()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Label_Campo" x="367" y="94" width="175" height="20"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[PF Total:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Label_Campo" x="367" y="114" width="175" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{FL_PROJETO}]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[PF Serviços Não Mensuráveis:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Label_Campo" x="367" y="134" width="175" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{FL_PROJETO}]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[PF Funções Mensuráveis:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Label_Campo" x="367" y="154" width="175" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{FL_PROJETO}]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Data Criação:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Campo" x="542" y="94" width="100" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{CABECALHO}.getPfTotal()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Campo" x="542" y="114" width="100" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{FL_PROJETO}]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{CABECALHO}.getPfServicosNaoMensuraveis()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Campo" x="542" y="134" width="100" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{FL_PROJETO}]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{CABECALHO}.getPfFuncoesMensuraveis()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Campo" x="542" y="154" width="100" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{FL_PROJETO}]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{CABECALHO}.getDtCriacao()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Titulo_Pagina" x="0" y="58" width="835" height="20" backcolor="#CCCC00"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{FL_PROJETO} ? "FPA - Projeto " + $P{CABECALHO}.getProjeto() : "FPA - Baseline " + $P{CABECALHO}.getSistema()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="60" splitType="Stretch">
+			<subreport>
+				<reportElement x="3" y="0" width="835" height="37" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="IMG_LOGO">
+					<subreportParameterExpression><![CDATA[$P{IMG_LOGO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{TEMPLATE_DIR} + "\\titulo_paisagem.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="100" splitType="Stretch">
+			<printWhenExpression><![CDATA[$P{FL_PROJETO} && $P{DS_FUNCAO_DADOS}.getRecordCount() > 0]]></printWhenExpression>
+			<subreport>
+				<reportElement x="0" y="0" width="838" height="100"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<subreportParameter name="FL_DETALHADO">
+					<subreportParameterExpression><![CDATA[$P{FL_DETALHADO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="DS_FUNCAO_DADOS">
+					<subreportParameterExpression><![CDATA[$P{DS_FUNCAO_DADOS}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[$P{DS_FUNCAO_DADOS}]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "\\pro\\reportFuncaoDados.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="10">
+			<printWhenExpression><![CDATA[$P{FL_PROJETO}]]></printWhenExpression>
+		</band>
+		<band height="100">
+			<printWhenExpression><![CDATA[$P{FL_PROJETO} && $P{DS_FUNCAO_TRANSACAO}.getRecordCount() > 0]]></printWhenExpression>
+			<subreport>
+				<reportElement x="0" y="0" width="838" height="100"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<subreportParameter name="FL_DETALHADO">
+					<subreportParameterExpression><![CDATA[$P{FL_DETALHADO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="DS_FUNCAO_TRANSACAO">
+					<subreportParameterExpression><![CDATA[$P{DS_FUNCAO_TRANSACAO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[$P{DS_FUNCAO_TRANSACAO}]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "\\pro\\reportFuncaoTransacao.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="10">
+			<printWhenExpression><![CDATA[$P{FL_PROJETO}]]></printWhenExpression>
+		</band>
+		<band height="100">
+			<printWhenExpression><![CDATA[$P{FL_PROJETO} && $P{DS_SNM}.getRecordCount() > 0]]></printWhenExpression>
+			<subreport>
+				<reportElement x="0" y="0" width="838" height="100"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<subreportParameter name="DS_SNM">
+					<subreportParameterExpression><![CDATA[$P{DS_SNM}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[$P{DS_SNM}]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "\\pro\\reportSNM.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="100">
+			<printWhenExpression><![CDATA[!$P{FL_PROJETO} && $P{DS_FUNCAO_DADOS}.getRecordCount() > 0]]></printWhenExpression>
+			<subreport>
+				<reportElement x="0" y="0" width="838" height="100"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<subreportParameter name="FL_DETALHADO">
+					<subreportParameterExpression><![CDATA[$P{FL_DETALHADO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="DS_FUNCAO_DADOS">
+					<subreportParameterExpression><![CDATA[$P{DS_FUNCAO_DADOS}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[$P{DS_FUNCAO_DADOS}]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "\\bse\\reportFuncaoDados.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="10">
+			<printWhenExpression><![CDATA[!$P{FL_PROJETO}]]></printWhenExpression>
+		</band>
+		<band height="100">
+			<printWhenExpression><![CDATA[!$P{FL_PROJETO} && $P{DS_FUNCAO_TRANSACAO}.getRecordCount() > 0]]></printWhenExpression>
+			<subreport>
+				<reportElement x="0" y="0" width="838" height="100"/>
+				<subreportParameter name="SUBREPORT_DIR"/>
+				<subreportParameter name="FL_DETALHADO">
+					<subreportParameterExpression><![CDATA[$P{FL_DETALHADO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="DS_FUNCAO_TRANSACAO">
+					<subreportParameterExpression><![CDATA[$P{DS_FUNCAO_TRANSACAO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[$P{DS_FUNCAO_TRANSACAO}]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "\\bse\\reportFuncaoTransacao.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="10" width="712" height="15"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Top" lineSpacing="Single">
+					<font size="8" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Emitido em " + $P{DATA_EMISSAO} + ", por " + $P{USUARIO_EMISSAO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="722" y="10" width="70" height="15"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="792" y="10" width="20" height="15"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<noData>
+		<band height="24">
+			<staticText>
+				<reportElement x="0" y="0" width="243" height="20" forecolor="#FF0000"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nenhuma função encontrada!]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

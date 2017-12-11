@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+<ui:composition
+	template="#{fatorEquivalenciaBean.modoOperacao == 'LOV' ? '/templates/template-popup-lista.xhtml' : '/templates/template-lista.xhtml'}">
+
+
+
+	<ui:define name="breadcrumb">
+		<div id="breadcrumb">
+			<ul class="crumbs">
+				<li class="first"><a href="#" style="z-index: 3"><span></span>#{messages['label.home']}</a></li>
+				<li><a href="#" style="z-index: 2">#{messages['label.fatores.equivalencia']}</a></li>
+				<li><a href="#" style="z-index: 1">#{messages['label.consultar']}</a></li>
+			</ul>
+		</div>
+	</ui:define>
+
+	<ui:define name="filtrocampos">
+		<div id="conteudo">
+			<h1 class="tituloForm">#{messages['label.consultar.fator.equivalencia']}</h1>
+			<h1 class="itemForm">
+				<h:outputLabel value="#{messages['label.filtro']}" />
+			</h1>
+			<a4j:outputPanel id="panelFiltro">
+				<table>
+					<tr>
+						<td><h:outputLabel for="empresas"
+								value="#{messages['label.empresa']}" styleClass="labelForm" />
+							<h:selectOneMenu id="empresas"
+								value="#{fatorEquivalenciaBean.filtroEmpresa}"
+								valueChangeListener="#{fatorEquivalenciaBean.valueChangedEmpresa}"
+								styleClass="selectOneMenu" label="#{messages['label.empresa']}">
+
+								<a4j:support event="onchange" reRender="contratos"
+									bypassUpdates="false" ajaxSingle="true" />
+
+
+								<s:selectItems value="#{factoryEmpresas}" var="f"
+									label="#{f.nmEmpresa}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+
+								<s:convertEntity />
+
+							</h:selectOneMenu></td>
+
+					</tr>
+
+					<tr>
+						<td><h:outputLabel for="contratos"
+								value="#{messages['label.contrato']}" styleClass="labelForm" />
+							<h:selectOneMenu id="contratos"
+								value="#{fatorEquivalenciaBean.filtroContrato}"
+								valueChangeListener="#{fatorEquivalenciaBean.valueChangedContrato}"
+								styleClass="selectOneMenu" label="#{messages['label.contrato']}">
+
+								<a4j:support event="onchange" reRender="contratos"
+									bypassUpdates="false" ajaxSingle="true" />
+
+								<s:selectItems
+									value="#{fatorEquivalenciaBean.contratosTOlistFiltro}" var="c"
+									label="#{c.codigoContrato}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+
+								<s:convertEntity />
+
+							</h:selectOneMenu></td>
+
+					</tr>
+
+				</table>
+
+				<table width="100%">
+					<tr>
+						<td align="center"><a4j:commandButton id="pesquisar"
+								value="#{messages['label.pesquisar']}" type="submit"
+								actionListener="#{fatorEquivalenciaBean.buscar()}"
+								styleClass="inputBtn" reRender="panelFiltro, pnlResultado" /> <a4j:commandButton
+								id="incluir" value="#{messages['label.incluir']}" type="submit"
+								action="#{fatorEquivalenciaBean.novo()}" styleClass="inputBtn" />
+							<a4j:commandButton id="limpar"
+								value="#{messages['label.limpar']}" type="submit"
+								action="#{fatorEquivalenciaBean.limparPesquisa()}"
+								reRender="pnlResultado, panelFiltro" styleClass="inputBtn" /></td>
+					</tr>
+				</table>
+			</a4j:outputPanel>
+		</div>
+	</ui:define>
+
+
+	<ui:define name="resultadotabela">
+		<a4j:outputPanel id="pnlResultado">
+			<a4j:outputPanel id="renderResultado"
+				rendered="#{fatorEquivalenciaBean.consultaRealizada}">
+				<div id="conteudo">
+					<h1 class="itemForm">#{messages['label.resultado.consulta']}</h1>
+					<h:outputText value="#{messages['msg.nenhum.registro.encontrado']}"
+						rendered="#{fatorEquivalenciaDataModel.rowCount == 0}" />
+					<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3"
+						cellspacing="1" border="0" width="100%" id="listagem" rows="10"
+						var="registro" value="#{fatorEquivalenciaDataModel}"
+						rendered="#{fatorEquivalenciaDataModel.rowCount > 0}">
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column style="text-align:center;" width="10%">
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.empresa']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.contrato']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.descricao']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.versao.Planilha']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.data.inicial']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.data.final']}" />
+								</rich:column>
+
+							</rich:columnGroup>
+						</f:facet>
+
+						<rich:columnGroup>
+							<rich:column style="text-align:center;">
+								<a4j:commandLink title="#{messages['label.visualizar']}"
+									action="#{fatorEquivalenciaBean.visualizar()}">
+									<h:graphicImage value="/img/ico_view.png" styleClass="acoes" />
+								</a4j:commandLink>
+								<a4j:commandLink title="#{messages['label.alterar']}"
+									rendered="#{registro.dtVigenciaFim == null and  registro.getContratoTO().getStContrato()=='ATIVADO' }"
+									action="#{fatorEquivalenciaBean.editar()}">
+									<h:graphicImage value="/img/ico_edit.png" styleClass="acoes" />
+								</a4j:commandLink>
+
+								<a4j:commandLink title="#{messages['label.publicar']}"
+									actionListener="#{fatorEquivalenciaBean.publicar()}"
+									reRender="pnlResultado"
+									rendered="#{registro.dtVigenciaInicio == null}"
+									onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+									<h:graphicImage value="/img/ico_publicar.png"
+										styleClass="acoes" />
+								</a4j:commandLink>
+
+								<a4j:commandLink title="#{messages['label.excluir']}"
+									actionListener="#{fatorEquivalenciaBean.excluir()}"
+									reRender="pnlResultado"
+									rendered="#{not fatorEquivalenciaBean.existeContagem(registro.contratoTO)}"
+									onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+									<h:graphicImage value="/img/ico_del.png" styleClass="acoes" />
+								</a4j:commandLink>
+
+
+
+							</rich:column>
+
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.contratoTO.empresaTO.nmEmpresa}" />
+							</rich:column>
+
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.contratoTO.codigoContrato}" />
+							</rich:column>
+
+
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.contratoTO.descricaoContrato}" />
+							</rich:column>
+
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.versaoFatorEquivalencia}">
+									<f:converter converterId="decimalConverter" />
+								</h:outputText>
+							</rich:column>
+
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.dtVigenciaInicio}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+								</h:outputText>
+							</rich:column>
+
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.dtVigenciaFim}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+								</h:outputText>
+							</rich:column>
+
+						</rich:columnGroup>
+					</rich:dataTable>
+
+					<ui:include src="/templates/paginacao.xhtml">
+						<ui:param name="lista" value="#{fatorEquivalenciaDataModel}" />
+					</ui:include>
+				</div>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+	</ui:define>
+
+
+</ui:composition>
+</html>

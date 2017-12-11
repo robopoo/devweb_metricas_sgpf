@@ -1,0 +1,224 @@
+/***************** Componentes, botoes, labels, titulos ******************/
+
+input.inputText {
+  border: 1px solid #CCCCCC;
+  height: 16px;
+  padding-right: 4px;
+  padding-right: 4px;
+  padding-left: 4px;
+  padding-left: 4px;
+  /* IE7-8 doesn't have border-radius, so don't indent the padding */
+
+  margin-bottom: 0;
+  margin-right: 20px;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+}
+
+input.inputTextArea{
+    font-family: "Tahoma", "Arial", "Arabic Transparent";
+}
+
+.fileUpload {
+  border: 1px solid #CCCCCC;
+  height: 22px;
+  padding-right: 4px;
+  padding-right: 4px;
+  padding-left: 4px;
+  padding-left: 4px;
+  /* IE7-8 doesn't have border-radius, so don't indent the padding */
+
+  margin-bottom: 0;
+  margin-right: 20px;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;	
+}
+
+
+input.inputRichCalendar {
+  border: 1px solid #CCCCCC;
+  height: 20px;
+  padding-right: 4px;
+  padding-right: 4px;
+  padding-left: 4px;
+  padding-left: 4px;
+  /* IE7-8 doesn't have border-radius, so don't indent the padding */
+
+  margin-bottom: 0;  
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+}
+
+.labelForm{
+	margin-bottom: 5px;
+	margin-top: 8px;
+	display: block;		
+}
+
+LABEL.labelcabecalho{
+	font-weight: bold;	
+}
+
+.labelBoldForm{
+	margin-bottom: 5px;
+	margin-top: 8px;
+	display: block;		
+}
+
+H1.tituloForm {
+	color: #BA763C;
+	font-size: 18px;
+	margin-top: 20px;
+	font-weight: bold;
+}
+
+H1.itemForm {
+	color: #BA763C;
+	font-size: 13px;
+	border-bottom: 1px solid #CDCDCD;
+	width: 95%;
+	padding-bottom: 5px;
+	margin-top: 20px;
+}
+
+H2.itemForm {
+	color: #BA763C;
+	font-size: 13px;
+	width: 95%;
+	padding-bottom: 2px;
+	margin-top: 10px;
+}
+
+H3.itemForm {
+	color: #BA763C;
+	font-size: 11px;
+	text-align: left;
+	margin-top: 5px;
+}
+
+INPUT.inputBtn {
+	-moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #F5F5F5;
+    background: -webkit-gradient(linear, center top, center bottom, from(#FFFFFF), to(#E6E6E6));
+    background-image: -moz-linear-gradient(center top , #FFFFFF, #E6E6E6);
+    background-repeat: repeat-x;
+    border-radius: 4px 4px 4px 4px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #CFCFCF;
+    
+    color: #333333;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    line-height: 20px;
+    *height: 30px;
+    margin-top: 30px;
+    margin-bottom: 0;
+    margin-right: 10px;
+    padding: 4px 12px;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    vertical-align: middle;
+
+}
+
+INPUT.inputBtn:focus, INPUT.inputBtn:hover {
+  	background: -webkit-gradient(linear, center top, center bottom, from(#FFFFFF), to(#ACACAC));
+	background-image: -moz-linear-gradient(center top , #FFFFFF, #ACACAC);
+	background-color: #ACACAC;
+}
+
+
+SELECT.selectOneMenu {
+  border: 1px solid #CCCCCC;
+  height: 22px;
+  padding-left: 4px;
+  padding-right: 0px;
+  /* IE7-8 doesn't have border-radius, so don't indent the padding */
+  margin-bottom: 0;
+  margin-right: 20px;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;	
+}
+
+/********************************************************************/
+
+TABLE.tableList {
+	margin-top: 30px;
+	border-radius: 6px 6px 6px 6px;
+}
+
+TABLE.tableList, 
+TABLE.tableList TD, 
+TABLE.tableList TH {
+	border-collapse: collapse;
+	border: 1px solid #CDCDCD;
+	color: #444444;
+}
+
+TABLE.tableList TH {
+	background-color: #E3E3E3;
+}
+
+TABLE.tableList TD {
+	height: 25px;
+	padding: 5px;
+}
+
+TABLE.tableList TR.alt {
+	background-color: #EEEEEE;
+}
+
+.acoes {
+	margin-left: 3px;
+	border: 0;
+}
+
+.imgLov {
+	margin-top: -5px; 
+	vertical-align: middle; 
+	border: 0;	
+}
+
+.inputBtnImageText{
+	display:block;
+	width:200px;
+	height:24px;
+	border:0px solid #000;
+	background-color:#fff;
+}
+
+.inputBtnImageTextDisabled{
+	display:block;
+	width:200px;
+	height:24px;
+	border:0px solid #000;
+	background-color:#ededed;
+	color: gray;
+	text-decoration: none;
+	cursor: default !important;
+}
+
+.imgBtnImageText{
+	vertical-align:middle;
+	margin-right:5px;
+}
+
+.inputFrente{
+	z-index: 1;
+	position:absolute;	
+	display: block;	
+}
+
+.inputEscondido{
+	display: none;	
+}

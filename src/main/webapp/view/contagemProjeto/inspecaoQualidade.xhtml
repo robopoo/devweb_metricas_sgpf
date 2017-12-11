@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+<f:view contentType="text/html" locale="pt_BR">
+
+	<ui:composition template="/templates/template-principal.xhtml">
+		<ui:define name="script">
+			<script type="text/javascript">			
+
+				function esconderComentario(inputClicado)
+				{
+					var elementos = inputClicado.id.split(':');
+					var gridId = elementos[0] + ':' + elementos[1] + ':' + elementos[2] + ':' + 'pgComentReij';
+					document.getElementById(gridId).className = 'inputEscondido';						
+				}
+				function exibirComentario(inputClicado)
+				{				
+					var elementos = inputClicado.id.split(':');
+					var gridId = elementos[0] + ':' + elementos[1] + ':' + elementos[2] + ':' + 'pgComentReij';																	
+					document.getElementById(gridId).className = 'inputFrente';						
+				}
+				function aprovarDesaprovar(inputClicado)
+				{	
+					var elementos = inputClicado.id.split(':');
+					var editarComent = elementos[0] + ':' + elementos[1] + ':' + elementos[2] + ':' + 'editarComent';
+					var obrigatorio = elementos[0] + ':' + elementos[1] + ':' + elementos[2] + ':' + 'obrigatorio';
+
+					if(inputClicado.checked){
+						document.getElementById(editarComent).style.display = 'none';	
+						document.getElementById(obrigatorio).style.display = 'none';											
+					}else{
+						document.getElementById(editarComent).style.display = '';
+						document.getElementById(obrigatorio).style.display = '';						
+					}			
+				}
+
+				jQuery( document ).ready(
+						jQuery("[id$='sbcAprovarDesaprovar']").each(function() {
+							aprovarDesaprovar( jQuery( this ).get(0) );
+						})
+				);
+
+			</script>
+		</ui:define>
+
+		<ui:define name="breadcrumb">
+			<div id="breadcrumb">
+				<ul class="crumbs">
+					<li class="first"><a href="#" style="z-index: 3"> <span></span>#{messages['label.home']}
+					</a></li>
+					<li><a href="#" style="z-index: 2">#{messages['label.consultar.fpa']}</a></li>
+					<li><a href="#" style="z-index: 1"> <h:outputText
+								value="#{messages['label.visualizacao']}" />
+					</a></li>
+				</ul>
+			</div>
+		</ui:define>
+		<ui:define name="conteudo">
+
+			<a4j:outputPanel id="pnlResultado">
+				<a4j:outputPanel id="renderResultado">
+					<div id="conteudo">
+						<h1 class="tituloForm">#{messages['inspecao.qualidade']}</h1>
+						<h1 class="itemForm">
+							<h:outputLabel value="#{messages['label.resumo.contagem']}" />
+						</h1>
+
+						<table width="50%">
+							<tr>
+								<td><h:outputLabel class="labelcabecalho"
+										value="#{messages['label.fornecedor']}:" /> <h:outputLabel
+										value="#{inspecaoQualidadeBean.projetoFiltro.fornecedor}" /></td>
+								<td><h:outputLabel class="labelcabecalho"
+										value="#{messages['label.pf.funcoes.mensuraveis']}:" /> <h:outputLabel
+										value=" #{inspecaoQualidadeBean.qtPFMensuraveis}" /></td>
+							</tr>
+
+							<tr>
+								<td><h:outputLabel class="labelcabecalho"
+										value="#{messages['label.projeto']}:" /> <h:outputLabel
+										value="#{inspecaoQualidadeBean.projetoFiltro.projeto}" /></td>
+								<td><h:outputLabel class="labelcabecalho"
+										value="#{messages['label.pf.servicos.nao.mensuraveis']}:" />
+									<h:outputLabel
+										value="#{inspecaoQualidadeBean.qtPFServicosNaoMensuraveis}" /></td>
+							</tr>
+
+							<tr>
+								<td><h:outputLabel class="labelcabecalho"
+										value="#{messages['label.subprojeto']}:" /> <h:outputLabel
+										value="#{inspecaoQualidadeBean.projetoFiltro.subProjeto}" /></td>
+								<td><h:outputLabel class="labelcabecalho"
+										value="#{messages['label.pf.total']}:" /> <h:outputLabel
+										value="#{inspecaoQualidadeBean.qtPFTotal}" /></td>
+							</tr>
+
+							<tr>
+
+								<td><h:outputLabel class="labelcabecalho"
+										value="#{messages['label.sistemas']}:" /> <h:outputLabel
+										value="#{inspecaoQualidadeBean.projetoFiltro.sistemaTO.dsSistema}" /></td>
+								<td><h:outputLabel class="labelcabecalho"
+										value="#{messages['label.data.criacao']}:" /> <h:outputLabel
+										value="#{inspecaoQualidadeBean.projetoFiltro.dtCriacao}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputLabel></td>
+							</tr>
+
+							<tr>
+
+								<td colspan="2"><h:outputLabel class="labelcabecalho"
+										value="#{messages['label.responsavel.analista.fornecedor']}:" />
+									<h:outputLabel
+										value="#{inspecaoQualidadeBean.projetoFiltro.responsavelPDCaseTO.nomeAnalista}" /></td>
+
+							</tr>
+
+
+						</table>
+
+						<h1 class="itemForm">
+							<h:outputLabel value="#{messages['label.funcoes.mensuraveis']}" />
+						</h1>
+
+						<h2 class="itemForm">
+							<h:outputLabel value="#{messages['label.funcao.dados']}" />
+						</h2>
+
+						<h:outputText
+							value="#{messages['msg.nenhum.registro.encontrado']}"
+							rendered="#{projetoFiltro.funcaoDadosProjetoTOList.size() == null or projetoFiltro.funcaoDadosProjetoTOList.size() == 0}" />
+						<rich:dataTable
+							rowClasses="row-odd, row-odd,row-odd, row-odd, row-odd, row-odd, row-even, row-even, row-even, row-even, row-even, row-even"
+							cellpadding="3" cellspacing="1" border="0" width="100%"
+							id="listagem" var="registroFD"
+							value="#{projetoFiltro.funcaoDadosProjetoTOList}"
+							rendered="#{projetoFiltro.funcaoDadosProjetoTOList.size() != null and projetoFiltro.funcaoDadosProjetoTOList.size() > 0}">
+							<f:facet name="header">
+								<rich:columnGroup>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.aprovacao']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.funcao.dados']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.tipo']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.elemento.contagem']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.quantidade.tr']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.quantidade.td']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.complexidade']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.pf']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.pf.local']}" />
+									</rich:column>
+
+								</rich:columnGroup>
+							</f:facet>
+
+							<rich:columnGroup>
+
+
+
+								<rich:column style="text-align:left; width:5%">
+									<h:panelGrid columns="3">
+										<h:selectBooleanCheckbox id='sbcAprovarDesaprovar'
+											value="#{registroFD.aprovado}"
+											readonly="#{not s:hasRole('Q.A')}"
+											disabled="#{not s:hasRole('Q.A')}"
+											onclick='aprovarDesaprovar(this);' />
+										<h:graphicImage value="/img/ico_edit.png" styleClass="acoes"
+											id="editarComent" title="#{messages['label.visualizar']}"
+											onclick="exibirComentario(this);" />
+										<h:outputLabel id="obrigatorio" value="*" style="color: Red" />
+									</h:panelGrid>
+									<h:panelGrid id="pgComentReij" styleClass="inputEscondido">
+										<h:graphicImage value="/img/comentar.jpg" styleClass="acoes"
+											style='margin-left: 408px; margin-bottom: -5px' id="okComent"
+											title="#{messages['label.minimizar']}"
+											onclick="esconderComentario(this);" />
+										<h:inputTextarea id="comentarioReij"
+											readonly="#{not s:hasRole('Q.A')}"
+											disabled="#{not s:hasRole('Q.A')}"
+											value="#{registroFD.comentarioRejeicao}" cols="50" rows="5">
+											<f:validateLength maximum="250"></f:validateLength>
+										</h:inputTextarea>
+									</h:panelGrid>
+
+
+								</rich:column>
+
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{registroFD.nome}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFD.funcaoDadosTP}" />
+								</rich:column>
+								<rich:column style="text-align:left; width:12%">
+									<h:outputText
+										value="#{registroFD.elementoContagemTO.codElementoContagem}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFD.qtTipoRegistro}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFD.qtTipoDados}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFD.complexidadeTP}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFD.valorPontoFuncao}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFD.valorPontoFuncaoLocal}" />
+								</rich:column>
+
+							</rich:columnGroup>
+							<rich:columnGroup>
+								<rich:column style="text-align:left; width:5%;">
+								</rich:column>
+								<rich:column style="text-align:left;" colspan="8">
+									<h:outputText
+										value="#{messages['label.descricao.funcao.projeto']} " />
+									<h:outputText value="#{registroFD.descricao}" />
+								</rich:column>
+							</rich:columnGroup>
+							<rich:columnGroup>
+								<rich:column style="text-align:left; width:5%;">
+								</rich:column>
+								<rich:column style="text-align:left;" colspan="8">
+									<h:outputText
+										value="#{messages['label.descricao.funcao.baseline']} " />
+									<h:outputText
+										value="#{registroFD.funcaoDadosBaselineTO.descricao}" />
+								</rich:column>
+							</rich:columnGroup>
+							<rich:columnGroup>
+								<rich:column style="text-align:left; width:5%;">
+								</rich:column>
+								<rich:column style="text-align:left;" colspan="8">
+									<h:outputText
+										value="#{messages['label.descricao.manutencao']} " />
+									<h:outputText value="#{registroFD.descricaoManutencao}" />
+								</rich:column>
+							</rich:columnGroup>
+							<rich:columnGroup>
+								<rich:column style="text-align:left; width:5%;">
+								</rich:column>
+								<rich:column style="text-align:left;" colspan="8">
+									<h:outputText value="#{messages['label.tipo.registro']}: " />
+									<ui:include src="/templates/template-inspecao.xhtml">
+										<ui:param name="inspecao" value="#{inspecaoQualidadeBean.TRs}" />
+									</ui:include>
+								</rich:column>
+							</rich:columnGroup>
+							<rich:columnGroup>
+								<rich:column style="text-align:left; width:5%;">
+								</rich:column>
+								<rich:column style="text-align:left;" colspan="8">
+									<h:outputText value="#{messages['label.tipo.dados']} " />
+									<ui:include src="/templates/template-inspecao.xhtml">
+										<ui:param name="inspecao"
+											value="#{inspecaoQualidadeBean.TDsFD}" />
+									</ui:include>
+								</rich:column>
+							</rich:columnGroup>
+						</rich:dataTable>
+
+						<h2 class="itemForm">
+							<h:outputLabel value="#{messages['label.funcao.transacao']}" />
+						</h2>
+
+						<h:outputText
+							value="#{messages['msg.nenhum.registro.encontrado']}"
+							rendered="#{projetoFiltro.funcaoTransacaoProjetoTOList.size() == null or projetoFiltro.funcaoTransacaoProjetoTOList.size() == 0}" />
+
+						<rich:dataTable
+							rowClasses="row-odd, row-odd, row-odd, row-odd, row-odd, row-odd, row-even, row-even, row-even, row-even, row-even, row-even"
+							cellpadding="3" cellspacing="1" border="0" width="100%"
+							id="listagemFT" var="registroFT"
+							value="#{projetoFiltro.funcaoTransacaoProjetoTOList}"
+							rendered="#{projetoFiltro.funcaoTransacaoProjetoTOList.size() != null and projetoFiltro.funcaoTransacaoProjetoTOList.size() > 0}">
+							<f:facet name="header">
+								<rich:columnGroup>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.aprovacao']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.funcao.transacao']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.tipo']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.elemento.contagem']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.quantidade.tr']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.quantidade.td']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.complexidade']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.pf']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.pf.local']}" />
+									</rich:column>
+
+								</rich:columnGroup>
+							</f:facet>
+
+							<rich:columnGroup>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:panelGrid columns="3">
+										<h:selectBooleanCheckbox id='sbcAprovarDesaprovar'
+										readonly="#{not s:hasRole('Q.A')}"
+											disabled="#{not s:hasRole('Q.A')}"
+											value="#{registroFT.aprovado}"
+											onclick='aprovarDesaprovar(this);' />
+										<h:graphicImage value="/img/ico_edit.png" styleClass="acoes"
+											id="editarComent" title="#{messages['label.visualizar']}"
+											onclick="exibirComentario(this);" />
+										<h:outputLabel id="obrigatorio" value="*" style="color: Red" />
+									</h:panelGrid>
+									<h:panelGrid id="pgComentReij" styleClass="inputEscondido">
+										<h:graphicImage value="/img/comentar.jpg" styleClass="acoes"
+											style='margin-left: 408px; margin-bottom: -5px' id="okComent"
+											title="#{messages['label.visualizar']}"
+											onclick="esconderComentario(this);" />
+										<h:inputTextarea id="comentarioReij"
+											readonly="#{not s:hasRole('Q.A')}"
+											disabled="#{not s:hasRole('Q.A')}"
+											value="#{registroFT.comentarioRejeicao}" cols="50" rows="5">
+											<f:validateLength maximum="250"></f:validateLength>
+										</h:inputTextarea>
+									</h:panelGrid>
+
+								</rich:column>
+
+
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{registroFT.nome}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFT.funcaoTransacaoTP}" />
+								</rich:column>
+								<rich:column style="text-align:left; width:12%">
+									<h:outputText
+										value="#{registroFT.elementoContagemTO.codElementoContagem}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFT.qtArquivoReferenciado}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFT.qtTipoDados}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFT.complexidadeTP}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFT.valorPontoFuncao}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFT.valorPontoFuncaoLocal}" />
+								</rich:column>
+
+							</rich:columnGroup>
+							<rich:columnGroup>
+								<rich:column style="text-align:left; width:5%;">
+								</rich:column>
+								<rich:column style="text-align:left;" colspan="8">
+									<h:outputText
+										value="#{messages['label.descricao.funcao.projeto']} " />
+									<h:outputText value="#{registroFT.descricao}" />
+								</rich:column>
+							</rich:columnGroup>
+							<rich:columnGroup>
+								<rich:column style="text-align:left; width:5%;">
+								</rich:column>
+								<rich:column style="text-align:left;" colspan="8">
+									<h:outputText
+										value="#{messages['label.descricao.funcao.baseline']} " />
+									<h:outputText
+										value="#{registroFT.funcaoTransacaoBaselineTO.descricao}" />
+								</rich:column>
+							</rich:columnGroup>
+							<rich:columnGroup>
+								<rich:column style="text-align:left; width:5%;">
+								</rich:column>
+								<rich:column style="text-align:left;" colspan="8">
+									<h:outputText
+										value="#{messages['label.descricao.manutencao']} " />
+									<h:outputText value="#{registroFT.descricaoManutencao}" />
+								</rich:column>
+							</rich:columnGroup>
+							<rich:columnGroup>
+								<rich:column style="text-align:left; width:5%;">
+								</rich:column>
+								<rich:column style="text-align:left;" colspan="8">
+									<h:outputText
+										value="#{messages['label.arquivo.referenciado']}: " />
+									<ui:include src="/templates/template-inspecao.xhtml">
+										<ui:param name="inspecao" value="#{inspecaoQualidadeBean.ARs}" />
+									</ui:include>
+								</rich:column>
+							</rich:columnGroup>
+							<rich:columnGroup>
+								<rich:column style="text-align:left; width:5%;">
+								</rich:column>
+								<rich:column style="text-align:left;" colspan="8">
+									<h:outputText value="#{messages['label.tipo.dados']} " />
+									<ui:include src="/templates/template-inspecao.xhtml">
+										<ui:param name="inspecao"
+											value="#{inspecaoQualidadeBean.TDsFT}" />
+									</ui:include>
+								</rich:column>
+							</rich:columnGroup>
+						</rich:dataTable>
+
+
+
+						<h1 class="itemForm">
+							<h:outputLabel
+								value="#{messages['label.servicos.nao.mensuraveis']}" />
+						</h1>
+						<h2 class="itemForm">
+							<h:outputLabel value="#{messages['label.funcao.transacao']}" />
+						</h2>
+
+
+						<h:outputText
+							value="#{messages['msg.nenhum.registro.encontrado']}"
+							rendered="#{projetoFiltro.servicoNaoMensuravelTOs.size() == null or projetoFiltro.servicoNaoMensuravelTOs.size() == 0}" />
+						<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3"
+							cellspacing="1" border="0" width="100%" id="listagemNM"
+							var="registro"
+							value="#{inspecaoQualidadeBean.projetoFiltro.servicoNaoMensuravelTOs}"
+							rendered="#{projetoFiltro.servicoNaoMensuravelTOs.size() != null and projetoFiltro.servicoNaoMensuravelTOs.size() > 0}">
+							<f:facet name="header">
+								<rich:columnGroup>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.aprovacao']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.funcao.transacao']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.elemento.contagem']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.pf.referencia']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.qt.itens']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.pf']}" />
+									</rich:column>
+
+								</rich:columnGroup>
+							</f:facet>
+
+							<rich:columnGroup>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:panelGrid columns="3">
+										<h:selectBooleanCheckbox id='sbcAprovarDesaprovar'
+										readonly="#{not s:hasRole('Q.A')}"
+											disabled="#{not s:hasRole('Q.A')}"
+											value="#{registro.aprovado}"
+											onclick='aprovarDesaprovar(this);' />
+										<h:graphicImage value="/img/ico_edit.png" styleClass="acoes"
+											id="editarComent" title="#{messages['label.visualizar']}"
+											onclick="exibirComentario(this);" />
+										<h:outputLabel id="obrigatorio" value="*" style="color: Red" />
+									</h:panelGrid>
+									<h:panelGrid id="pgComentReij" styleClass="inputEscondido">
+										<h:graphicImage value="/img/comentar.jpg" styleClass="acoes"
+											style='margin-left: 408px; margin-bottom: -5px' id="okComent"
+											title="#{messages['label.visualizar']}"
+											onclick="esconderComentario(this);" />
+										<h:inputTextarea id="comentarioReij"
+											readonly="#{not s:hasRole('Q.A')}"
+											disabled="#{not s:hasRole('Q.A')}"
+											value="#{registro.comentarioRejeicao}" cols="50" rows="5">
+											<f:validateLength maximum="250"></f:validateLength>
+										</h:inputTextarea>
+									</h:panelGrid>
+
+
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{registro.nome}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:12%">
+									<h:outputText
+										value="#{registro.elementoContagemTO.codElementoContagem}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:8%">
+									<h:outputText value="#{registro.qtPontoFuncaoReferencia}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:6%">
+									<h:outputText value="#{registro.qtItens}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registro.qtPontoFuncaoFinal}" />
+								</rich:column>
+
+							</rich:columnGroup>
+						</rich:dataTable>
+
+						<table width="100%">
+							<tr>
+								<td align="center"><a4j:commandButton id="salvar"
+										value="#{messages['label.salvar']}" type="submit"
+										action="#{inspecaoQualidadeBean.salvar()}"
+										styleClass="inputBtn" 
+										rendered="#{s:hasRole('Q.A')}"
+										process="listagem, listagemFT, listagemNM"
+										onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;" />
+
+									<a4j:commandButton id="limpar" immediate="true"
+										value="#{messages['label.abandonar']}" type="submit"
+										onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+										styleClass="inputBtn" action="list" /></td>
+							</tr>
+						</table>
+					</div>
+				</a4j:outputPanel>
+			</a4j:outputPanel>
+		</ui:define>
+	</ui:composition>
+</f:view>
+</html>

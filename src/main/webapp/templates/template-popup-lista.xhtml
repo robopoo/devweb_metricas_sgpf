@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+ 	xml:lang="pt" lang="pt"	
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+	
+<body>
+
+<f:view>
+  <ui:composition template="/templates/template-popup-principal.xhtml">
+
+	<ui:define name="conteudo">
+	
+        <!-- Inicio da Busca -->
+		<table width="100%" cellpadding="0" cellspacing="0" border="0">
+			<tr>
+				<td>
+                    <ui:insert name="filtrocampos"/>
+				</td>
+			</tr>
+			<tr>
+				<td><br /></td>
+			</tr>
+			<tr>
+				<td align="left" class="bgbotao" colspan="2">
+					<ui:insert name="filtrobotoes"/>
+				</td>
+			</tr>
+		</table>
+		<br />
+		<table width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td align="left">
+					<ui:insert name="resultadotabela" />
+				</td>
+			</tr>
+			<tr>
+				<td><br /></td>
+			</tr>			
+		</table>
+
+	</ui:define>
+
+  </ui:composition>
+
+</f:view>
+</body>
+</html>

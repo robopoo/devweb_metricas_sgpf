@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+<ui:composition
+	template="#{usuarioBean.modoOperacao == 'LOV' ? '/templates/template-popup-lista.xhtml' : '/templates/template-lista.xhtml'}">
+
+	<ui:define name="script">
+		<script type="text/javascript">
+			function aplicaMascara() {
+				mascaraFormulario('formulario', 'matricula', 'TEXTONUMERO');
+				mascaraFormulario('formulario', 'nome', 'TEXTONUMERO');
+			}			
+		</script>
+		<a4j:outputPanel id="pnlJS" ajaxRendered="true">
+			<script type="text/javascript">
+				aplicaMascara();
+			</script>
+		</a4j:outputPanel>
+	</ui:define>
+
+	<ui:define name="breadcrumb">
+		<div id="breadcrumb">
+			<ul class="crumbs">
+				<li class="first"><a href="#" style="z-index: 3"><span></span>#{messages['label.home']}</a></li>
+				<li><a href="#" style="z-index: 2">#{messages['label.usuarios']}</a></li>
+				<li><a href="#" style="z-index: 1">#{messages['label.consultar']}</a></li>
+			</ul>
+		</div>
+	</ui:define>
+
+	<ui:define name="filtrocampos">
+		<div id="conteudo">
+			<h1 class="tituloForm">#{messages['label.consultar.usuarios']}</h1>
+			<h1 class="itemForm">
+				<h:outputLabel value="#{messages['label.filtro']}" />
+			</h1>
+			<a4j:outputPanel id="panelFiltro">
+				<table>
+					<tr>
+						<td><h:outputLabel for="login"
+								value="#{messages['label.login']}" styleClass="labelForm" /> <h:inputText
+								id="login" value="#{usuarioFiltro.login}"
+								label="#{messages['label.login']}" size="20"
+								styleClass="inputText" /></td>
+						<td><h:outputLabel for="matricula"
+								value="#{messages['label.matricula']}" styleClass="labelForm" />
+							<h:inputText id="matricula" value="#{usuarioFiltro.matricula}"
+								label="#{messages['label.matricula']}" size="20"
+								styleClass="inputText" /></td>
+					</tr>
+					<tr>
+						<td colspan="2"><h:outputLabel for="nome"
+								value="#{messages['label.nome']}" styleClass="labelForm" /> <h:inputText
+								id="nome" value="#{usuarioFiltro.nome}"
+								label="#{messages['label.nome']}" size="65"
+								styleClass="inputText" /></td>
+
+					</tr>
+					<tr>
+						<td><h:outputLabel for="tipoPerfil"
+								value="#{messages['label.tipo.perfil']}" styleClass="labelForm" />
+							<h:selectOneMenu id="tipoPerfil"
+								value="#{usuarioFiltro.tipoPerfil}" styleClass="selectOneMenu"
+								label="#{messages['label.tipo.perfil']}">
+								<s:selectItems value="#{tipoPerfilEnum}" var="p"
+									label="#{p.descricao}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEnum />
+							</h:selectOneMenu></td>
+						<td><h:outputLabel for="status"
+								value="#{messages['label.status']}" styleClass="labelForm" /> <h:selectOneMenu
+								id="status" value="#{usuarioFiltro.status}"
+								styleClass="selectOneMenu" label="#{messages['label.status']}">
+								<s:selectItems value="#{statusEnum}" var="s"
+									label="#{s.descricao}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEnum />
+							</h:selectOneMenu></td>
+					</tr>
+				</table>
+
+				<table width="100%">
+					<tr>
+						<td align="center"><a4j:commandButton id="pesquisar"
+								value="#{messages['label.pesquisar']}" type="submit"
+								actionListener="#{usuarioBean.buscar()}" styleClass="inputBtn"
+								reRender="panelFiltro, pnlResultado" /> <a4j:commandButton
+								id="incluir" value="#{messages['label.incluir']}" type="submit"
+								action="#{usuarioBean.novo()}" styleClass="inputBtn" /> <a4j:commandButton
+								id="limpar" value="#{messages['label.limpar']}" type="submit"
+								action="#{usuarioBean.limparPesquisa()}"
+								reRender="pnlResultado, panelFiltro" styleClass="inputBtn" /></td>
+					</tr>
+				</table>
+				<h:commandButton id="btnObterImpressao" value="Click!"
+					action="#{usuarioBean.obterImpressao()}" style="display: none;" />
+			</a4j:outputPanel>
+		</div>
+	</ui:define>
+
+	<ui:define name="resultadotabela">
+		<a4j:outputPanel id="pnlResultado">
+			<a4j:outputPanel id="renderResultado"
+				rendered="#{usuarioBean.consultaRealizada}">
+				<div id="conteudo">
+					<h1 class="itemForm">#{messages['label.resultado.consulta']}</h1>
+					<h:outputText value="#{messages['msg.nenhum.registro.encontrado']}"
+						rendered="#{usuarioDataModel.rowCount == 0}" />
+					<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3"
+						cellspacing="1" border="0" width="100%" id="listagem" rows="10"
+						var="registro" value="#{usuarioDataModel}"
+						rendered="#{usuarioDataModel.rowCount > 0}">
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column style="text-align:center;" width="10%">
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.login']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.matricula']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.nome']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.tipo.perfil']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.status']}" />
+								</rich:column>
+							</rich:columnGroup>
+						</f:facet>
+
+						<rich:columnGroup>
+							<rich:column style="text-align:center;">
+								<a4j:commandLink title="#{messages['label.visualizar']}"
+									action="#{usuarioBean.visualizar()}">
+									<h:graphicImage value="/img/ico_view.png" styleClass="acoes" />
+								</a4j:commandLink>
+								<a4j:commandLink title="#{messages['label.alterar']}"
+									action="#{usuarioBean.editar()}"
+									rendered="#{registro.status eq 'ATIVADO'}">
+									<h:graphicImage value="/img/ico_edit.png" styleClass="acoes" />
+								</a4j:commandLink>
+								<a4j:commandLink title="#{messages['label.ativar']}"
+									action="#{usuarioBean.ativar()}"
+									rendered="#{registro.status eq 'DESATIVADO'}"
+									reRender="pnlResultado"
+									onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+									<h:graphicImage value="/img/ico_ativar.png" styleClass="acoes" />
+								</a4j:commandLink>
+								<a4j:commandLink title="#{messages['label.desativar']}"
+									action="#{usuarioBean.desativar()}"
+									rendered="#{registro.status eq 'ATIVADO'}"
+									reRender="pnlResultado"
+									onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+									<h:graphicImage value="/img/ico_cancel.png" styleClass="acoes" />
+								</a4j:commandLink>
+								<a4j:commandLink title="#{messages['label.resetar.senha']}"
+									action="#{usuarioBean.resetarSenha()}"
+									rendered="#{registro.status eq 'ATIVADO'}">
+									<h:graphicImage value="/img/ico_reset_password.png"
+										styleClass="acoes" />
+								</a4j:commandLink>
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.login}" />
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.matricula}" />
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.nome}" />
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.tipoPerfil.descricao}" />
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.status.descricao}" />
+							</rich:column>
+						</rich:columnGroup>
+					</rich:dataTable>
+
+					<ui:include src="/templates/paginacao.xhtml">
+						<ui:param name="lista" value="#{usuarioDataModel}" />
+					</ui:include>
+				</div>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+	</ui:define>
+
+</ui:composition>
+</html>

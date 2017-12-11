@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+
+<ui:composition template="/templates/template-form.xhtml">
+
+	<ui:define name="breadcrumb">
+		<div id="breadcrumb">
+			<ul class="crumbs">
+				<li class="first"><a href="#" style="z-index: 3"> <span></span>#{messages['label.home']}
+				</a></li>
+				<li><a href="#" style="z-index: 2">#{messages['label.empresa']}</a></li>
+				<li><a href="#" style="z-index: 1"> <h:outputText
+							value="#{messages['label.visualizacao']}"
+							rendered="#{empresaBean.operacao == 'VISUALIZACAO'}" /> <h:outputText
+							value="#{messages['label.inclusao']}"
+							rendered="#{empresaBean.operacao == 'INSERCAO'}" /> <h:outputText
+							value="#{messages['label.alteracao']}"
+							rendered="#{empresaBean.operacao == 'ALTERACAO'}" />
+				</a></li>
+			</ul>
+		</div>
+	</ui:define>
+
+
+	<ui:define name="camposFormularioBase">
+		<a4j:outputPanel id="panelFormulario">
+			<div id="conteudo">
+				<h1 class="tituloForm">
+					<h:outputText value="#{messages['label.visualizar.empresa']}"
+						rendered="#{empresaBean.operacao == 'VISUALIZACAO'}" />
+					<h:outputText value="#{messages['label.incluir.empresa']}"
+						rendered="#{empresaBean.operacao == 'INSERCAO'}" />
+					<h:outputText value="#{messages['label.alterar.empresa']}"
+						rendered="#{empresaBean.operacao == 'ALTERACAO'}" />
+				</h1>
+				<table border="0">
+					<tr>
+						<td colspan="2"><pdvix:label for="nome"
+								value="#{messages['label.nome']}"
+								required="#{empresaBean.operacao == 'INSERCAO' or empresaBean.operacao == 'ALTERACAO'}" />
+							<h:inputText id="nome" value="#{empresaTO.nmEmpresa}"
+								label="#{messages['label.nome']}" size="100"
+								styleClass="inputText" maxlength="100" required="true"
+								disabled="#{empresaBean.operacao != 'INSERCAO' and empresaBean.operacao != 'ALTERACAO'}" />
+						</td>
+						<td><pdvix:label for="status"
+								value="#{messages['label.status']}" /> <h:selectOneMenu
+								id="status" value="#{empresaTO.stEmpresa}"
+								styleClass="selectOneMenu" label="#{messages['label.status']}"
+								disabled="true">
+								<s:selectItems value="#{statusEnum}" var="s"
+									label="#{s.descricao}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEnum />
+							</h:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td><pdvix:label for="fornecedor"
+								value="#{messages['label.fornecedor']}" required="true" /> <h:selectOneMenu
+								id="fornecedor" value="#{empresaTO.flFornecedor}"
+								required="true" styleClass="selectOneMenu"
+								label="#{messages['label.fornecedor']}"
+								disabled="#{empresaBean.operacao != 'INSERCAO' and empresaBean.operacao != 'ALTERACAO'}">
+								<s:selectItems value="#{simNaoEnum}" var="s"
+									label="#{s.descricao}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEnum />
+							</h:selectOneMenu></td>
+
+					</tr>
+				</table>
+
+				<div id="subconteudo"
+					rendered="#{empresaBean.operacao == 'INSERCAO' or empresaBean.operacao == 'ALTERACAO'}">
+
+					<h:outputText class="itemForm"
+						rendered="#{contratoTolist.rowCount > 0 or empresaBean.operacao == 'INSERCAO' or empresaBean.operacao == 'ALTERACAO' }">
+						<h1 class="itemForm">#{messages['label.contrato']}</h1>
+					</h:outputText>
+					<a4j:outputPanel id="panelCamposContrato"
+						rendered="#{empresaBean.operacao == 'INSERCAO' or empresaBean.operacao == 'ALTERACAO'}">
+						<table>
+							<tr>
+								<td><pdvix:label for="codigoContrato" required="true"
+										value="#{messages['label.contrato']}" /> <h:inputText
+										id="codigoContrato" value="#{contratoTO.codigoContrato}"
+										label="#{messages['label.contrato.codigo']}" size="50"
+										maxlength="15" styleClass="inputText" /></td>
+							</tr>
+							<tr>
+								<td colspan="3"><pdvix:label for="descContrato"
+										value="#{messages['label.descricao']}" required="true" /> <h:inputTextarea
+										id="descContrato" value="#{contratoTO.descricaoContrato}"
+										label="#{messages['label.descricao']}" cols="70" rows="5"
+										styleClass="inputText" /></td>
+							</tr>
+
+
+						</table>
+
+
+					</a4j:outputPanel>
+					<table width="100%">
+						<tr>
+							<td align="center"><a4j:commandButton id="incluir"
+									rendered="#{empresaBean.operacao == 'INSERCAO' or empresaBean.operacao == 'ALTERACAO'}"
+									value="#{messages['label.incluir.contrato']}" type="submit"
+									ajaxSingle="true" process="panelCamposContrato"
+									reRender="panelCamposContrato, pnlResultadoContrato"
+									actionListener="#{empresaBean.addContrato()}"
+									styleClass="inputBtn" /></td>
+						</tr>
+					</table>
+				</div>
+
+				<a4j:outputPanel id="pnlResultadoContrato">
+					<a4j:outputPanel id="renderResultadoContrato">
+						<div id="conteudoContrato">
+
+							<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3"
+								cellspacing="1" border="0" width="100%" id="listagemContrato"
+								rows="10" var="registro" value="#{contratoTolist}"
+								rendered="#{contratoTolist.rowCount > 0}">
+								<f:facet name="header">
+									<rich:columnGroup>
+
+										<rich:column style="text-align:center;" width="10%"
+											rendered="#{empresaBean.operacao == 'INSERCAO' or empresaBean.operacao == 'ALTERACAO'}">
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.contrato']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.descricao']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.situacao']}" />
+										</rich:column>
+
+
+									</rich:columnGroup>
+								</f:facet>
+
+								<rich:columnGroup>
+
+									<rich:column style="text-align:center;"
+										rendered="#{empresaBean.operacao == 'INSERCAO' or empresaBean.operacao == 'ALTERACAO'}">
+
+										<a4j:commandLink title="#{messages['label.alterar']}"
+											rendered="#{empresaBean.operacao == 'INSERCAO' or empresaBean.operacao == 'ALTERACAO'}"
+											actionListener="#{empresaBean.editarContrato()}"
+											reRender="panelCamposContrato"
+											onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+											<h:graphicImage value="/img/ico_edit.png" styleClass="acoes" />
+										</a4j:commandLink>
+
+										<a4j:commandLink title="#{messages['label.excluir']}"
+											actionListener="#{empresaBean.removerContrato()}"
+											reRender="pnlResultadoContrato"
+											rendered="#{(empresaBean.operacao == 'INSERCAO' or empresaBean.operacao == 'ALTERACAO') and not empresaBean.existeContagem(registro)}"
+											onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+											<h:graphicImage value="/img/ico_del.png" styleClass="acoes" />
+										</a4j:commandLink>
+
+
+										<a4j:commandLink title="#{messages['label.ativar']}"
+											action="#{empresaBean.ativarContrato()}"
+											rendered="#{registro.stContrato == 'DESATIVADO' and (empresaBean.operacao == 'INSERCAO' or empresaBean.operacao == 'ALTERACAO')}"
+											reRender="pnlResultadoContrato"
+											onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+											<h:graphicImage value="/img/ico_ativar.png"
+												styleClass="acoes" />
+										</a4j:commandLink>
+										<a4j:commandLink title="#{messages['label.desativar']}"
+											action="#{empresaBean.desativarContrato()}"
+											rendered="#{registro.stContrato == 'ATIVADO' and (empresaBean.operacao == 'INSERCAO' or empresaBean.operacao == 'ALTERACAO')}"
+											reRender="pnlResultadoContrato"
+											onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+											<h:graphicImage value="/img/ico_cancel.png"
+												styleClass="acoes" />
+										</a4j:commandLink>
+
+
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.codigoContrato}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.descricaoContrato}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.stContrato.descricao}" />
+									</rich:column>
+
+								</rich:columnGroup>
+							</rich:dataTable>
+
+							<ui:include src="/templates/paginacao.xhtml">
+								<ui:param name="lista" value="#{contratolist}" />
+								<ui:param name="id" value="listagemContrato" />
+							</ui:include>
+						</div>
+					</a4j:outputPanel>
+				</a4j:outputPanel>
+
+				<table width="100%">
+					<tr>
+						<td align="center"><a4j:commandButton id="salvar"
+								value="#{messages['label.salvar']}" type="submit"
+								action="#{empresaBean.gravar()}" styleClass="inputBtn"
+								reRender="panelFormulario" status="indicator"
+								onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+								rendered="#{empresaBean.operacao == 'INSERCAO' or empresaBean.operacao == 'ALTERACAO'}" />
+
+							<a4j:commandButton id="abandonar"
+								value="#{messages['label.abandonar']}" type="submit"
+								action="#{empresaBean.cancelar()}" styleClass="inputBtn"
+								reRender="panelFormulario" status="indicator"
+								onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+								immediate="true" /></td>
+					</tr>
+				</table>
+
+			</div>
+		</a4j:outputPanel>
+	</ui:define>
+
+</ui:composition>
+</html>

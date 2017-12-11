@@ -1,0 +1,56 @@
+/************ MENU ***************/
+
+
+.rich-toolbar {
+	/* IE 6 */
+	_background-image: none !important;
+	/* IE7 */
+    *background-image: none !important; 
+    /* IE8 */
+    background-image: /*\**/none !important;    
+    background-image: -moz-linear-gradient(center top , #FFFFFF, #DEDEDE) !important;
+    background: -webkit-gradient(linear, center top, center bottom, from(#FFFFFF), to(#DEDEDE)) !important;
+    background-color: #DEDEDE !important;
+	border: none !important;
+    padding: 0;
+}
+
+.rich-toolbar-item {
+    color: #000000;
+}
+
+
+.rich-menu-list-border {
+	/* IE 6 */
+	_background-image: none !important;
+	/* IE7 */
+    *background-image: none !important; 
+    /* IE8 */
+    background-image: /*\**/none !important; 
+    
+    background-image: -moz-linear-gradient(center top , #FFFFFF, #DEDEDE) !important;
+    background: -webkit-gradient(linear, center top, center bottom, from(#FFFFFF), to(#DEDEDE)) !important;
+    background-color: #DEDEDE !important;
+    border-left-color: #DEDEDE !important;
+    border-right-color: #DEDEDE !important;
+}
+
+.rich-menu-list-bg {
+	/* IE 6 */
+	_background-image: none !important;
+	/* IE7 */
+    *background-image: none !important; 
+    /* IE8 */
+    background-image: /*\**/none !important; 
+    background-image: none !important;
+    border-left-color: none !important;
+    border-right-color: none !important;
+    border-top-color: none !important;
+}
+
+
+.rich-menu-item-hover, .rich-menu-group-hover {
+	border-color: #BCBCBC !important;
+    background-color: #BCBCBC !important;
+	color: #000000 !important;    
+}

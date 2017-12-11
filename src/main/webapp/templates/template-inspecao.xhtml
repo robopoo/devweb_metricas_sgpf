@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt" lang="pt"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+<body>
+
+	<f:view contentType="text/html" locale="pt_BR">
+		<ui:composition>
+			<ui:repeat value="#{inspecao.dadosMantidos}" var="item"
+				varStatus="itemVar">
+				<h:outputText value="#{item}" />
+				<h:outputText value=", "
+					rendered="#{!itemVar.last || inspecao.dadosIncluidos.size() > 0 || inspecao.dadosRemovidos.size() > 0}" />
+			</ui:repeat>
+			<ui:repeat value="#{inspecao.dadosIncluidos}" var="item"
+				varStatus="itemVar">
+				<h:outputText value="#{item}" style="color: #33CC00" />
+				<h:outputText value=", "
+					rendered="#{!itemVar.last || inspecao.dadosRemovidos.size() > 0}" />
+			</ui:repeat>
+			<ui:repeat value="#{inspecao.dadosRemovidos}" var="item"
+				varStatus="itemVar">
+				<h:outputText value="#{item}" style="color: #FF0000" />
+				<h:outputText value=", " rendered="#{!itemVar.last}" />
+			</ui:repeat>
+
+		</ui:composition>
+
+	</f:view>
+</body>
+</html>

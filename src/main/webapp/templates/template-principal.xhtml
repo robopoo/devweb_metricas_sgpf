@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+<f:view encoding="UTF-8" locale="pt_BR">
+	<f:loadBundle basename="messages" var="mensagens" />
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="cache-control" content="no-cache" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="expires" content="-1" />
+		<title><ui:insert name="title">..:: PD METRICA ::.. #{mensagens.versao}</ui:insert></title>
+		
+		<link rel="stylesheet" type="text/css" href="#{contextPath}/css/layout.css?#{mensagens.versao}" />
+		<link rel="stylesheet" type="text/css" href="#{contextPath}/css/componentes.css?#{mensagens.versao}" />
+		<link rel="stylesheet" type="text/css" href="#{contextPath}/css/menu.css?#{mensagens.versao}" />
+		<link rel="stylesheet" type="text/css" href="#{contextPath}/css/cabecalho.css?#{mensagens.versao}" />
+		<link rel="stylesheet" type="text/css" href="#{contextPath}/css/subModal.css?#{mensagens.versao}" />
+		<link rel="stylesheet" type="text/css" href="#{contextPath}/css/breadcrumb.css?#{mensagens.versao}" />
+		<link rel="stylesheet" type="text/css" href="#{contextPath}/css/richfaces.css?#{mensagens.versao}" />
+		<link rel="stylesheet" type="text/css" href="#{contextPath}/css/notificacao.css?#{mensagens.versao}" />
+		<link rel="stylesheet" type="text/css" href="#{contextPath}/css/jquery.alerts.css?#{mensagens.versao}" />
+	
+		<script	src="#{contextPath}/js/geral.js?#{mensagens.versao}" type="text/javascript" charset="UTF-8"/>
+		<script	src="#{contextPath}/js/jquery.alerts.js?#{mensagens.versao}" type="text/javascript" charset="UTF-8"/>
+		<script	src="#{contextPath}/js/jquery.alphanumeric.custom.js?#{mensagens.versao}" type="text/javascript" charset="UTF-8"/>
+		<script	src="#{contextPath}/js/jquery.alphanumeric.pack.js?#{mensagens.versao}"	type="text/javascript" charset="UTF-8"/>
+		<script	src="#{contextPath}/js/jquery.maskedinput-1.1.2.js?#{mensagens.versao}"	type="text/javascript" charset="UTF-8"/>
+		<script	src="#{contextPath}/js/jquery.maskfinancial-1.3.js?#{mensagens.versao}"	type="text/javascript" charset="UTF-8"/>
+		<script	src="#{contextPath}/js/jquery.maskMoney.js?#{mensagens.versao}"	type="text/javascript" charset="UTF-8"/>
+		<script	src="#{contextPath}/js/common.js?#{mensagens.versao}"	type="text/javascript" charset="UTF-8"/>
+		<script	src="#{contextPath}/js/subModal.js?#{mensagens.versao}" type="text/javascript" charset="UTF-8"/>
+		<script	src="#{contextPath}/js/aguarde.js?#{mensagens.versao}" type="text/javascript" charset="UTF-8"/>
+		<script	src="#{contextPath}/js/dataTableCheckBox.js?#{mensagens.versao}" type="text/javascript" charset="UTF-8"/>
+		<script	src="#{contextPath}/js/jquery.textarea.maxLength.js?#{mensagens.versao}" type="text/javascript" charset="UTF-8"/>
+		<script type="text/javascript">
+		    /* <![CDATA[ */              
+	        	jQuery.noConflict();
+	        /* ]]> */
+	    </script>		
+		<script type="text/javascript">
+			function noBack() {
+				window.history.forward()
+			}
+			noBack();
+			window.onload = noBack;
+			window.onpageshow = function(evt) {
+				if (evt.persisted)
+					noBack()
+			}
+			window.onunload = function() {
+				void (0)
+			}		
+		</script>			
+	</head>
+
+	<body>
+	<h:form id="formulario" enctype="#{(paramForlumarioEnctypeMultipart != null and paramForlumarioEnctypeMultipart) ? 'multipart/form-data' : 'application/x-www-form-urlencoded'}">
+		<a name="irTopoPagina"></a>
+	        <div id="main">
+	            <div id="topo">
+		            <div id="bemVindo">
+		            	<span>Seja Bem-Vindo, #{usuarioAutenticado.nome} </span>	
+		            </div> <!-- bemVindo -->
+					<div id="logo" >
+						<a4j:commandLink action="home" immediate="true">
+							<img src="#{contextPath}/img/logo_pd_metrica.png" width="218px" heigth="48px" border="0" />
+
+						</a4j:commandLink>
+						<img src="#{contextPath}/img/img_vix_pd_metrica.png" width="240px" heigth="69px" border="0" style="float: right;" />
+					</div>
+					<!-- logo -->
+	            </div> <!-- topo -->
+	            
+	       <ui:include src="/templates/menu.xhtml" />
+	            
+		   	<table width="100%" align="left" border="0" cellpadding="0" cellspacing="0" style="margin-top: 3px; margin-left: 0px; float: left;">
+		   		<tr>
+		   			<td>
+		   				<a4j:outputPanel id="painelMensagem" ajaxRendered="true">
+							<ui:include src="/templates/mensagem.xhtml" />
+						</a4j:outputPanel><br />
+		   			</td>
+		   		</tr>		   	
+		   		<tr>
+		   			<td>
+		   				<ui:insert name="cabecalho" />
+		   			</td>
+		   		</tr>
+		   		<tr>
+		   			<td>
+		   				<ui:insert name="breadcrumb" />
+		   			</td>
+		   		</tr>
+		   	</table> <!--  TABLE caminho pao -->
+		   	
+		   	<table width="100%" align="left" border="0" cellpadding="0" cellspacing="0" style="margin-top: 3px; margin-left: 0px; float: left;">
+		   		<tr>
+		   			<td>
+		   				<ui:insert name="abas" />
+		   			</td>
+		   		</tr>
+		   	</table> <!--  Abas  -->		   	
+				
+			<div id="divConfirm">
+			</div>
+							
+			<a4j:status id="indicator" onstart="AguardeShow();" onstop="AguardeHide();" />
+			
+			<ui:insert name="conteudo" />
+	
+			<ui:include src="/templates/aguarde.xhtml" />
+			<!-- Forca a chamada ao jQuery por questoes de compatilibidade. -->
+			<rich:jQuery selector="#mascara" query="maskFinancial()" timing="onload" />
+			
+			<br /><br /><br />
+		    <div id="rodape">
+		    	<div style="padding-top:5px;">© 2013 Todos os direitos reservados a PD CASE </div>
+		    </div> <!-- rodape -->			
+		
+		</div> <!-- main -->
+	</h:form>
+	
+	<ui:insert name="auxiliar" />
+	
+	<script type="text/javascript">
+		iniciarLov('#{contextPath}');
+	</script>
+	<ui:insert name="script" />
+	
+	<ui:debug hotkey="l"></ui:debug>	
+	
+	</body>
+</f:view>
+</html>

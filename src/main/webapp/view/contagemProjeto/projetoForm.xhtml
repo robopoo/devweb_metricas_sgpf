@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+<body>
+	<f:view contentType="text/html" locale="pt_BR">
+		<ui:composition template="/templates/template-form-composto.xhtml">
+			<ui:define name="script">
+				<script type="text/javascript">
+			function aplicaMascara()
+			 {
+				/* limiteTextArea('formulario:pageVisaoGeralSolucao:visaoGeralSolucao', 500, 'limiteVisaoGeralSolucao'); */
+			}			
+		</script>
+				<a4j:outputPanel id="pnlJS" ajaxRendered="true">
+					<script type="text/javascript">
+				aplicaMascara();
+			</script>
+				</a4j:outputPanel>
+			</ui:define>
+			<ui:define name="breadcrumb">
+				<div id="breadcrumb">
+					<ul class="crumbs">
+						<li class="first"><a href="#" style="z-index: 3"> <span></span>#{messages['label.home']}
+						</a></li>
+						<li><a href="#" style="z-index: 2">#{messages['label.contagem.projeto']}</a></li>
+						<li><a href="#" style="z-index: 1"> <h:outputText
+									value="#{messages['label.visualizacao']}"
+									rendered="#{projetoBean.operacao == 'VISUALIZACAO'}" /> <h:outputText
+									value="#{messages['label.inclusao']}"
+									rendered="#{projetoBean.operacao == 'INSERCAO'}" /> <h:outputText
+									value="#{messages['label.alteracao']}"
+									rendered="#{projetoBean.operacao == 'ALTERACAO'}" />
+						</a></li>
+					</ul>
+				</div>
+			</ui:define>
+			<ui:define name="camposFormularioBase">
+				<a4j:outputPanel id="panelFormulario">
+					<div id="conteudo">
+						<div>
+							<table border="0" width="100%">
+								<tr>
+									<td width="70%">
+										<h1 class="tituloForm">
+											<h:outputText value="#{messages['label.visualizar']}"
+												rendered="#{projetoBean.operacao == 'VISUALIZACAO'}" />
+											<h:outputText value="#{messages['label.incluir']}"
+												rendered="#{projetoBean.operacao == 'INSERCAO'}" />
+											<h:outputText value="#{messages['label.alterar']}"
+												rendered="#{projetoBean.operacao == 'ALTERACAO'}" />
+											<h:outputText value="&#160;#{messages['label.projeto']}" />
+										</h1>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<s:div style="margin-top: 12px"
+							rendered="#{projetoBean.operacao != 'INSERCAO'}">
+
+							<h1 class="itemForm">
+								<h:outputText value="#{messages['label.cabecalho.projeto']}" />
+							</h1>
+							<table>
+								<tr>
+									<td><h:outputLabel styleClass="labelcabecalho"
+											value="#{messages['label.contagem.projeto.funcao.dados']}:" /></td>
+									<td><h:outputLabel value="#{projetoTO.qtPontoFuncaoDados}" /></td>
+								</tr>
+								<tr>
+									<td><h:outputLabel styleClass="labelcabecalho"
+											value="#{messages['label.contagem.projeto.funcao.transacao']}:" /></td>
+									<td><h:outputLabel
+											value="#{projetoTO.qtPontoFuncaoTransacao}" /></td>
+								</tr>
+								<tr>
+									<td><h:outputLabel styleClass="labelcabecalho"
+											value="#{messages['label.contagem.projeto.total.pf']}:" /></td>
+									<td><h:outputLabel value="#{projetoTO.pfTotal}" /></td>
+								</tr>
+								<tr>
+									<td><h:outputLabel styleClass="labelcabecalho"
+											value="#{messages['label.contagem.projeto.total.pf.local']}:" /></td>
+									<td><h:outputLabel value="#{projetoTO.qtPontoFuncaoLocal}" /></td>
+								</tr>
+							</table>
+						</s:div>
+
+						<h1 class="itemForm">
+							<h:outputText value="#{messages['label.projeto']}" />
+						</h1>
+
+						<table border="0">
+							<tr>
+								<td>
+									<table border="0">
+										<tr>
+											<td><pdvix:label for="empresa"
+													value="#{messages['label.empresa']}"
+													required="#{projetoBean.operacao == 'INSERCAO'}" /> <h:selectOneMenu
+													id="empresa" required="true" style="width: 300px;"
+													value="#{projetoTO.contratoTO.empresaTO}"
+													valueChangeListener="#{projetoBean.valueChangedEmpresa}"
+													styleClass="selectOneMenu"
+													label="#{messages['label.empresa']}"
+													disabled="#{projetoBean.operacao != 'INSERCAO'}">
+													<a4j:support event="onchange"
+														reRender="contrato,sistema,gestorPrincipal,gestorEnvolvido,gestoEmpresaPrincipal,gestoEmpresaEnvolvido,sistemaEnvolvido"
+														bypassUpdates="false" ajaxSingle="true" />
+													<s:selectItems value="#{factoryEmpresasAtiva}" var="c"
+														rendered="#{projetoBean.operacao == 'INSERCAO'}"
+														label="#{c.nmEmpresa}" styleClass="rich-text-general"
+														noSelectionLabel="#{messages['label.selecione']}" />
+													<s:convertEntity />
+												</h:selectOneMenu></td>
+											<td><pdvix:label for="contrato"
+													value="#{messages['label.contrato']}"
+													required="#{projetoBean.operacao == 'INSERCAO'}" /> <h:selectOneMenu
+													id="contrato" required="true" style="width: 500px;"
+													value="#{projetoTO.contratoTO}" styleClass="selectOneMenu"
+													label="#{messages['label.contrato']}"
+													disabled="#{projetoBean.operacao != 'INSERCAO'}">
+													<s:selectItems
+														value="#{projetoBean.operacao != 'INSERCAO' ? projetoTO.contratoTO.empresaTO.contratoTOlist : projetoTO.contratoTO.empresaTO.contratosAtivos}"
+														var="c"
+														label="#{c.codigoContrato}"
+														styleClass="rich-text-general"
+														noSelectionLabel="#{messages['label.selecione']}" />
+													<s:convertEntity />
+												</h:selectOneMenu></td>
+											<td><pdvix:label value="#{messages['label.sistema']}"
+													for="sistema"
+													required="#{projetoBean.operacao == 'INSERCAO'}" /> <h:selectOneMenu
+													required="true" style="width: 400px;"
+													valueChangeListener="#{projetoBean.valueChangedSistema}"
+													id="sistema" value="#{projetoTO.sistemaTO}"
+													styleClass="selectOneMenu"
+													disabled="#{projetoBean.operacao != 'INSERCAO'}"
+													label="#{messages['label.sistema']}">
+													<s:selectItems
+														value="#{projetoTO.contratoTO.empresaTO.sistemaTOlist}"
+														var="c" label="#{c.cdSistema} - #{c.dsSistema}"
+														styleClass="rich-text-general"
+														noSelectionLabel="#{messages['label.selecione']}" />
+													<s:convertEntity />
+													<a4j:support event="onchange"
+														reRender="panelSistemaEnvolvido" bypassUpdates="false"
+														ajaxSingle="true" />
+												</h:selectOneMenu></td>
+										</tr>
+									</table>
+									<table border="0">
+										<tr>
+
+											<td><pdvix:label
+													value="#{messages['label.projeto.titulo']}"
+													for="projetoTitulo" required="true" /> <h:inputText
+													required="true" id="projetoTitulo"
+													value="#{projetoTO.titulo}"
+													label="#{messages['label.projeto.titulo']}" size="40"
+													styleClass="inputText" autocomplete="off"
+													onmouseover="this.focus();"
+													onkeyup="this.value=this.value.toUpperCase();"
+													disabled="#{projetoBean.operacao != 'INSERCAO' and projetoBean.operacao != 'ALTERACAO'}" />
+
+											</td>
+											<td><pdvix:label value="#{messages['label.projeto']}"
+													required="true" for="projeto" /> <h:inputText id="projeto"
+													required="true" value="#{projetoTO.projeto}"
+													label="#{messages['label.projeto']}" size="25"
+													maxlength="15" styleClass="inputText" autocomplete="off"
+													onmouseover="this.focus();"
+													onkeyup="this.value=this.value.toUpperCase();"
+													disabled="#{projetoBean.operacao != 'INSERCAO' and projetoBean.operacao != 'ALTERACAO'}" /></td>
+											<td align="left"><pdvix:label required="true"
+													value="#{messages['label.subprojeto']}" for="subprojeto" />
+												<h:inputText id="subprojeto" value="#{projetoTO.subProjeto}"
+													required="true" label="#{messages['label.subprojeto']}"
+													size="25" maxlength="3" styleClass="inputText"
+													autocomplete="off" onmouseover="this.focus();"
+													onkeyup="this.value=this.value.toUpperCase();"
+													disabled="#{projetoBean.operacao != 'INSERCAO' and projetoBean.operacao != 'ALTERACAO'}" />
+											</td>
+
+
+
+										</tr>
+									</table>
+									<table border="0">
+										<tr>
+
+
+											<td><pdvix:label
+													value="#{messages['label.projeto.analista.responsavel.pdcase']}"
+													for="analistaPDCase" required="true" /> <h:selectOneMenu
+													required="true" id="analistaPDCase"
+													value="#{projetoTO.responsavelPDCaseTO}"
+													styleClass="selectOneMenu"
+													label="#{messages['label.projeto.analista.responsavel.pdcase']}"
+													disabled="#{projetoBean.operacao != 'INSERCAO' and projetoBean.operacao != 'ALTERACAO'}">
+													<s:selectItems value="#{factoryAnalistasPDCase}" var="c"
+														label="#{c.nomeAnalista}" styleClass="rich-text-general"
+														noSelectionLabel="#{messages['label.selecione']}" />
+													<s:convertEntity />
+												</h:selectOneMenu></td>
+											<td><pdvix:label
+													value="#{messages['label.projeto.analista.empresa.principal']}"
+													for="gestoEmpresaPrincipal" required="true" /> <h:selectOneMenu
+													required="true" id="gestoEmpresaPrincipal"
+													value="#{projetoTO.responsavelPrincipalClienteTO}"
+													label="#{messages['label.projeto.analista.empresa.principal']}"
+													styleClass="selectOneMenu"
+													disabled="#{projetoBean.operacao != 'INSERCAO' and projetoBean.operacao != 'ALTERACAO'}">
+													<s:selectItems value="#{projetoBean.analistaTOEmpresaList}"
+														var="c" label="#{c.nomeAnalista}"
+														styleClass="rich-text-general"
+														noSelectionLabel="#{messages['label.selecione']}" />
+													<s:convertEntity />
+												</h:selectOneMenu></td>
+											<td><pdvix:label
+													value="#{messages['label.projeto.analista.empresa.envolvido']}"
+													for="gestoEmpresaEnvolvido" /> <h:selectOneMenu
+													id="gestoEmpresaEnvolvido"
+													value="#{projetoTO.responsavelEnvolvidoClientTO}"
+													label="#{messages['label.projeto.analista.empresa.envolvido']}"
+													styleClass="selectOneMenu"
+													disabled="#{projetoBean.operacao != 'INSERCAO' and projetoBean.operacao != 'ALTERACAO'}">
+													<s:selectItems value="#{projetoBean.analistaTOEmpresaList}"
+														var="c" label="#{c.nomeAnalista}"
+														styleClass="rich-text-general"
+														noSelectionLabel="#{messages['label.selecione']}" />
+													<s:convertEntity />
+												</h:selectOneMenu></td>
+										</tr>
+										<tr>
+											<td><pdvix:label
+													value="#{messages['label.projeto.gestor.principal']}"
+													for="gestorPrincipal" required="true" /> <h:selectOneMenu
+													required="true" id="gestorPrincipal"
+													value="#{projetoTO.gestorPrincipalTO}"
+													label="#{messages['label.projeto.gestor.principal']}"
+													styleClass="selectOneMenu"
+													disabled="#{(projetoBean.operacao != 'INSERCAO' and projetoBean.operacao != 'ALTERACAO')}">
+													<s:selectItems value="#{projetoBean.gestorTOEmpresaList}"
+														var="c" label="#{c.nomeAnalista}"
+														styleClass="rich-text-general"
+														noSelectionLabel="#{messages['label.selecione']}" />
+													<s:convertEntity />
+												</h:selectOneMenu></td>
+											<td><pdvix:label
+													value="#{messages['label.projeto.gestor.envolvido']}"
+													for="gestorEnvolvido" /> <h:selectOneMenu
+													id="gestorEnvolvido" value="#{projetoTO.gestorEnvolvidoTO}"
+													label="#{messages['label.projeto.gestor.envolvido']}"
+													styleClass="selectOneMenu"
+													disabled="#{(projetoBean.operacao != 'INSERCAO' and projetoBean.operacao != 'ALTERACAO') or projetoTO.contratoTO.empresaTO == null}">
+													<s:selectItems value="#{projetoBean.gestorTOEmpresaList}"
+														var="c" label="#{c.nomeAnalista}"
+														styleClass="rich-text-general"
+														noSelectionLabel="#{messages['label.selecione']}" />
+													<s:convertEntity />
+												</h:selectOneMenu></td>
+										</tr>
+										<tr>
+
+										</tr>
+										<tr>
+											<td colspan="2"><pdvix:label
+													value="#{messages['label.projeto.visao.gerao.soluacao']}" />
+												<h:inputTextarea id="visaoGeralSolucao"
+													value="#{projetoTO.visaoGeralSolucao}"
+													disabled="#{projetoBean.operacao != 'INSERCAO' and projetoBean.operacao != 'ALTERACAO'}"
+													rows="5" cols="70"
+													onchange="limiteTextArea('formulario:pageVisaoGeralSolucao:visaoGeralSolucao', 3000, 'limiteVisaoGeralSolucao')">
+													<f:validateLength maximum="3000" />
+												</h:inputTextarea></td>
+										</tr>
+									</table>
+
+								</td>
+							</tr>
+						</table>
+
+						<h1 class="itemForm">
+							<h:outputText value="Sistemas Associados" />
+						</h1>
+						<table border="0" width="100%">
+							<tr>
+								<td><a4j:outputPanel id="panelSistemaEnvolvido">
+										<h:panelGrid columns="2">
+											<h:selectOneMenu styleClass="selectOneMenu"
+												id="sistemaEnvolvido" label="Sistema Envolvido"
+												disabled="#{projetoBean.operacao eq 'VISUALIZACAO'}"
+												value="#{projetoBean.sistemaTO}">
+												<s:selectItems
+													value="#{projetoTO.contratoTO.empresaTO.sistemaTOlist}"
+													var="s" label="#{s.cdSistema} - #{s.dsSistema}"
+													styleClass="rich-text-general"
+													noSelectionLabel="#{messages['label.selecione']}" />
+												<s:convertEntity />
+											</h:selectOneMenu>
+											<a4j:commandLink id="incluir" type="submit"
+												rendered="#{projetoBean.operacao eq 'INSERCAO' or projetoBean.operacao eq 'ALTERACAO'}"
+												actionListener="#{projetoBean.incluirSistema()}"
+												ajaxSingle="true" reRender="panelSistemaEnvolvido"
+												process="sistemaEnvolvido">
+												<h:graphicImage value="/img/ico_plus.png"
+													styleClass="imgBtnImageText">
+												</h:graphicImage>
+											</a4j:commandLink>
+										</h:panelGrid>
+										<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3"
+											cellspacing="1" border="0" width="100%"
+											id="listagemSistemasEnvovolvidos" var="registro"
+											value="#{projetoBean.sistemasEnvolvidos}">
+											<f:facet name="header">
+												<rich:columnGroup>
+													<rich:column style="text-align:center;" width="5%"
+														rendered="#{projetoBean.operacao eq 'INSERCAO' or projetoBean.operacao eq 'ALTERACAO'}" />
+													<rich:column style="text-align:left;">
+														<h:outputText value="#{messages['label.descricao']}" />
+													</rich:column>
+												</rich:columnGroup>
+											</f:facet>
+											<rich:columnGroup>
+												<rich:column style="text-align:center;"
+													rendered="#{projetoBean.operacao eq 'INSERCAO' or projetoBean.operacao eq 'ALTERACAO'}">
+													<a4j:commandLink title="#{messages['label.excluir']}"
+														actionListener="#{projetoBean.excluirSistema()}"
+														onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+														reRender="panelSistemaEnvolvido">
+														<h:graphicImage value="/img/ico_del.png"
+															styleClass="acoes" />
+													</a4j:commandLink>
+												</rich:column>
+												<rich:column style="text-align:left;">
+													<h:outputText value="#{registro.cdSistema} - #{registro.dsSistema}" size="80" />
+												</rich:column>
+											</rich:columnGroup>
+										</rich:dataTable>
+
+									</a4j:outputPanel></td>
+							</tr>
+						</table>
+						<table width="100%">
+							<tr>
+								<td align="center"><a4j:commandButton id="salvar"
+										value="#{messages['label.salvar']}" type="submit"
+										action="#{projetoBean.gravar()}" styleClass="inputBtn"
+										reRender="panelBreadCrumb, pnlBotoes" status="indicator"
+										rendered="#{projetoBean.operacao eq 'INSERCAO' or projetoBean.operacao eq 'ALTERACAO'}"
+										onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;" />
+									<a4j:commandButton id="abandonar"
+										value="#{messages['label.abandonar']}" type="submit"
+										action="#{projetoBean.cancelar()}" styleClass="inputBtn"
+										status="indicator" immediate="true"
+										onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;" /></td>
+							</tr>
+						</table>
+
+					</div>
+				</a4j:outputPanel>
+			</ui:define>
+		</ui:composition>
+	</f:view>
+</body>
+</html>

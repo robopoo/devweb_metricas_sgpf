@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+<ui:composition
+	template="#{sistemaBean.modoOperacao == 'LOV' ? '/templates/template-popup-lista.xhtml' : '/templates/template-lista.xhtml'}">
+
+
+
+	<ui:define name="breadcrumb">
+		<div id="breadcrumb">
+			<ul class="crumbs">
+				<li class="first"><a href="#" style="z-index: 3"><span></span>#{messages['label.home']}</a></li>
+				<li><a href="#" style="z-index: 2">#{messages['label.sistemas']}</a></li>
+				<li><a href="#" style="z-index: 1">#{messages['label.consultar']}</a></li>
+			</ul>
+		</div>
+	</ui:define>
+
+	<ui:define name="filtrocampos">
+		<div id="conteudo">
+			<h1 class="tituloForm">#{messages['label.consultar.sistemas']}</h1>
+			<h1 class="itemForm">
+				<h:outputLabel value="#{messages['label.filtro']}" />
+			</h1>
+			<a4j:outputPanel id="panelFiltro">
+				<table>
+
+					<tr>
+
+						<td><h:outputLabel for="empresas" value="#{messages['label.empresa']}"
+								styleClass="labelForm" /> <h:selectOneMenu id="empresas" value="#{sistemaFiltro.empresaTO}"
+								styleClass="selectOneMenu" label="#{messages['label.empresa']}">
+
+								<s:selectItems value="#{factoryEmpresas}" var="f" label="#{f.nmEmpresa}"
+									styleClass="rich-text-general" noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEntity />
+							</h:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td><h:outputLabel for="sistema" value="#{messages['label.sistema']}"
+								styleClass="labelForm" /> <h:inputText id="sistema" value="#{sistemaFiltro.dsSistema}"
+								label="#{messages['label.sistema']}" size="100" styleClass="inputText" /></td>
+
+					</tr>
+				</table>
+
+				<table width="100%">
+					<tr>
+						<td align="center"><a4j:commandButton id="pesquisar"
+								value="#{messages['label.pesquisar']}" type="submit"
+								actionListener="#{sistemaBean.buscar()}" styleClass="inputBtn"
+								reRender="panelFiltro, pnlResultado" /> <a4j:commandButton id="incluir"
+								value="#{messages['label.incluir']}" type="submit" action="#{sistemaBean.novo()}"
+								styleClass="inputBtn" /> <a4j:commandButton id="limpar" value="#{messages['label.limpar']}"
+								type="submit" action="#{sistemaBean.limparPesquisa()}" reRender="pnlResultado, panelFiltro"
+								styleClass="inputBtn" /></td>
+					</tr>
+				</table>
+			</a4j:outputPanel>
+		</div>
+	</ui:define>
+
+
+	<ui:define name="resultadotabela">
+		<a4j:outputPanel id="pnlResultado">
+			<a4j:outputPanel id="renderResultado" rendered="#{sistemaBean.consultaRealizada}">
+				<div id="conteudo">
+					<h1 class="itemForm">#{messages['label.resultado.consulta']}</h1>
+					<h:outputText value="#{messages['msg.nenhum.registro.encontrado']}"
+						rendered="#{sistemaDataModel.rowCount == 0}" />
+					<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3" cellspacing="1" border="0"
+						width="100%" id="listagem" rows="10" var="registro" value="#{sistemaDataModel}"
+						rendered="#{sistemaDataModel.rowCount > 0}">
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column style="text-align:center;" width="10%">
+								</rich:column>
+
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.empresa']}" />
+								</rich:column>
+
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.codigo']}" />
+								</rich:column>
+
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.sistema']}" />
+								</rich:column>
+
+							</rich:columnGroup>
+						</f:facet>
+
+						<rich:columnGroup>
+							<rich:column style="text-align:center;">
+								<a4j:commandLink title="#{messages['label.visualizar']}"
+									action="#{sistemaBean.visualizar()}">
+									<h:graphicImage value="/img/ico_view.png" styleClass="acoes" />
+								</a4j:commandLink>
+								<a4j:commandLink title="#{messages['label.alterar']}" action="#{sistemaBean.editar()}">
+									<h:graphicImage value="/img/ico_edit.png" styleClass="acoes" />
+								</a4j:commandLink>
+
+								<a4j:commandLink title="#{messages['label.excluir']}"
+									actionListener="#{sistemaBean.excluir()}" reRender="pnlResultado"
+									rendered="#{not sistemaBean.existeProjetos(registro)}"
+									onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+									<h:graphicImage value="/img/ico_del.png" styleClass="acoes" />
+								</a4j:commandLink>
+
+							</rich:column>
+
+
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.empresaTO.nmEmpresa}" />
+							</rich:column>
+
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.cdSistema}" />
+							</rich:column>
+
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.dsSistema}" />
+							</rich:column>
+
+						</rich:columnGroup>
+					</rich:dataTable>
+
+					<ui:include src="/templates/paginacao.xhtml">
+						<ui:param name="lista" value="#{sistemaDataModel}" />
+					</ui:include>
+				</div>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+	</ui:define>
+
+
+</ui:composition>
+</html>

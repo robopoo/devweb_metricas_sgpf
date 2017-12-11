@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+<f:view contentType="text/html" locale="pt_BR">
+	<ui:composition template="/templates/template-lista.xhtml">
+
+		<ui:define name="script">
+			<script type="text/javascript">
+			
+			function exibirProjeto(selectContagem){
+				
+				var tdProjeto;					
+
+				projeto = document.getElementById("tdProjeto");
+				subprojeto = document.getElementById("tdSubprojeto");
+
+				if(selectContagem.value == 'PROJETO'){
+
+					projeto.style.display = '';
+					subprojeto.style.display = '';
+
+				}else{
+
+					projeto.style.display = 'none';
+					subprojeto.style.display = 'none';
+
+				}
+			}
+
+		</script>
+
+		</ui:define>
+
+		<ui:define name="breadcrumb">
+		</ui:define>
+		<ui:define name="filtrocampos">
+			<div id="conteudo">
+				<h1 class="tituloForm">#{messages['label.consultar.planilha']}</h1>
+				<h1 class="itemForm">
+					<h:outputLabel value="#{messages['label.filtro']}" />
+				</h1>
+				<a4j:outputPanel id="panelFiltro">
+					<ui:include src="/templates/filtroProjeto.xhtml">
+						<ui:param name="requiredProjeto" value="false" />
+						<ui:param name="requiredSubprojeto" value="false" />
+					</ui:include>
+					<table>
+						<tr>
+							<td><pdvix:label for="tpContagem"
+									value="#{messages['label.tipo.contagem']}" required="true" />
+								<h:selectOneRadio value="#{relatorioFPABean.tipoContagem}"
+									required="true" onclick="exibirProjeto(this);"
+									label="#{messages['label.tipo.contagem']}">
+									<s:selectItems id="tpContagem"
+										value="#{relatorioFPABean.tiposContagem}" var="s"
+										label="#{s.getDescricao()}" styleClass="rich-text-general" />
+									<s:convertEnum />
+								</h:selectOneRadio></td>
+						</tr>
+						<tr>
+							<td style="height: 10px"></td>
+						</tr>
+						<tr>
+							<td><pdvix:label for="tpRelatorio"
+									value="#{messages['label.tipo.relatorio']}" required="true" />
+								<h:selectOneRadio value="#{relatorioFPABean.tipoRelatorio}"
+									required="true" label="#{messages['label.tipo.relatorio']}">
+									<s:selectItems id="tpRelatorio"
+										value="#{relatorioFPABean.tiposRelatorio}" var="s"
+										label="#{s.getDescricao()}" styleClass="rich-text-general">
+									</s:selectItems>
+									<s:convertEnum />
+								</h:selectOneRadio></td>
+
+						</tr>
+					</table>
+					<table width="100%">
+						<tr>
+							<td align="center"><a4j:commandButton id="pesquisar"
+									value="#{messages['label.pesquisar']}" type="submit"
+									action="#{relatorioFPABean.pesquisar()}" styleClass="inputBtn" /></td>
+						</tr>
+					</table>
+				</a4j:outputPanel>
+			</div>
+		</ui:define>
+
+	</ui:composition>
+</f:view>
+</html>

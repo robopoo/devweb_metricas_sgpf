@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+<ui:composition template="/templates/template-lista.xhtml">
+	<ui:define name="script">
+		<script type="text/javascript">
+			function aplicaMascara()
+			 {
+				/* limiteTextArea('formulario:pageVisaoGeralSolucao:visaoGeralSolucao', 500, 'limiteVisaoGeralSolucao'); */
+			}			
+		</script>
+		<a4j:outputPanel id="pnlJS" ajaxRendered="true">
+			<script type="text/javascript">
+				aplicaMascara();
+			</script>
+		</a4j:outputPanel>
+	</ui:define>
+	<ui:define name="breadcrumb">
+		<div id="breadcrumb">
+			<ul class="crumbs">
+				<li class="first"><a href="#" style="z-index: 3"> <span></span>#{messages['label.home']}
+				</a></li>
+				<li><a href="#" style="z-index: 2">#{messages['label.funcao.dados']}</a></li>
+				<li><a href="#" style="z-index: 1"> <h:outputText
+							value="#{messages['label.visualizacao']}" />
+				</a></li>
+			</ul>
+		</div>
+	</ui:define>
+	<ui:define name="filtrocampos">
+		<div id="conteudo">
+			<a4j:outputPanel id="panelFiltro">
+				<div>
+					<table border="0" width="100%">
+						<tr>
+							<td width="70%">
+								<h1 class="tituloForm">#{messages['label.funcao.dados']}</h1>
+								<h1 class="itemForm">
+									<h:outputText value="#{messages['label.filtro']}" />
+								</h1>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<ui:include src="/templates/filtroProjeto.xhtml">
+				</ui:include>
+				<table width="100%">
+					<tr>
+						<td align="center"><a4j:commandButton id="pesquisar"
+								value="#{messages['label.pesquisar']}" type="submit"
+								actionListener="#{funcaoDadosProjetoBean.buscar()}"
+								styleClass="inputBtn" reRender="pnlResultado" /> <a4j:commandButton
+								id="incluir" value="#{messages['label.incluir']}" type="submit"
+								action="#{funcaoDadosProjetoBean.novo()}" styleClass="inputBtn" />
+							<a4j:commandButton id="limpar"
+								value="#{messages['label.limpar']}" type="submit"
+								action="#{funcaoDadosProjetoBean.limparPesquisa()}"
+								ajaxSingle="true" reRender="pnlResultado, panelFiltro"
+								styleClass="inputBtn" /></td>
+					</tr>
+				</table>
+
+			</a4j:outputPanel>
+		</div>
+	</ui:define>
+
+	<ui:define name="resultadotabela">
+		<a4j:outputPanel id="pnlResultado">
+			<a4j:outputPanel id="renderResultado"
+				rendered="#{funcaoDadosProjetoBean.consultaRealizada}">
+				<div id="conteudo">
+					<h1 class="itemForm">#{messages['label.resultado.consulta']}</h1>
+					<h:outputText value="#{messages['msg.nenhum.registro.encontrado']}"
+						rendered="#{funcaoDadosProjetoDataModel.rowCount == 0}" />
+					<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3"
+						rendered="#{funcaoDadosProjetoDataModel.rowCount > 0}"
+						cellspacing="1" border="0" width="100%" id="listagemFuncaoDados"
+						rows="10" var="registro" value="#{funcaoDadosProjetoDataModel}">
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column style="text-align:center;" width="5%" />
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.funcao.dados']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.tipo']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.elemento.contagem']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText
+										value="#{messages['label.funcao.quantidade.tds']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText
+										value="#{messages['label.funcao.quantidade.trs']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.complexidade']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.pf']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.pf.local']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.tr.descricao']}" />
+								</rich:column>
+							</rich:columnGroup>
+						</f:facet>
+						<rich:columnGroup>
+							<rich:column style="text-align:center;">
+								<a4j:commandLink title="#{messages['label.alterar']}"
+									reRender="pnlResultado" immediate="true"
+									action="#{funcaoDadosProjetoBean.editar()}"
+									rendered="#{registro.projetoTO.status != 'CONCLUIDO'}">
+									<h:graphicImage value="/img/ico_edit.png" styleClass="acoes" />
+								</a4j:commandLink>
+								<a4j:commandLink title="#{messages['label.excluir']}"
+									actionListener="#{funcaoDadosProjetoBean.excluir()}"
+									reRender="pnlResultado" immediate="true"
+									rendered="#{registro.projetoTO.status != 'CONCLUIDO'}"
+									onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+									<h:graphicImage value="/img/ico_del.png" styleClass="acoes" />
+								</a4j:commandLink>
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.nome}" size="80" />
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.tipoFuncaoDadosProjeto}" />
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.codElementoContagem}" />
+							</rich:column>
+							<rich:column style="text-align:right;">
+								<h:outputText value="#{registro.qtTipoDados}" />
+							</rich:column>
+							<rich:column style="text-align:right;">
+								<h:outputText value="#{registro.qtTipoRegistro}" />
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.complexidadeTP}" />
+							</rich:column>
+							<rich:column style="text-align:right;">
+								<h:outputText value="#{registro.valorPontoFuncao}" />
+							</rich:column>
+							<rich:column style="text-align:right;">
+								<h:outputText value="#{registro.valorPontoFuncaoLocal}" />
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.descricaoTRs}"
+									style="word-wrap: break-word;" />
+							</rich:column>
+						</rich:columnGroup>
+					</rich:dataTable>
+					<ui:include src="/templates/paginacao.xhtml">
+						<ui:param name="lista" value="#{funcaoDadosProjetoDataModel}" />
+						<ui:param name="id" value="listagemFuncaoDados" />
+					</ui:include>
+				</div>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

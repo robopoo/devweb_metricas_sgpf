@@ -1,0 +1,190 @@
+#logon{
+	background-image: url("../img/fundoLogin.jpg");
+	background-repeat: repeat-x;
+}	
+
+body{
+	background-color:#F4F4F2;	
+	font:11px Arial, Helvetica, sans-serif;
+	margin: 0px;
+}
+
+input {
+	border:1px solid #CCCCCC;
+}
+
+#lateral {
+	position:absolute;
+	width:100%;
+	height:225px;
+	top:50%;
+	margin-top:-120px;
+}
+
+#centro {
+	position:absolute;
+	background-repeat:no-repeat;
+	width:760px;
+	height:410px;
+	top:50%;
+	left:50%;
+	margin-top:-205px;
+	margin-left:-380px;
+}
+
+#boxcentral {
+	position:absolute;
+	width:288px;
+	height:160px;
+	*height:200px;
+	_height:200px;
+	top:110px;
+	left:218px;
+	padding:20px;
+    border: 1px solid #9A9A9A;
+    border-radius: 5px;
+    margin: 0 auto;
+    margin-top: 0px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 9px #000000, 0 0 0 0 #000000;
+    background-color: #FFFFFF;
+    padding-left: 30px;
+    padding-bottom: 30px;	
+}
+
+#divBtnEntrar {
+	text-align: right;
+	float: right;
+	display: block;
+	*margin-top: -20px;
+}
+
+.BtFechar {
+	border: 1px OUTSET;
+	width:90px;
+	cursor: pointer;
+}
+
+.BtFechar_focus {
+	border: 1px OUTSET;
+	width:90px;
+	cursor: pointer;
+}
+
+input.inputText {
+  border: 1px solid #CCCCCC;
+  height: 20px;
+  padding-right: 4px;
+  padding-right: 4px;
+  padding-left: 4px;
+  padding-left: 4px;
+  /* IE7-8 doesn't have border-radius, so don't indent the padding */
+
+  margin-bottom: 0;
+  margin-right: 20px;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+}
+
+
+
+INPUT.inputBtn {
+	-moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #F5F5F5;
+    background: -webkit-gradient(linear, center top, center bottom, from(#FFFFFF), to(#E6E6E6));
+    background-image: -moz-linear-gradient(center top , #FFFFFF, #E6E6E6);
+    background-repeat: repeat-x;
+    border-radius: 4px 4px 4px 4px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #CFCFCF;
+ 
+    color: #333333;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 11px;
+    margin-bottom: 0;
+    padding: 4px 12px;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    vertical-align: middle;
+
+}
+
+INPUT.inputBtn:focus, INPUT.inputBtn:hover {
+  background: -webkit-gradient(linear, center top, center bottom, from(#FFFFFF), to(#ACACAC));
+	background-image: -moz-linear-gradient(center top , #FFFFFF, #ACACAC);
+	background-color: #ACACAC;
+}
+
+
+/*****************/ /* MENSAGEM SUCESSO, ALERTA E ERRO */ /*****************/
+
+#MsgErro {
+	background-color:#FFFFEA;
+	border: solid 1px #CC0000;
+	margin-left:-13px;
+	margin-top:-13px;
+	width:277px;
+	margin-bottom:10px;
+	padding-top: 5px;
+	padding-right: 3px;
+	padding-bottom: 7px;
+	padding-left: 30px;
+	color:#CC0000;
+}
+
+
+.msgSucesso{
+	color: #006600;
+	font-weight:bold;
+	font-size:12px;
+}
+
+.msgAlerta{
+	color: #E56C33;
+	font-weight:bold;
+	font-size:12px;
+}
+
+.msgErro{
+	color: #FF0000;
+	font-weight:bold;
+	font-size:12px;
+	margin-top: 5px;
+}
+
+/* Componentes Richfaces */
+.rich-messages-marker img {
+	padding-right: 7px;
+}
+
+.rich-message-label {
+	color: red;
+}
+
+.top {
+	vertical-align: top;
+}
+
+.rich-messages-label {
+	position: absolute;
+	*position: none;
+	margin-top: 10px
+}
+
+/* rich:modalPanel login */
+.rich-mpnl-header {
+    background-color: #D2D2D2 !important;
+    background-image: none !important;
+    border: 1px solid #CDCDCD !important;
+    border-collapse: collapse !important;
+    color: #444444 !important;
+}
+
+/***************** rich:modalPanel login *****************/

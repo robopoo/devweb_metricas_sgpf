@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+ 	  xml:lang="pt" lang="pt"	
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+
+<f:view encoding="UTF-8" locale="pt_BR">
+
+<head>
+
+ 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+  	<title>
+		<ui:insert name="title">..:: PD METRICA ::..</ui:insert>
+  	</title>
+
+	<link rel="stylesheet" type="text/css" href="#{contextPath}/css/login.css?#{mensagens.versao}" />
+	<link rel="stylesheet" type="text/css" href="#{contextPath}/css/subModal.css?#{mensagens.versao}" />
+		
+	<script	src="#{contextPath}/js/aguarde.js?#{mensagens.versao}" type="text/javascript" charset="UTF-8"/>
+	<script	src="#{contextPath}/js/common.js?#{mensagens.versao}"	type="text/javascript" charset="UTF-8"/>	
+	<script	src="#{contextPath}/js/subModal.js?#{mensagens.versao}" type="text/javascript" charset="UTF-8"/>
+		
+	<script type="text/javascript">
+       	iniciarLov('#{contextPath}');
+    </script>			
+</head>
+
+<body id="logon">
+
+	<noscript><br /><center><h:outputText value="O JavaScript está desabilitado! Habilite no seu navegador para continuar." styleClass="msgErro"/></center><br /></noscript>
+	
+	<h:form id="formulario">
+	
+		<div id="lateral">
+			<div id="centro">
+				<div id="boxcentral">
+					<img src="img/logo_pd_metrica.png" width="218px" height="48px" border="0" /><br />
+					<h:panelGroup>
+			   			<h:outputLabel for="usuario" value="Login" /><br/>
+				  		<h:inputText id="usuario" required="true" value="#{credentials.username}" label="#{messages['label.login']}" maxlength="40" style="width:283px;" styleClass="inputText" />
+				  	</h:panelGroup>
+						
+						<br clear="all" />
+						<br clear="all" />
+						
+						<h:panelGroup>
+			   				<h:outputLabel for="senha" value="Senha" /><br/>
+				  			<h:inputSecret id="senha" required="true" redisplay="true" value="#{credentials.password}"	label="#{messages['label.senha']}" maxlength="40" style="width:283px;" styleClass="inputText" />
+			   			</h:panelGroup>						
+						<br clear="all" />
+						<br clear="all" />
+						<table width="100%">
+							<tr>
+								<td align="right">
+									<h:commandButton id="btnEntrar" action="#{identity.authenticate()}" styleClass="inputBtn" value="#{messages['label.entrar']}" onclick="AguardeShow();" />
+								</td>
+							</tr>
+						</table>
+				</div>
+
+			</div>
+		</div>	
+
+
+		<div id="mensagem">
+			<a4j:outputPanel id="pnlMensagem">
+				<rich:modalPanel id="msgPanel" rendered="#{! empty facesContext.maximumSeverity}"  resizeable="false" moveable="false" autosized="true" zindex="2000">
+	            	<f:facet name="header">
+	                	<h:outputText value="Mensagem" />
+		            </f:facet>
+	
+		            <f:facet name="controls">
+		            	<h:graphicImage url="/img/ico_close.png" style="cursor: pointer;" onclick="Richfaces.hideModalPanel('msgPanel')"/>
+		            </f:facet>
+		            
+					<table border="0" width="100%">
+						<tr>
+							<td style="width: 100%;">
+					            <h:panelGrid columns="1">
+						            <rich:messages showSummary="false" showDetail="true" id="messageOutput"
+												   errorClass="msgErro" infoClass="msgSucesso" warnClass="msgAlerta" fatalClass="msgErro">
+										<f:facet name="infoMarker">
+											<h:graphicImage value="/img/information.png" />
+										</f:facet>
+										<f:facet name="errorMarker">
+											<h:graphicImage value="/img/error.png" />
+										</f:facet>
+										<f:facet name="warnMarker">
+											<h:graphicImage value="/img/warn.png" />
+										</f:facet>
+									</rich:messages>
+					            </h:panelGrid>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center" style="width: 100%;">
+								<br/>
+								<h:commandButton action="#" id="fechar" value="#{messages['label.fechar']}" class="inputBtn" onclick="Richfaces.hideModalPanel('msgPanel'); return false;" />
+							</td>
+						</tr>
+					
+					</table>
+					
+				<a4j:status id="indicator" onstart="AguardeShow();" onstop="AguardeHide();" />
+				
+				<ui:include src="/templates/aguarde.xhtml" />
+					
+	        	<script type="text/javascript" charset="iso-8859-1">
+	        		setTimeout("Richfaces.showModalPanel('formulario:msgPanel',{width:450, top:200});", 100);
+	        		setTimeout("document.getElementById('formulario:fechar').focus();", 1000);
+	        	</script>						
+					
+	        	</rich:modalPanel>
+        	</a4j:outputPanel>
+	    </div>
+	</h:form>
+
+  	<script type="text/javascript" charset="utf-8">
+			setTimeout("try{ document.getElementById('formulario:usuario').focus();}catch(err){}", 500);
+   	</script> 	
+</body>
+
+</f:view>
+
+</html>

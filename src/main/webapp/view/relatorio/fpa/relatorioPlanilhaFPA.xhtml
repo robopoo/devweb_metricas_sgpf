@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:c="http://java.sun.com/jstl/core">
+<f:view contentType="text/html" locale="pt_BR">
+
+	<ui:composition template="/templates/template-principal.xhtml">
+
+		<ui:define name="breadcrumb">
+			<div id="breadcrumb">
+				<ul class="crumbs">
+					<li class="first"><a href="#" style="z-index: 3"> <span></span>#{messages['label.home']}
+					</a></li>
+					<li><a href="#" style="z-index: 2">#{messages['label.consultar.fpa']}</a></li>
+					<li><a href="#" style="z-index: 1"> <h:outputText
+								value="#{messages['label.visualizacao']}" />
+					</a></li>
+				</ul>
+			</div>
+		</ui:define>
+		<ui:define name="conteudo">
+
+			<a4j:outputPanel id="pnlResultado">
+				<a4j:outputPanel id="renderResultado">
+					<div id="conteudo">
+						<h1 class="tituloForm">#{messages['label.consultar.planilha']}</h1>
+						<h1 class="itemForm">
+							<h:outputLabel value="#{messages['label.resumo.contagem']}" />
+						</h1>
+
+						<table width="50%">
+							<tr>
+								<td><h:outputLabel class="labelcabecalho"
+										value="#{messages['label.fornecedor']}:" /> <c:choose>
+										<c:when test="#{relatorioFPABean.projeto}">
+											<h:outputLabel
+												value="#{relatorioFPABean.funcaoProjetoFiltroBean.projetoFiltro.fornecedor}" />
+										</c:when>
+										<c:otherwise>
+											<h:outputLabel
+												value="#{relatorioFPABean.funcaoProjetoFiltroBean.filtroSistema.fornecedor}" />
+										</c:otherwise>
+									</c:choose></td>
+								<td><h:outputLabel class="labelcabecalho"
+										value="#{messages['label.pf.total']}:" /> <h:outputLabel
+										value="#{relatorioFPABean.qtPFTotal}" /></td>
+							</tr>
+
+							<c:if test="#{relatorioFPABean.tipoContagem == 'PROJETO'}">
+								<tr>
+									<td><h:outputLabel class="labelcabecalho"
+											value="#{messages['label.projeto']}:" /> <h:outputLabel
+											value="#{relatorioFPABean.funcaoProjetoFiltroBean.projetoFiltro.projeto}" /></td>
+									<td><h:outputLabel class="labelcabecalho"
+											value="#{messages['label.pf.servicos.nao.mensuraveis']}:" />
+										<h:outputLabel
+											value="#{relatorioFPABean.qtPFServicosNaoMensuraveis}" /></td>
+								</tr>
+							</c:if>
+
+							<tr>
+								<c:choose>
+									<c:when test="#{relatorioFPABean.projeto}">
+										<td><h:outputLabel class="labelcabecalho"
+												value="#{messages['label.subprojeto']}:" /> <h:outputLabel
+												value="#{relatorioFPABean.funcaoProjetoFiltroBean.projetoFiltro.subProjeto}" /></td>
+										<td><h:outputLabel class="labelcabecalho"
+												value="#{messages['label.pf.funcoes.mensuraveis']}:" /> <h:outputLabel
+												value=" #{relatorioFPABean.qtPFMensuraveis}" /></td>
+									</c:when>
+									<c:otherwise>
+										<td colspan="2"></td>
+									</c:otherwise>
+								</c:choose>
+							</tr>
+							<tr>
+
+								<td><h:outputLabel class="labelcabecalho"
+										value="#{messages['label.sistemas']}:" /> <h:outputLabel
+										value="#{relatorioFPABean.funcaoProjetoFiltroBean.filtroSistema.cdSistema} - #{relatorioFPABean.funcaoProjetoFiltroBean.filtroSistema.dsSistema}" /></td>
+								<c:if test="#{relatorioFPABean.projeto}">
+									<td><h:outputLabel class="labelcabecalho"
+											value="#{messages['label.data.criacao']}:" /> <h:outputLabel
+											value="#{relatorioFPABean.dtCriacao}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputLabel></td>
+								</c:if>
+							</tr>
+							<tr>
+								<c:if test="#{relatorioFPABean.projeto}">
+									<td colspan="2"><h:outputLabel class="labelcabecalho"
+											value="#{messages['label.responsavel.analista.fornecedor']}:" />
+										<h:outputLabel
+											value="#{relatorioFPABean.funcaoProjetoFiltroBean.projetoFiltro.responsavelPrincipalClienteTO.nomeAnalista}" /></td>
+								</c:if>
+							</tr>
+
+
+						</table>
+
+						<c:choose>
+							<c:when test="#{relatorioFPABean.projeto}">
+								<h1 class="itemForm">
+									<h:outputLabel value="#{messages['label.funcoes.mensuraveis']}" />
+								</h1>
+							</c:when>
+							<c:otherwise>
+								<h1 class="itemForm">
+									<h:outputLabel value="#{messages['label.funcoes']}" />
+								</h1>
+							</c:otherwise>
+						</c:choose>
+
+						<h2 class="itemForm">
+							<h:outputLabel value="#{messages['label.funcao.dados']}" />
+						</h2>
+
+						<h:outputText
+							value="#{messages['msg.nenhum.registro.encontrado']}"
+							rendered="#{funcoesDados.rowCount == null or funcoesDados.rowCount == 0}" />
+						<rich:dataTable
+							rowClasses="#{relatorioFPABean.tipoRelatorio == 'DETALHADO' ? 'row-odd, row-odd, row-odd, row-even, row-even, row-even' : 'row-odd, row-even'}"
+							cellpadding="3" cellspacing="1" border="0" width="100%"
+							id="listagem" var="registroFD" value="#{funcoesDados}"
+							rendered="#{funcoesDados.rowCount != null and funcoesDados.rowCount > 0}">
+							<f:facet name="header">
+								<rich:columnGroup>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.funcao.dados']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.tipo']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;"
+										rendered="#{relatorioFPABean.projeto}">
+										<h:outputText value="#{messages['label.elemento.contagem']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.quantidade.tr']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.quantidade.td']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.complexidade']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.pf']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;"
+										rendered="#{relatorioFPABean.projeto}">
+										<h:outputText value="#{messages['label.pf.local']}" />
+									</rich:column>
+
+								</rich:columnGroup>
+							</f:facet>
+
+							<rich:columnGroup>
+
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{registroFD.nome}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFD.funcaoDadosTP}" />
+								</rich:column>
+								<rich:column style="text-align:left; width:12%"
+									rendered="#{relatorioFPABean.projeto}">
+									<h:outputText
+										value="#{registroFD.elementoContagemTO.codElementoContagem}" />
+								</rich:column>
+
+								<rich:column style="text-align:right; width:5%">
+									<h:outputText value="#{registroFD.qtTipoRegistro}" />
+								</rich:column>
+
+								<rich:column style="text-align:right; width:5%">
+									<h:outputText value="#{registroFD.qtTipoDados}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFD.complexidadeTP}" />
+								</rich:column>
+
+								<rich:column style="text-align:right; width:5%">
+									<h:outputText value="#{registroFD.valorPontoFuncao}" />
+								</rich:column>
+
+								<rich:column style="text-align:right; width:5%"
+									rendered="#{relatorioFPABean.projeto}">
+									<h:outputText value="#{registroFD.valorPontoFuncaoLocal}" />
+								</rich:column>
+
+							</rich:columnGroup>
+							<rich:columnGroup
+								rendered="#{relatorioFPABean.tipoRelatorio == 'DETALHADO'}">
+								<rich:column style="text-align:left; width:5%" colspan="8">
+									<h:outputText value="#{messages['label.tipo.registro']}: " />
+									<h:outputText value="#{relatorioFPABean.TRs}" />
+								</rich:column>
+							</rich:columnGroup>
+							<rich:columnGroup
+								rendered="#{relatorioFPABean.tipoRelatorio == 'DETALHADO'}">
+								<rich:column style="text-align:left; width:5%" colspan="8">
+									<h:outputText value="#{messages['label.tipo.dados']} " />
+									<h:outputText value="#{relatorioFPABean.TDsFD}" />
+								</rich:column>
+							</rich:columnGroup>
+						</rich:dataTable>
+
+						<h2 class="itemForm">
+							<h:outputLabel value="#{messages['label.funcao.transacao']}" />
+						</h2>
+
+						<h:outputText
+							value="#{messages['msg.nenhum.registro.encontrado']}"
+							rendered="#{funcoesTrans.rowCount == null or funcoesTrans.rowCount == 0}" />
+
+						<rich:dataTable
+							rowClasses="#{relatorioFPABean.tipoRelatorio == 'DETALHADO' ? 'row-odd, row-odd, row-odd, row-even, row-even, row-even' : 'row-odd, row-even'}"
+							cellpadding="3" cellspacing="1" border="0" width="100%"
+							id="listagemFT" var="registroFT"
+							value="#{funcoesTrans}"
+							rendered="#{funcoesTrans.rowCount != null and funcoesTrans.rowCount > 0}">
+							<f:facet name="header">
+								<rich:columnGroup>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.funcao.transacao']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.tipo']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;"
+										rendered="#{relatorioFPABean.projeto}">
+										<h:outputText value="#{messages['label.elemento.contagem']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.quantidade.ar']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.quantidade.td']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.complexidade']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{messages['label.pf']}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;"
+										rendered="#{relatorioFPABean.projeto}">
+										<h:outputText value="#{messages['label.pf.local']}" />
+									</rich:column>
+
+								</rich:columnGroup>
+							</f:facet>
+
+							<rich:columnGroup>
+
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{registroFT.nome}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFT.funcaoTransacaoTP}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:12%"
+									rendered="#{relatorioFPABean.projeto}">
+									<h:outputText
+										value="#{registroFT.elementoContagemTO.codElementoContagem}" />
+								</rich:column>
+
+								<rich:column style="text-align:right; width:5%">
+									<h:outputText value="#{registroFT.qtArquivoReferenciado}" />
+								</rich:column>
+
+								<rich:column style="text-align:right; width:5%">
+									<h:outputText value="#{registroFT.qtTipoDados}" />
+								</rich:column>
+
+								<rich:column style="text-align:left; width:5%">
+									<h:outputText value="#{registroFT.complexidadeTP}" />
+								</rich:column>
+
+								<rich:column style="text-align:right; width:5%">
+									<h:outputText value="#{registroFT.valorPontoFuncao}" />
+								</rich:column>
+
+								<rich:column style="text-align:right; width:5%"
+									rendered="#{relatorioFPABean.projeto}">
+									<h:outputText value="#{registroFT.valorPontoFuncaoLocal}" />
+								</rich:column>
+
+							</rich:columnGroup>
+							<rich:columnGroup
+								rendered="#{relatorioFPABean.tipoRelatorio == 'DETALHADO'}">
+								<rich:column style="text-align:left; width:5%" colspan="8">
+									<h:outputText
+										value="#{messages['label.arquivo.referenciado']}: " />
+									<h:outputText value="#{relatorioFPABean.ARs}" />
+								</rich:column>
+							</rich:columnGroup>
+							<rich:columnGroup
+								rendered="#{relatorioFPABean.tipoRelatorio == 'DETALHADO'}">
+								<rich:column style="text-align:left; width:5%" colspan="8">
+									<h:outputText value="#{messages['label.tipo.dados']} " />
+									<h:outputText value="#{relatorioFPABean.TDsFT}" />
+								</rich:column>
+							</rich:columnGroup>
+						</rich:dataTable>
+
+
+						<c:if test="#{relatorioFPABean.projeto}">
+
+							<h1 class="itemForm">
+								<h:outputLabel
+									value="#{messages['label.servicos.nao.mensuraveis']}" />
+							</h1>
+							<h2 class="itemForm">
+								<h:outputLabel value="#{messages['label.funcao.transacao']}" />
+							</h2>
+
+
+							<h:outputText
+								value="#{messages['msg.nenhum.registro.encontrado']}"
+								rendered="#{servicosNaoMensuraveis.rowCount == null or servicosNaoMensuraveis.rowCount == 0}" />
+							<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3"
+								cellspacing="1" border="0" width="100%" id="listagemNM"
+								 var="registro" value="#{servicosNaoMensuraveis}"
+								rendered="#{servicosNaoMensuraveis.rowCount != null and servicosNaoMensuraveis.rowCount > 0}">
+								<f:facet name="header">
+									<rich:columnGroup>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.funcao.transacao']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.elemento.contagem']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.pf.referencia']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.qt.itens']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.pf']}" />
+										</rich:column>
+
+									</rich:columnGroup>
+								</f:facet>
+
+								<rich:columnGroup>
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.nome}" />
+									</rich:column>
+
+									<rich:column style="text-align:left; width:12%">
+										<h:outputText
+											value="#{registro.elementoContagemTO.codElementoContagem}" />
+									</rich:column>
+
+									<rich:column style="text-align:right; width:8%">
+										<h:outputText value="#{registro.qtPontoFuncaoReferencia}" />
+									</rich:column>
+
+									<rich:column style="text-align:right; width:6%">
+										<h:outputText value="#{registro.qtItens}" />
+									</rich:column>
+
+									<rich:column style="text-align:right; width:5%">
+										<h:outputText value="#{registro.qtPontoFuncaoFinal}" />
+									</rich:column>
+
+								</rich:columnGroup>
+							</rich:dataTable>
+
+						</c:if>
+						<table width="100%">
+							<tr>
+								<td align="center"><a4j:commandButton id="expFPA"
+										value="#{messages['label.preencher.planilha']}" type="submit"
+										styleClass="inputBtn"
+										actionListener="#{relatorioFPABean.exportar()}"
+										oncomplete="if(#{facesContext.maximumSeverity eq null}) document.getElementById('formulario:btnObterImpressao').click();" />
+									<h:commandButton id="imprimir"
+										value="#{messages['label.imprimir']}" type="submit"
+										styleClass="inputBtn"
+										actionListener="#{relatorioFPABean.imprimir()}" /> <a4j:commandButton
+										id="limpar" value="#{messages['label.abandonar']}"
+										type="submit"
+										onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+										styleClass="inputBtn" action="filtro" /></td>
+							</tr>
+						</table>
+						<h:commandButton id="btnObterImpressao" value="Click!"
+							action="#{relatorioFPABean.obterImpressao()}"
+							style="display: none;" />
+
+					</div>
+				</a4j:outputPanel>
+			</a4j:outputPanel>
+		</ui:define>
+	</ui:composition>
+</f:view>
+</html>

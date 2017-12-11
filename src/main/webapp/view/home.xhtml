@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib">
+
+<body>
+	<f:view contentType="text/html" locale="pt_BR">
+		<ui:composition template="/templates/template-lista.xhtml">
+
+			<ui:define name="filtrocampos">
+
+				<div id="conteudo">
+					<a4j:outputPanel id="panelFiltro">
+						<h1 class="tituloForm">
+							<h:outputLabel value="#{messages['msg.boas.vindas']}" />
+						</h1>
+						<h1 class="itemForm">
+							<h:outputLabel value="#{messages['msg.boas.vindas.obs']}" />
+						</h1>
+						<ui:include src="/templates/filtroProjeto.xhtml">
+						</ui:include>
+						<table width="100%">
+							<tr>
+								<td align="center"><a4j:commandButton id="salvar"
+										value="#{messages['label.salvar']}" type="submit"
+										actionListener="#{funcaoProjetoFiltroBean.carregarProjetoSessao()}"
+										styleClass="inputBtn" /> <h:commandButton id="limpar"
+										value="#{messages['label.limpar']}" type="submit"
+										actionListener="#{funcaoProjetoFiltroBean.limparProjetoSessao()}"
+										styleClass="inputBtn" /></td>
+							</tr>
+						</table>
+
+					</a4j:outputPanel>
+				</div>
+			</ui:define>
+		</ui:composition>
+
+	</f:view>
+</body>
+
+</html>

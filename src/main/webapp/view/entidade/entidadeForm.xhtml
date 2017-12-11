@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+
+<ui:composition template="/templates/template-form.xhtml">
+
+	<ui:define name="script">
+		<script type="text/javascript">
+
+			jQuery("[id$=desc]").maxLength({MaxLength : '750'});
+			mascaraFormulario('formulario', 'tamAtributo', 'INTEIRO');		
+			mascaraFormulario('formulario', 'precisao', 'INTEIRO');
+			
+			function atualizarTextArea(){
+				jQuery("[id$=descAtributo]").maxLength({MaxLength : '750'});
+				jQuery("[id$=validadeAtributo]").maxLength({MaxLength : '200'});
+			}
+
+			atualizarTextArea();			
+
+			function mudarFormato(select){
+				tamanho = document.getElementById('formulario:tamAtributo');
+				precisao = document.getElementById('formulario:precisao');
+
+				if ( select.value != 'NUMERO' ){
+					precisao.disabled = true;
+					precisao.value = '0';										
+				}else{
+					precisao.disabled = false;															
+				}				 
+
+				if( select.value == 'DATA' ){
+					tamanho.disabled = true;					
+					tamanho.value = '0';					
+				}else{
+					tamanho.disabled = false;				
+				}
+			}
+
+		</script>
+
+	</ui:define>
+
+
+	<ui:define name="breadcrumb">
+		<div id="breadcrumb">
+			<ul class="crumbs">
+				<li class="first"><a href="#" style="z-index: 3"> <span></span>#{messages['label.home']}
+				</a></li>
+				<li><a href="#" style="z-index: 2">#{messages['label.entidade']}</a></li>
+				<li><a href="#" style="z-index: 1"> <h:outputText
+							value="#{messages['label.visualizacao']}"
+							rendered="#{entidadeBean.operacao == 'VISUALIZACAO'}" /> <h:outputText
+							value="#{messages['label.inclusao']}"
+							rendered="#{entidadeBean.operacao == 'INSERCAO'}" /> <h:outputText
+							value="#{messages['label.alteracao']}"
+							rendered="#{entidadeBean.operacao == 'ALTERACAO'}" />
+				</a></li>
+			</ul>
+		</div>
+	</ui:define>
+
+
+	<ui:define name="camposFormularioBase">
+		<a4j:outputPanel id="panelFormulario">
+			<div id="conteudo">
+				<h1 class="tituloForm">
+					<h:outputText value="#{messages['label.visualizar.entidade']}"
+						rendered="#{entidadeBean.operacao == 'VISUALIZACAO'}" />
+					<h:outputText value="#{messages['label.incluir.entidade']}"
+						rendered="#{entidadeBean.operacao == 'INSERCAO'}" />
+					<h:outputText value="#{messages['label.alterar.entidade']}"
+						rendered="#{entidadeBean.operacao == 'ALTERACAO'}" />
+				</h1>
+
+				<h1 class="itemForm">#{messages['label.entidade']}</h1>
+				<table>
+
+					<tr>
+						<td><pdvix:label value="#{messages['label.empresas']}"
+								for="empresas" required="#{entidadeBean.operacao == 'INSERCAO'}" />
+							<h:selectOneMenu id="empresas" styleClass="selectOneMenu"
+								label="#{messages['label.empresa']}"
+								value="#{entidadeTO.sistemaTO.empresaTO}"
+								disabled="#{entidadeBean.operacao != 'INSERCAO'}"
+								required="true">
+
+								<a4j:support event="onchange" reRender="sistemas"
+									bypassUpdates="false" ajaxSingle="true" />
+
+								<s:selectItems
+									value="#{entidadeBean.operacao != 'INSERCAO' ? factoryEmpresas : factoryEmpresasAtiva}"
+									var="f" label="#{f.nmEmpresa}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEntity />
+							</h:selectOneMenu></td>
+
+						<td><pdvix:label for="sistemas"
+								value="#{messages['label.sistemas']}"
+								required="#{entidadeBean.operacao == 'INSERCAO'}" /> <h:selectOneMenu
+								id="sistemas" value="#{entidadeTO.sistemaTO}"
+								styleClass="selectOneMenu" label="#{messages['label.sistema']}"
+								disabled="#{entidadeBean.operacao != 'INSERCAO'}"
+								required="true" style="width:400px">
+
+								<s:selectItems
+									value="#{entidadeTO.sistemaTO.empresaTO.sistemaTOlist}" var="f"
+									label="#{f.cdSistema} - #{f.dsSistema}"
+									styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEntity />
+							</h:selectOneMenu></td>
+
+						<td><pdvix:label for="status1"
+								value="#{messages['label.status']}" /> <h:outputText
+								id="status1" value="#{entidadeTO.status.descricao}" /></td>
+
+
+						<td style="text-align: right;"></td>
+					</tr>
+
+					<tr>
+						<td><pdvix:label for="nome"
+								value="#{messages['label.entidade']}"
+								required="#{entidadeBean.operacao == 'INSERCAO' or entidadeBean.operacao == 'ALTERACAO'}" />
+							<h:outputLabel styleClass="" /> <h:inputText id="nome"
+								value="#{entidadeTO.nmEntidade}"
+								label="#{messages['label.entidade']}" size="40"
+								styleClass="inputText" maxlength="50" required="true"
+								disabled="#{entidadeBean.operacao != 'INSERCAO' and entidadeBean.operacao != 'ALTERACAO'}" />
+						</td>
+						<td colspan="1"><pdvix:label for="categoria"
+								value="#{messages['label.categoria']}" /> <h:selectOneMenu
+								id="categoria" value="#{entidadeTO.categoria}"
+								styleClass="selectOneMenu"
+								label="#{messages['label.categoria']}"
+								disabled="#{entidadeBean.operacao != 'INSERCAO' and entidadeBean.operacao != 'ALTERACAO'}">
+								<s:selectItems value="#{categoriaEnum}" var="p"
+									label="#{p.descricao}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEnum />
+							</h:selectOneMenu></td>
+						<td colspan="1"><pdvix:label for="tipoEnticade"
+								value="#{messages['label.tipo']}" /> <h:selectOneMenu
+								id="tipoEnticade" value="#{entidadeTO.tpEntidade}"
+								styleClass="selectOneMenu" label="#{messages['label.tipo']}"
+								disabled="#{entidadeBean.operacao != 'INSERCAO' and entidadeBean.operacao != 'ALTERACAO'}">
+								<s:selectItems value="#{tipoEntidadeEnum}" var="p"
+									label="#{p.descricao}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEnum />
+							</h:selectOneMenu></td>
+						<td></td>
+
+
+					</tr>
+
+
+					<tr>
+
+						<td colspan="4"><pdvix:label for="desc"
+								value="#{messages['label.descricao']}"
+								required="#{entidadeBean.operacao == 'INSERCAO' or entidadeBean.operacao == 'ALTERACAO'}" />
+							<h:inputTextarea id="desc" value="#{entidadeTO.dsEntidade}"
+								label="#{messages['label.descricao']}" styleClass="inputText"
+								cols="70" rows="2" required="true"
+								disabled="#{entidadeBean.operacao != 'INSERCAO' and entidadeBean.operacao != 'ALTERACAO'}">
+								<f:validateLength maximum="750"></f:validateLength>
+							</h:inputTextarea></td>
+
+					</tr>
+
+				</table>
+
+
+				<div id="subconteudo"
+					rendered="#{entidadeBean.operacao == 'INSERCAO' or entidadeBean.operacao == 'ALTERACAO'}">
+
+					<h1 class="itemForm" style="padding-top: 15px">#{messages['label.atributo']}</h1>
+					<a4j:outputPanel id="panelCamposAtributo"
+						rendered="#{entidadeBean.operacao == 'INSERCAO' or entidadeBean.operacao == 'ALTERACAO'}">
+						<table>
+							<tr>
+								<td><pdvix:label for="nomeAtributo"
+										value="#{messages['label.atributo.nome']}" required="true" />
+									<h:inputText id="nomeAtributo"
+										value="#{atributoTONovo.nmAtributo}"
+										label="#{messages['label.atributo.nome']}" size="50"
+										maxlength="80" styleClass="inputText" /></td>
+								<td colspan="2"><pdvix:label for="reconhecido"
+										value="#{messages['label.reconhecido.usuario']}" /> <h:selectOneMenu
+										id="reconhecido" value="#{atributoTONovo.flReconhecido}"
+										styleClass="selectOneMenu"
+										label="#{messages['label.reconhecido.usuario']}">
+										<s:selectItems value="#{simNaoEnum}" var="s"
+											label="#{s.descricao}" styleClass="rich-text-general"
+											noSelectionLabel="#{messages['label.selecione']}" />
+										<s:convertEnum />
+									</h:selectOneMenu></td>
+
+							</tr>
+							<tr>
+								<td colspan="3"><pdvix:label for="descAtributo"
+										value="#{messages['label.descricao']}" required="true" /> <h:inputTextarea
+										id="descAtributo" value="#{atributoTONovo.dsAtributo}"
+										label="#{messages['label.descricao']}" cols="70" rows="2"
+										styleClass="inputText">
+										<f:validateLength maximum="750"></f:validateLength>
+									</h:inputTextarea></td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									<table cellpadding="0" cellspacing="0">
+										<tr>
+											<td><pdvix:label for="tpFormatoAtributo"
+													value="#{messages['label.formato']}" /> <h:selectOneMenu
+													id="tpFormatoAtributo" onchange="mudarFormato(this);"
+													value="#{atributoTONovo.tpFormato}"
+													styleClass="selectOneMenu"
+													label="#{messages['label.formato']}">
+													<s:selectItems value="#{formatoEnum}" var="s"
+														label="#{s.descricao}" styleClass="rich-text-general"
+														noSelectionLabel="#{messages['label.selecione']}" />
+													<s:convertEnum />
+												</h:selectOneMenu></td>
+											<td><pdvix:label for="tamAtributo"
+													value="#{messages['label.tamanho']}" /> <h:inputText
+													id="tamAtributo"
+													disabled="#{atributoTONovo.tpFormato == 'DATA'}"
+													value="#{atributoTONovo.nrTamanho}"
+													label="#{messages['label.tamanho']}" size="10"
+													maxlength="5" styleClass="inputText">
+												</h:inputText></td>
+											<td><pdvix:label for="precisao"
+													value="#{messages['label.precisao']}" /> <h:inputText
+													id="precisao" value="#{atributoTONovo.precisao}"
+													disabled="#{atributoTONovo.tpFormato == 'DATA'}"
+													label="#{messages['label.precisao']}" size="10"
+													maxlength="2" styleClass="inputText">
+												</h:inputText></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3"><pdvix:label for="validadeAtributo"
+										value="#{messages['label.validade']}" /> <h:inputTextarea
+										id="validadeAtributo" value="#{atributoTONovo.dsValidade}"
+										label="#{messages['label.descricao']}" cols="70" rows="2"
+										styleClass="inputText">
+
+										<f:validateLength maximum="200"></f:validateLength>
+									</h:inputTextarea></td>
+							</tr>
+
+
+						</table>
+
+
+					</a4j:outputPanel>
+					<table width="100%">
+						<tr>
+							<td align="center"><a4j:commandButton id="incluir"
+									rendered="#{entidadeBean.operacao == 'INSERCAO' or entidadeBean.operacao == 'ALTERACAO'}"
+									value="#{messages['label.incluir.atributo']}" type="submit"
+									ajaxSingle="true" process="panelCamposAtributo"
+									oncomplete="atualizarTextArea();"
+									reRender="panelCamposAtributo, pnlResultadoAtributo, qtTD"
+									actionListener="#{entidadeBean.addAtributo()}"
+									styleClass="inputBtn" /></td>
+						</tr>
+					</table>
+				</div>
+				<a4j:outputPanel id="pnlResultadoAtributo">
+					<a4j:outputPanel id="renderResultadoAtributo">
+						<div id="conteudoAtributo">
+							<h1 class="itemForm">#{messages['label.resultado.consulta']}</h1>
+							<h:outputText
+								value="#{messages['msg.nenhum.registro.encontrado']}"
+								rendered="#{atributoTOlist.rowCount == 0}" />
+							<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3"
+								cellspacing="1" border="0" width="100%" id="listagemAtributo"
+								rows="10" var="registro" value="#{atributoTOlist}"
+								rendered="#{atributoTOlist.rowCount > 0}">
+								<f:facet name="header">
+									<rich:columnGroup>
+
+										<rich:column style="text-align:center;" width="10%"
+											rendered="#{entidadeBean.operacao == 'INSERCAO' or entidadeBean.operacao == 'ALTERACAO'}">
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.atributo']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.descricao']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.formato']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.tamanho']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.precisao']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.validade']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.situacao']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText
+												value="#{messages['label.reconhecido.usuario']}" />
+										</rich:column>
+
+									</rich:columnGroup>
+								</f:facet>
+
+								<rich:columnGroup>
+
+									<rich:column style="text-align:center;"
+										rendered="#{entidadeBean.operacao == 'INSERCAO' or entidadeBean.operacao == 'ALTERACAO'}">
+
+										<a4j:commandLink title="#{messages['label.alterar']}"
+											rendered="#{entidadeBean.operacao == 'INSERCAO' or entidadeBean.operacao == 'ALTERACAO'}"
+											actionListener="#{entidadeBean.editarAtributo()}"
+											ajaxSingle="true" oncomplete="atualizarTextArea();"
+											reRender="panelCamposAtributo">
+											<h:graphicImage value="/img/ico_edit.png" styleClass="acoes" />
+										</a4j:commandLink>
+
+										<a4j:commandLink title="#{messages['label.excluir']}"
+											actionListener="#{entidadeBean.removerAtributo()}"
+											reRender="pnlResultadoAtributo, qtTD" ajaxSingle="true"
+											rendered="#{entidadeBean.operacao == 'INSERCAO' or entidadeBean.operacao == 'ALTERACAO'}"
+											onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+											<h:graphicImage value="/img/ico_del.png" styleClass="acoes" />
+										</a4j:commandLink>
+										<a4j:commandLink title="#{messages['label.ativar']}"
+											ajaxSingle="true" action="#{entidadeBean.ativarAtributo()}"
+											rendered="#{registro.status.value == 'D' }"
+											reRender="pnlResultadoAtributo"
+											onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+											<h:graphicImage value="/img/ico_ativar.png"
+												styleClass="acoes" />
+										</a4j:commandLink>
+										<a4j:commandLink title="#{messages['label.desativar']}"
+											ajaxSingle="true"
+											action="#{entidadeBean.desativarAtributo()}"
+											rendered="#{registro.status.value == 'A' }"
+											reRender="pnlResultadoAtributo"
+											onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+											<h:graphicImage value="/img/ico_cancel.png"
+												styleClass="acoes" />
+										</a4j:commandLink>
+
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.nmAtributo}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.dsAtributo}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.tpFormato.descricao}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.nrTamanho}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.precisao}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.dsValidade}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.status.descricao}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.flReconhecido.descricao}" />
+									</rich:column>
+
+								</rich:columnGroup>
+							</rich:dataTable>
+
+							<ui:include src="/templates/paginacao.xhtml">
+								<ui:param name="lista" value="#{atributoTOlist}" />
+								<ui:param name="id" value="listagemAtributo" />
+							</ui:include>
+						</div>
+					</a4j:outputPanel>
+				</a4j:outputPanel>
+
+				<table width="100%">
+					<tr>
+						<td align="center"><a4j:commandButton id="salvar"
+								rendered="#{entidadeBean.operacao != 'VISUALIZACAO'}"
+								value="#{messages['label.salvar']}" type="submit"
+								action="#{entidadeBean.gravar()}" styleClass="inputBtn"
+								reRender="panelFormulario" status="indicator"
+								onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;" />
+
+							<a4j:commandButton id="abandonar"
+								rendered="#{entidadeBean.operacao != 'VISUALIZACAO'}"
+								value="#{messages['label.abandonar']}" type="submit"
+								styleClass="inputBtn" status="indicator" action="list"
+								onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+								immediate="true" /> <a4j:commandButton id="abandonarVisualizar"
+								rendered="#{entidadeBean.operacao == 'VISUALIZACAO'}"
+								value="#{messages['label.abandonar']}" type="submit"
+								styleClass="inputBtn" status="indicator" action="list"
+								immediate="true" /></td>
+					</tr>
+				</table>
+
+			</div>
+		</a4j:outputPanel>
+	</ui:define>
+
+
+</ui:composition>
+</html>

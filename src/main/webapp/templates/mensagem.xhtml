@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xml:lang="pt" lang="pt" 
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich">
+
+	<script type="text/javascript">
+		jQuery(function() {
+			jQuery('#divMensagem').animate({ height: 'toggle', opacity: 'show'}, 'slow', function(){
+				posicionaSeta();
+			});
+		});	   	
+	</script>
+	
+	<h:panelGroup rendered="#{facesContext.maximumSeverity ne null}">
+	
+		<div id="divMensagem" style="display: none;">
+			<div class="#{facesContext.maximumSeverity.ordinal == '2' ? 'notification error' : (facesContext.maximumSeverity.ordinal == '0' ? 'notification success' : 'notification warn') }">
+				<rich:messages layout="table" showSummary="false" showDetail="true">
+					<f:facet name="infoMarker" />
+					<f:facet name="errorMarker" />
+					<f:facet name="warnMarker" />
+				</rich:messages>	
+			</div>
+			<script type="text/javascript">
+				window.location='#irTopoPagina';
+			</script>	
+		</div>
+	</h:panelGroup>
+</html>

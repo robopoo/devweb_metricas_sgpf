@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+
+	<a4j:outputPanel id="pnlFormularioVisaoGeralSolucao">
+		<table border="0" width="100%">
+			<tr>
+				<td>
+					<pdvix:label value="#{messages['label.projeto.visao.gerao.soluacao']}"/>
+					<h:inputTextarea id="visaoGeralSolucao" value="#{paramProjeto.visaoGeralSolucao}"
+										     disabled="#{paramBean.operacao != 'INSERCAO' and paramBean.operacao != 'ALTERACAO'}"
+											 rows="5" cols="150" onchange="limiteTextArea('formulario:pageVisaoGeralSolucao:visaoGeralSolucao', 500, 'limiteVisaoGeralSolucao')">
+								<f:validateLength maximum="500" />
+					</h:inputTextarea>
+					<!-- <rich:jQuery name="jsLimiteVisaoGeralSolucao" selector="#visaoGeralSolucao" timing="immediate" query="limiteTextArea('formulario:pageVisaoGeralSolucao:visaoGeralSolucao', 500, 'limiteVisaoGeralSolucao')" /> -->
+					
+				
+				<!-- 	<textarea id="visaoGeralSolucao" value="#{paramProjeto.visaoGeralSolucao}" cols="150" rows="5" maxlength="500">
+				
+					</textarea> -->
+					<!-- <div id="limiteVisaoGeralSolucao">
+						<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.</p>
+					</div> -->
+				</td>
+			</tr>
+		</table>
+		<!-- <div id="limiteVisaoGeralSolucao">
+						<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.</p>
+		</div> -->
+		<!-- <table border="0" width="100%">
+			<tr>
+				<td>
+					<h:outputLabel id="limiteVisaoGeralSolucao"/>
+				</td>
+			</tr>
+		</table> -->
+	</a4j:outputPanel>
+</ui:composition>

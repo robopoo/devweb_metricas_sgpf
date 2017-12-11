@@ -1,0 +1,84 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt" lang="pt"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<div id="menu">
+	<rich:toolBar styleClass="menu">
+		<rich:dropDownMenu id="menuCadastros" rendered="#{s:hasRole('Q.A')}">
+			<f:facet name="label">
+				<h:panelGroup>
+					<h:outputText id="labelMenuCadastros" value="Cadastros" />
+				</h:panelGroup>
+			</f:facet>
+			<!-- 				<rich:menuItem id="itemCliente" value="#{messages['label.cliente']}" action="pessoa" immediate="true" rendered="#{autenticador.permiteAcessoOperacao('GERENCIAR_CLIENTES')}"/> -->
+			<rich:menuItem id="itemAnalista"
+				value="#{messages['label.menu.analista']}" action="analista"
+				immediate="true" />
+
+		<!--  	<rich:menuItem id="itemUsuario"
+				value="#{messages['label.menu.usuario']}" action="usuario"
+				immediate="true"  /> -->
+			<rich:menuItem id="itemEmpresa"
+				value="#{messages['label.menu.empresa']}" action="empresa"
+				immediate="true" />
+			<rich:menuItem id="itemSistema"
+				value="#{messages['label.menu.sistema']}" action="sistema"
+				immediate="true"  />
+			<!-- 				<rich:menuItem id="itemEntidade" value="#{messages['label.menu.entidade']}" action="entidade" immediate="true" /> -->
+			<rich:menuItem id="itemFatorEquivalencia"
+				value="#{messages['label.menu.fator.equivalencia']}"
+				action="fatorEquivalencia" immediate="true"  />
+		</rich:dropDownMenu>
+		<rich:dropDownMenu id="menuBaseline" >
+			<f:facet name="label">
+				<h:panelGroup>
+					<h:outputText id="labelMenuEntidade" value="Baseline" />
+				</h:panelGroup>
+			</f:facet>
+			<rich:menuItem id="itemEntidade"
+				value="#{messages['label.menu.entidade']}" action="entidade"
+				immediate="true"  />
+		</rich:dropDownMenu>
+		<rich:dropDownMenu id="itemContagemProjeto" >
+			<f:facet name="label">
+				<h:panelGroup>
+					<h:outputText id="labelMenuContagemProjeto"
+						value="#{messages['label.menu.contagem.projeto']}" />
+				</h:panelGroup>
+			</f:facet>
+			<rich:menuItem id="itemProjeto" value="#{messages['label.projeto']}"
+				action="projeto" immediate="true"  />
+			<rich:menuItem id="itemFuncaoDados"
+				value="#{messages['label.funcao.dados']}" action="funcaoDados"
+				immediate="true"  />
+			<rich:menuItem id="itemFuncaoTransacao"
+				value="#{messages['label.funcao.transacao']}"
+				action="funcaoTransacao" immediate="true"  />
+		</rich:dropDownMenu>
+		<rich:dropDownMenu id="menuRelatorio" >
+			<f:facet name="label">
+				<h:panelGroup>
+					<h:outputText id="labelMenuRelatorio" value="Relatório" />
+				</h:panelGroup>
+			</f:facet>
+			<rich:menuItem id="itemFPA" value="#{messages['label.menu.fpa']}"
+				immediate="true"  action="relatorioFPA" />
+			<rich:menuItem id="itemDVS" value="#{messages['label.menu.dvs']}"
+				action="filtroRelatorioDVS" immediate="true"  />
+		</rich:dropDownMenu>
+		<rich:toolBarGroup location="right">
+			<h:commandLink action="logout" id="logout"
+				value="#{messages['label.sair']}" immediate="true"
+				style="cursor:pointer;text-decoration:none;"
+				onclick="if (!confirm('Deseja sair do sistema?')) return false;">
+				<h:graphicImage url="/img/sair.png"
+					style="border: none; margin-left:6px;"
+					title="#{messages['label.sair']}" />
+			</h:commandLink>
+		</rich:toolBarGroup>
+	</rich:toolBar>
+</div>
+</html>

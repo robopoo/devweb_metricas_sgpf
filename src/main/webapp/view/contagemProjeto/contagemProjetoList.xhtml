@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pdvix="http://pdvix.com/facelets">
+<ui:composition
+	template="#{contagemProjetoBean.modoOperacao == 'LOV' ? '/templates/template-popup-lista.xhtml' : '/templates/template-lista.xhtml'}">
+	<ui:define name="script">
+		<script type="text/javascript">
+			function aplicaMascara() {
+			}			
+		</script>
+		<a4j:outputPanel id="pnlJS" ajaxRendered="true">
+			<script type="text/javascript">
+				aplicaMascara();
+			</script>
+		</a4j:outputPanel>
+	</ui:define>
+	<ui:define name="breadcrumb">
+		<div id="breadcrumb">
+			<ul class="crumbs">
+				<li class="first"><a href="#" style="z-index: 3"><span></span>#{messages['label.home']}</a></li>
+				<li><a href="#" style="z-index: 2">#{messages['label.contagem']}</a></li>
+				<li><a href="#" style="z-index: 1">#{messages['label.consultar']}</a></li>
+			</ul>
+		</div>
+	</ui:define>
+	<ui:define name="filtrocampos">
+		<div id="conteudo">
+			<h1 class="tituloForm">#{messages['label.consultar.contagem.projeto']}</h1>
+			<h1 class="itemForm">
+				<h:outputLabel value="#{messages['label.filtro']}" />
+			</h1>
+			<a4j:outputPanel id="panelFiltro">
+				<!-- <a4j:jsFunction name="renderizaFormulario" ajaxSingle="true"
+					immediate="true" reRender="empresa,contrato,sistema" /> -->
+				<table>
+					<tr>
+						<td><pdvix:label value="#{messages['label.empresa']}"
+								required="true" for="empresa" /> <h:selectOneMenu id="empresa"
+								value="#{contagemProjetoBean.empresaFiltro}"
+								styleClass="selectOneMenu" label="#{messages['label.empresa']}"
+								style="width:400px">
+								<a4j:support event="onchange"
+									reRender="contrato,sistema,projeto,subprojeto"
+									bypassUpdates="false" ajaxSingle="true" />
+								<s:selectItems value="#{factoryEmpresasAtiva}" var="c"
+									label="#{c.nmEmpresa}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEntity />
+							</h:selectOneMenu></td>
+						<!-- 
+						<td><h:outputLabel for="empresa"
+								value="#{messages['label.empresa']}" styleClass="labelForm" />
+							<h:inputText id="empresa"
+								value="#{contagemProjetoBean.empresaFiltro.nmEmpresa}"
+								label="#{messages['label.empresa']}" size="60"
+								styleClass="inputText" disabled="true" /></td>
+
+						<td valign="bottom"><a4j:commandLink
+								title="#{messages['label.pesquisar']}"
+								actionListener="#{empresaBean.prepararLov('lovEmpresa')}"
+								immediate="true" ajaxSingle="true"
+								oncomplete="showPopWin('#{contextPath}/view/empresa/empresaList.seam?cid=#{conversation.id}&amp;modo=LOV', null, null, renderizaFormulario, '#{messages['label.lov.empresa']}')">
+								<h:graphicImage value="/img/ico_lov.png" styleClass="acoes" />
+							</a4j:commandLink></td>
+							
+						<td><rich:spacer style="width:10px"></rich:spacer></td>
+ 							-->
+						<td><pdvix:label value="#{messages['label.contrato']}"
+								for="contrato" /> <h:selectOneMenu id="contrato"
+								value="#{contagemProjetoBean.projetoFiltro.contratoTO}"
+								styleClass="selectOneMenu" label="#{messages['label.contrato']}"
+								style="width:400px"
+								disabled="#{contagemProjetoBean.empresaFiltro == null}">
+								<s:selectItems
+									value="#{contagemProjetoBean.empresaFiltro.contratoTOlist}"
+									var="c" label="#{c.codigoContrato} - #{c.descricaoContrato}"
+									styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEntity />
+							</h:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td><pdvix:label value="#{messages['label.sistema']}"
+								for="sistema" /> <h:selectOneMenu id="sistema"
+								value="#{contagemProjetoBean.projetoFiltro.sistemaTO}"
+								styleClass="selectOneMenu" label="#{messages['label.sistema']}"
+								style="width:400px"
+								disabled="#{contagemProjetoBean.empresaFiltro == null}">
+								<s:selectItems
+									value="#{contagemProjetoBean.empresaFiltro.sistemaTOlist}"
+									var="c" label="#{c.cdSistema} - #{c.dsSistema}"
+									styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEntity />
+							</h:selectOneMenu></td>
+					</tr>
+					<tr>
+						<td><pdvix:label value="#{messages['label.projeto']}"
+								for="projeto" /> <h:inputText id="projeto"
+								value="#{contagemProjetoBean.projetoFiltro.projeto}"
+								label="#{messages['label.projeto']}" size="30"
+								styleClass="inputText" autocomplete="off"
+								onmouseover="this.focus();"
+								onkeyup="this.value=this.value.toUpperCase();" /></td>
+						<td><pdvix:label value="#{messages['label.subprojeto']}"
+								for="subprojeto" /> <h:inputText id="subprojeto"
+								value="#{contagemProjetoBean.projetoFiltro.subProjeto}"
+								label="#{messages['label.subprojeto']}" size="30"
+								styleClass="inputText" autocomplete="off"
+								onmouseover="this.focus();"
+								onkeyup="this.value=this.value.toUpperCase();" /></td>
+						<!-- <td valign="bottom"><a4j:commandLink
+								title="#{messages['label.pesquisar']}"
+								actionListener="#{empresaBean.prepararLov('lovEmpresa')}"
+								immediate="true" ajaxSingle="true"
+								oncomplete="showPopWin('#{contextPath}/view/empresa/empresaList.seam?cid=#{conversation.id}&amp;modo=LOV', null, null, renderizaFormulario, '#{messages['label.lov.empresa']}')">
+								<h:graphicImage value="/img/ico_lov.png" styleClass="acoes" />
+							</a4j:commandLink></td>
+							
+						<td> 
+						<rich:spacer style="width:10px"></rich:spacer>
+						</td>
+						-->
+					</tr>
+					<tr>
+						<td><pdvix:label value="#{messages['label.status']}"
+								for="status" /> <h:selectOneMenu id="status"
+								value="#{contagemProjetoBean.projetoFiltro.status}"
+								label="#{messages['label.status']}" styleClass="rich-input"
+								style="width:200px;">
+								<s:selectItems value="#{statusProjetoEnum}" var="s"
+									label="#{s.descricao}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEnum />
+							</h:selectOneMenu></td>
+					</tr>
+				</table>
+				<table width="100%">
+					<tr>
+						<td align="center"><a4j:commandButton id="pesquisar"
+								value="#{messages['label.pesquisar']}" type="submit" 
+								actionListener="#{contagemProjetoBean.buscar()}"
+								styleClass="inputBtn" reRender="panelFiltro, pnlResultado" /> <a4j:commandButton
+								id="incluir" value="#{messages['label.incluir']}" type="submit"
+								action="#{contagemProjetoBean.novo()}" styleClass="inputBtn" />
+							<a4j:commandButton id="limpar"
+								value="#{messages['label.limpar']}" type="submit"
+								action="#{contagemProjetoBean.limparPesquisa()}"
+								reRender="pnlResultado, panelFiltro" styleClass="inputBtn" /></td>
+					</tr>
+				</table>
+			</a4j:outputPanel>
+		</div>
+	</ui:define>
+	<ui:define name="resultadotabela">
+		<a4j:outputPanel id="pnlResultado">
+			<a4j:outputPanel id="renderResultado"
+				rendered="#{contagemProjetoBean.consultaRealizada}">
+				<div id="conteudo">
+					<h1 class="itemForm">#{messages['label.resultado.consulta']}</h1>
+					<h:outputText value="#{messages['msg.nenhum.registro.encontrado']}"
+						rendered="#{projetoDataModel.rowCount == 0}" />
+					<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3"
+						cellspacing="1" border="0" width="100%" id="listagem" rows="10"
+						var="registro" value="#{projetoDataModel}"
+						rendered="#{projetoDataModel.rowCount > 0}">
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column style="text-align:center;" width="8%">
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.contrato']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText
+										value="#{messages['label.processo.desenvolvimento']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.sistema']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.projeto']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.subprojeto']}" />
+								</rich:column>
+								<rich:column style="text-align:right;">
+									<h:outputText value="#{messages['label.pf.total']}" />
+								</rich:column>
+								<rich:column style="text-align:right;">
+									<h:outputText value="#{messages['label.pf.local']}" />
+								</rich:column>
+								<rich:column style="text-align:left;">
+									<h:outputText value="#{messages['label.status']}" />
+								</rich:column>
+							</rich:columnGroup>
+						</f:facet>
+						<rich:columnGroup>
+							<rich:column style="text-align:center;">
+								<a4j:commandLink title="#{messages['label.visualizar']}"
+									rendered="#{empresaBean.modoOperacao != 'LOV'}"
+									action="#{contagemProjetoBean.visualizar()}">
+									<h:graphicImage value="/img/ico_view.png" styleClass="acoes" />
+								</a4j:commandLink>
+								<a4j:commandLink title="#{messages['label.alterar']}"
+									action="#{contagemProjetoBean.editar()}"
+									rendered="#{contagemProjetoBean.modoOperacao != 'LOV'}">
+									<h:graphicImage value="/img/ico_edit.png" styleClass="acoes" />
+								</a4j:commandLink>
+								<a4j:commandLink title="#{messages['label.excluir']}"
+									actionListener="#{contagemProjetoBean.excluir()}"
+									reRender="pnlResultado"
+									rendered="#{contagemProjetoBean.modoOperacao != 'LOV'}"
+									onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+									<h:graphicImage value="/img/ico_del.png" styleClass="acoes" />
+								</a4j:commandLink>
+								<a4j:commandLink title="#{messages['label.qualidade']}"
+									action="#{contagemProjetoBean.avaliarQualidade()}"
+									rendered="#{contagemProjetoBean.modoOperacao != 'LOV'}">
+									<h:graphicImage value="/img/ico_inspQA.jpg" styleClass="acoes" />
+								</a4j:commandLink>
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.contratoTO.codigoContrato}" />
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.contratoTO.descricaoContrato}" />
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText
+									value="#{registro.sistemaTO.cdSistema} - #{registro.sistemaTO.dsSistema}" />
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.projeto}" />
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText value="#{registro.subProjeto}" />
+							</rich:column>
+							<rich:column style="text-align:right;">
+								<h:outputText value="#{registro.pfTotal}" />
+							</rich:column>
+							<rich:column style="text-align:right;">
+								<h:outputText value="#{registro.qtPontoFuncaoLocal}" />
+							</rich:column>
+							<rich:column style="text-align:left;">
+								<h:outputText
+									value="#{registro.status.value} - #{registro.status.descricao}" />
+							</rich:column>
+						</rich:columnGroup>
+					</rich:dataTable>
+					<ui:include src="/templates/paginacao.xhtml">
+						<ui:param name="lista" value="#{projetoDataModel}" />
+					</ui:include>
+				</div>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

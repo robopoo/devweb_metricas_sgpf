@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+
+
+<ui:composition template="/templates/template-form.xhtml">
+
+	<ui:define name="breadcrumb">
+		<div id="breadcrumb">
+			<ul class="crumbs">
+				<li class="first"><a href="#" style="z-index: 3"> <span></span>#{messages['label.home']}
+				</a></li>
+				<li><a href="#" style="z-index: 2">#{messages['label.entidade']}</a></li>
+				<li><a href="#" style="z-index: 1"> <h:outputText
+							value="#{messages['label.importar']}" />
+				</a></li>
+			</ul>
+		</div>
+	</ui:define>
+
+
+	<ui:define name="camposFormularioBase">
+		<div id="conteudo">
+			<a4j:outputPanel id="panelFormulario">
+				<h1 class="tituloForm">
+					<h:outputText value="#{messages['label.importar']}" />
+				</h1>
+				<table border="0">
+
+					<tr>
+
+						<td><pdvix:label for="empresas"
+								value="#{messages['label.empresas']}" /> <h:selectOneMenu
+								id="empresas" styleClass="selectOneMenu"
+								label="#{messages['label.empresa']}" required="true"
+								value="#{entidadeBean.empresaFiltro}" disabled="true">
+
+
+								<a4j:support event="onchange" reRender="sistemas"
+									bypassUpdates="false" ajaxSingle="true" />
+
+								<s:selectItems value="#{factoryEmpresasAtiva}" var="f"
+									label="#{f.nmEmpresa}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEntity />
+							</h:selectOneMenu></td>
+
+
+						<td colspan="2" rowspan="2"></td>
+					</tr>
+					<tr>
+
+						<td colspan="2"><pdvix:label for="sistemas"
+								value="#{messages['label.sistemas']}" /> <h:selectOneMenu
+								id="sistemas" disabled="true"
+								value="#{entidadeBean.entidadeFiltro.sistemaTO}"
+								styleClass="selectOneMenu" label="#{messages['label.sistema']}"
+								required="true">
+
+								<a4j:support event="onchange" reRender="pnlResultado"
+									actionListener="#{entidadeBean.buscarImportacao()}"
+									bypassUpdates="false" process="confgConexaoBD" />
+
+								<s:selectItems
+									value="#{entidadeBean.empresaFiltro.sistemaTOlist}" var="f"
+									label="#{f.dsSistema}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEntity />
+							</h:selectOneMenu></td>
+
+
+					</tr>
+				</table>
+				<h1 class="itemForm">#{messages['label.configuracao.bd']}</h1>
+
+				<div id="confgConexaoBD"
+					style="width: 100%">
+
+					<div>
+						<h:selectOneRadio value="#{entidadeBean.bancoDadosImportacao}"
+							required="true" label="#{messages['label.bd']}">
+							<s:selectItems value="#{bancoDadosImportacao}" var="s"
+								label="#{s.descricao}" />
+							<s:convertEnum></s:convertEnum>
+						</h:selectOneRadio>
+					</div>
+					<div style="display: inline-block">
+						<div style="display: inline-block">
+							<pdvix:label for="usuarioImp"
+								value="#{messages['label.usuario']}" required="true" />
+							<h:inputText id="usuarioImp" value="#{conexaoBanco.usuario}"
+								label="#{messages['label.usuario']}" size="50"
+								styleClass="inputText" maxlength="50" required="true" />
+						</div>
+						<div style="display: inline-block">
+							<pdvix:label for="senhaImp" value="#{messages['label.senha']}"
+								required="true" />
+							<h:inputSecret id="senhaImp"
+								value="#{entidadeBean.conexaoBanco.senha}"
+								label="#{messages['label.senha']}" size="50"
+								styleClass="inputText" maxlength="50" required="true" />
+						</div>
+						<div style="display: inline-block">
+							<pdvix:label for="host" value="#{messages['label.host']}"
+								required="true" />
+							<h:inputText id="host" value="#{entidadeBean.conexaoBanco.host}"
+								label="#{messages['label.host']}" size="50"
+								styleClass="inputText" maxlength="50" required="true" />
+						</div>
+					</div>
+					<div style="display: inline-block">
+						<div style="display: inline-block">
+							<pdvix:label for="porta" value="#{messages['label.porta']}"
+								required="true" />
+							<h:inputText id="porta" value="#{conexaoBanco.porta}"
+								label="#{messages['label.porta']}" size="50"
+								styleClass="inputText" maxlength="50" required="true" />
+						</div>
+						<div style="display: inline-block">
+							<pdvix:label for="sid" value="#{messages['label.sid']}"
+								required="true" />
+							<h:inputText id="sid" value="#{conexaoBanco.sid}"
+								label="#{messages['label.sid']}" size="50"
+								styleClass="inputText" maxlength="50" required="true" />
+						</div>
+						<div style="display: inline-block">
+							<pdvix:label for="schema" value="#{messages['label.schema']}" />
+							<h:inputText id="schema" value="#{conexaoBanco.schema}"
+								label="#{messages['label.schema']}" size="50"
+								style="min-width:100px" styleClass="inputText" maxlength="50" />
+						</div>
+					</div>
+
+
+				</div>
+
+
+				<table width="100%">
+					<tr>
+						<td align="center"><a4j:commandButton id="pesquisar"
+								value="#{messages['label.pesquisar']}" type="submit"
+								actionListener="#{entidadeBean.buscarImportacao()}"
+								styleClass="inputBtn" reRender="panelFiltro, pnlResultado" /></td>
+					</tr>
+
+				</table>
+
+				<h1 class="itemForm">#{messages['label.resultado.consulta']}</h1>
+				<a4j:outputPanel id="pnlResultado">
+					<a4j:outputPanel id="renderResultado">
+						<div id="conteudoEntidade">
+
+							<table>
+								<tr>
+									<td align="left"><a4j:commandButton id="selTodos"
+											oncomplete="atualizaCheckAllPaginacaoDataScroller( 'formulario:listagem:selAll' );"
+											value="#{messages['label.selecionar.todos']}" type="submit"
+											immediate="true"
+											actionListener="#{entidadeBean.selecionarTodos()}"
+											styleClass="inputBtn" reRender="panelFiltro, pnlResultado"
+											rendered="#{entidadeTOlist.rowCount != null and entidadeTOlist.rowCount > 0}" /></td>
+								</tr>
+
+							</table>
+
+
+							<h:outputText
+								value="#{messages['msg.nenhum.registro.encontrado']}"
+								rendered="#{entidadeTOlist.rowCount == null or entidadeTOlist.rowCount == 0}" />
+							<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3"
+								cellspacing="1" border="0" width="100%" id="listagem" rows="10"
+								var="registroDTimp" value="#{entidadeTOlist}"
+								rendered="#{entidadeTOlist.rowCount > 0}">
+								<f:facet name="header">
+									<rich:columnGroup>
+
+										<rich:column style="text-align:center;" width="10%">
+											<h:selectBooleanCheckbox id="selAll"
+												onclick="checkAllCheckboxesInTable( this );" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.entidade']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.descricao']}" />
+										</rich:column>
+
+
+									</rich:columnGroup>
+								</f:facet>
+
+								<rich:columnGroup>
+
+									<rich:column style="text-align:center;">
+										<h:selectBooleanCheckbox
+											rendered="#{!entidadeBean.entidadeDuplicada}"
+											value="#{registroDTimp.importar}" />
+									</rich:column>
+
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registroDTimp.nmEntidade}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registroDTimp.dsEntidade}" />
+									</rich:column>
+
+								</rich:columnGroup>
+							</rich:dataTable>
+
+							<ui:include src="/templates/paginacao.xhtml">
+								<ui:param name="lista" value="#{entidadeTOlist}" />
+								<ui:param name="id" value="listagem" />
+								<ui:param name="oncomplete"
+									value="atualizaCheckAllPaginacaoDataScroller( 'formulario:listagem:selAll' );" />
+								<ui:param name="process" value="listagem" />
+							</ui:include>
+						</div>
+					</a4j:outputPanel>
+				</a4j:outputPanel>
+
+				<table width="100%">
+					<tr>
+						<td align="center"><a4j:commandButton id="salvar"
+								value="#{messages['label.salvar']}" type="submit"
+								action="#{entidadeBean.importar()}" styleClass="inputBtn"
+								reRender="panelFormulario" status="indicator"
+								onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;" />
+
+							<a4j:commandButton id="abandonar"
+								value="#{messages['label.abandonar']}" type="submit"
+								action="#{entidadeBean.cancelar()}" styleClass="inputBtn"
+								reRender="panelFormulario" status="indicator"
+								onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+								immediate="true" /></td>
+					</tr>
+				</table>
+
+			</a4j:outputPanel>
+		</div>
+	</ui:define>
+
+
+</ui:composition>
+</html>

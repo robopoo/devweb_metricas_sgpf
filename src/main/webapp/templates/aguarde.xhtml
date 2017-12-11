@@ -1,0 +1,30 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt" lang="pt"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:modalPanel id="msgAguarde" rendered="true" resizeable="false" moveable="false" autosized="true" zindex="2000" style="background-color:#EFEFEF;">
+		<f:facet name="header">
+			<h:outputText value="" rendered="false" />
+		</f:facet>
+		
+		<f:facet name="controls">
+			<h:outputText value="" rendered="false" />
+		</f:facet>
+				
+		<table width="300px" border="0" align="center" cellpadding="0" cellspacing="0">
+			<tr class="aguarde">
+				<td align="center" style="color: #000088">
+                	<h:panelGrid columns="3" cellpadding="1">
+                    	<img src="#{contextPath}/img/loading.gif"/>
+                    	<rich:spacer width="10" />
+                    	<br />
+                    	<h:outputText value="Aguarde..." styleClass="rich-text-general" style="font-weight:bold;font-size:15px;" /> 
+                	</h:panelGrid>								
+				</td>
+			</tr>
+		</table>
+	</rich:modalPanel>
+</html>

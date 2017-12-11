@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages no-conversation-view-id="/view/home.xhtml"
+	xmlns="http://jboss.com/products/seam/pages" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.2.xsd"
+	login-view-id="/login.xhtml">
+
+	<page view-id="/login.xhtml" no-conversation-view-id="/login.xhtml"
+		login-required="false">
+		<begin-conversation join="true" />
+		<action execute="#{identity.logout()}" on-postback="false" />
+		<action execute="#{autenticador.preRender()}" on-postback="false" />
+		<navigation>
+			<rule if="#{identity.loggedIn}">
+				<end-conversation before-redirect="true" root="true" />
+				<redirect view-id="/view/home.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/usuario/usuarioList.xhtml"
+		no-conversation-view-id="/view/home.xhtml">
+		<begin-conversation join="true" />
+		<action execute="#{usuarioBean.preRender}" on-postback="false" />
+		<navigation>
+			<rule if-outcome="form">
+				<begin-conversation nested="true" />
+				<redirect view-id="/view/usuario/usuarioForm.xhtml" />
+			</rule>
+		</navigation>
+		<restrict>#{s:hasRole('Q.A')}</restrict>
+	</page>
+
+	<page view-id="/view/usuario/usuarioForm.xhtml"
+		no-conversation-view-id="/view/usuario/usuarioList.xhtml">
+		<navigation>
+			<rule if-outcome="list">
+				<end-conversation />
+				<redirect view-id="/view/usuario/usuarioList.xhtml" />
+			</rule>
+		</navigation>
+		<restrict>#{s:hasRole('Q.A')}</restrict>
+	</page>
+
+	<page view-id="/alterarSenhaForm.xhtml" login-required="false">
+		<begin-conversation join="true" />
+		<action execute="#{alterarSenhaBean.preRender}" on-postback="false" />
+	</page>
+
+	<!-- ========================== ANALISTA ======================= -->
+
+	<page view-id="/view/analista/analistaList.xhtml"
+		no-conversation-view-id="/view/home.xhtml">
+		<begin-conversation join="true" />
+		<action execute="#{analistaBean.preRender}" on-postback="false" />
+		<navigation>
+			<rule if-outcome="form">
+				<begin-conversation nested="true" />
+				<redirect view-id="/view/analista/analistaForm.xhtml" />
+			</rule>
+		</navigation>
+		<restrict>#{s:hasRole('Q.A')}</restrict>
+	</page>
+
+	<page view-id="/view/home.xhtml">
+		<begin-conversation join="true"/>
+	</page>
+	
+	<page view-id="/view/analista/analistaForm.xhtml"
+		no-conversation-view-id="/view/analista/analistaList.xhtml">
+		<navigation>
+			<rule if-outcome="list">
+				<end-conversation />
+				<redirect view-id="/view/analista/analistaList.xhtml" />
+			</rule>
+		</navigation>
+		<restrict>#{s:hasRole('Q.A')}</restrict>
+	</page>
+
+	<!-- ==========================EMPRESA ======================= -->
+	<page view-id="/view/empresa/empresaList.xhtml"
+		no-conversation-view-id="/view/home.xhtml">
+		<begin-conversation join="true" />
+		<action execute="#{empresaBean.preRender}" on-postback="false" />
+		<navigation>
+			<rule if-outcome="form">
+				<begin-conversation nested="true" />
+				<redirect view-id="/view/empresa/empresaForm.xhtml" />
+			</rule>
+		</navigation>
+		<restrict>#{s:hasRole('Q.A')}</restrict>
+	</page>
+
+	<page view-id="/view/empresa/empresaForm.xhtml"
+		no-conversation-view-id="/view/empresa/empresaList.xhtml">
+		<navigation>
+			<rule if-outcome="list">
+				<end-conversation />
+				<redirect view-id="/view/empresa/empresaList.xhtml" />
+			</rule>
+		</navigation>
+		<restrict>#{s:hasRole('Q.A')}</restrict>
+	</page>
+
+	<!-- ========================== SISTEMA ======================= -->
+
+	<page view-id="/view/sistema/sistemaList.xhtml"
+		no-conversation-view-id="/view/home.xhtml">
+		<begin-conversation join="true" />
+		<action execute="#{sistemaBean.preRender}" on-postback="false" />
+		<navigation>
+			<rule if-outcome="form">
+				<begin-conversation nested="true" />
+				<redirect view-id="/view/sistema/sistemaForm.xhtml" />
+			</rule>
+		</navigation>
+		<restrict>#{s:hasRole('Q.A')}</restrict>
+	</page>
+
+
+	<page view-id="/view/sistema/sistemaForm.xhtml"
+		no-conversation-view-id="/view/sistema/sistemaList.xhtml">
+		<navigation>
+			<rule if-outcome="list">
+				<end-conversation />
+				<redirect view-id="/view/sistema/sistemaList.xhtml" />
+			</rule>
+		</navigation>
+		<restrict>#{s:hasRole('Q.A')}</restrict>
+	</page>
+
+
+	<!-- ========================== Fator de Equivalencia ======================= -->
+
+	<page view-id="/view/fatorEquivalencia/fatorEquivalenciaList.xhtml"
+		no-conversation-view-id="/view/home.xhtml">
+		<begin-conversation join="true" />
+		<action execute="#{fatorEquivalenciaBean.preRender}"
+			on-postback="false" />
+		<navigation>
+			<rule if-outcome="form">
+				<begin-conversation nested="true" />
+				<redirect view-id="/view/fatorEquivalencia/fatorEquivalenciaForm.xhtml" />
+			</rule>
+		</navigation>
+		<restrict>#{s:hasRole('Q.A')}</restrict>
+	</page>
+
+
+	<page view-id="/view/fatorEquivalencia/fatorEquivalenciaForm.xhtml"
+		no-conversation-view-id="/view/fatorEquivalencia/fatorEquivalenciaList.xhtml">
+		<navigation>
+			<rule if-outcome="list">
+				<end-conversation />
+				<redirect view-id="/view/fatorEquivalencia/fatorEquivalenciaList.xhtml" />
+			</rule>
+		</navigation>
+		<restrict>#{s:hasRole('Q.A')}</restrict>
+	</page>
+
+
+
+
+	<!-- ============================== Entidade ======================================= -->
+
+	<page view-id="/view/entidade/entidadeList.xhtml"
+		no-conversation-view-id="/view/home.xhtml">
+		<begin-conversation join="true" />
+		<action execute="#{entidadeBean.preRender}" on-postback="false" />
+		<navigation>
+			<rule if-outcome="form">
+				<begin-conversation nested="true" />
+				<redirect view-id="/view/entidade/entidadeForm.xhtml" />
+			</rule>
+			<rule if-outcome="imp">
+				<begin-conversation nested="true" />
+				<redirect view-id="/view/entidade/entidadeImportacao.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+
+	<page view-id="/view/entidade/entidadeImportacao.xhtml"
+		no-conversation-view-id="/view/entidade/entidadeList.xhtml">
+		<navigation>
+			<rule if-outcome="list">
+				<end-conversation />
+				<redirect view-id="/view/entidade/entidadeList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/entidade/entidadeForm.xhtml"
+		no-conversation-view-id="/view/entidade/entidadeList.xhtml">
+		<navigation>
+			<rule if-outcome="list">
+				<end-conversation />
+				<redirect view-id="/view/entidade/entidadeList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<!-- ============================== relatorio DVS ======================================= -->
+
+	<page view-id="/view/relatorio/dvs/filtroDVS.xhtml"
+		no-conversation-view-id="/view/home.xhtml">
+		<begin-conversation join="true" />
+		<action execute="#{relatorioDVSBean.preRender}" on-postback="false" />
+		<navigation>
+			<rule if-outcome="relatorio">
+				<begin-conversation nested="true" />
+				<redirect view-id="/view/relatorio/dvs/relatorioDVSList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/relatorio/dvs/relatorioDVSList.xhtml"
+		no-conversation-view-id="/view/home.xhtml">
+		<navigation>
+			<rule if-outcome="filtro">
+				<end-conversation />
+				<redirect view-id="/view/relatorio/dvs/filtroDVS.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+
+	<!-- ============================== relatorio FPA ======================================= -->
+
+	<page view-id="/view/relatorio/fpa/filtroPlanilhaFPA.xhtml"
+		no-conversation-view-id="/view/home.xhtml">
+		<begin-conversation join="true" />
+		<action execute="#{relatorioFPABean.preRender}" on-postback="false" />
+		<navigation>
+			<rule if-outcome="relatorio">
+				<begin-conversation nested="true" />
+				<redirect view-id="/view/relatorio/fpa/relatorioPlanilhaFPA.xhtml" />
+			</rule>
+		</navigation>
+
+	</page>
+
+	<page view-id="/view/relatorio/fpa/relatorioPlanilhaFPA.xhtml"
+		no-conversation-view-id="/view/home.xhtml">
+		<navigation>
+			<rule if-outcome="filtro">
+				<end-conversation />
+				<redirect view-id="/view/relatorio/fpa/filtroPlanilhaFPA.xhtml" />
+			</rule>
+		</navigation>
+
+	</page>
+
+	<!-- ========================== contagemProjeto ======================= -->
+
+	<page view-id="/view/contagemProjeto/projetoList.xhtml"
+		no-conversation-view-id="/view/home.xhtml">
+		<begin-conversation join="true" />
+		<action execute="#{projetoBean.preRender}" on-postback="false" />
+		<navigation>
+			<rule if-outcome="form">
+				<begin-conversation nested="true" />
+				<redirect view-id="/view/contagemProjeto/projetoForm.xhtml" />
+			</rule>
+			<rule if-outcome="inspQualidade">
+				<begin-conversation nested="true" />
+				<redirect view-id="/view/contagemProjeto/inspecaoQualidade.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+	<page view-id="/view/contagemProjeto/funcaoDadosProjetoList.xhtml"
+		no-conversation-view-id="/view/home.xhtml">
+		<begin-conversation join="true" />
+		<action execute="#{funcaoDadosProjetoBean.preRender}"
+			on-postback="false" />
+		<navigation>
+			<rule if-outcome="form">
+				<begin-conversation nested="true" />
+				<redirect view-id="/view/contagemProjeto/funcaoDadosProjetoForm.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+	<page view-id="/view/contagemProjeto/funcaoTransacaoProjetoList.xhtml"
+		no-conversation-view-id="/view/home.xhtml">
+		<begin-conversation join="true" />
+		<action execute="#{funcaoTransacaoProjetoBean.preRender}"
+			on-postback="false" />
+		<navigation>
+			<rule if-outcome="form">
+				<begin-conversation nested="true" />
+				<redirect view-id="/view/contagemProjeto/funcaoTransacaoProjetoForm.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+	<page view-id="/view/contagemProjeto/funcaoTransacaoProjetoForm.xhtml"
+		no-conversation-view-id="/view/contagemProjeto/funcaoTransacaoProjetoList.xhtml">
+		<navigation>
+			<rule if-outcome="list">
+				<end-conversation />
+				<redirect view-id="/view/contagemProjeto/funcaoTransacaoProjetoList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+	<page view-id="/view/contagemProjeto/projetoForm.xhtml"
+		no-conversation-view-id="/view/contagemProjeto/projetoList.xhtml">
+		<navigation>
+			<rule if-outcome="list">
+				<end-conversation />
+				<redirect view-id="/view/contagemProjeto/projetoList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+	<page view-id="/view/contagemProjeto/funcaoDadosProjetoForm.xhtml">
+		<begin-conversation join="true" />
+		<navigation>
+			<rule if-outcome="list">
+				<end-conversation />
+				<redirect view-id="/view/contagemProjeto/funcaoDadosProjetoList.xhtml" />
+			</rule>
+		</navigation>
+	</page>
+
+
+	<page view-id="/view/contagemProjeto/inspecaoQualidade.xhtml"
+		no-conversation-view-id="/view/contagemProjeto/projetoList.xhtml">
+		<action execute="#{inspecaoQualidadeBean.preRender}"
+			on-postback="false" />
+		<navigation>
+			<rule if-outcome="list">
+				<end-conversation before-redirect="true" />
+				<redirect view-id="/view/contagemProjeto/projetoList.xhtml" />
+			</rule>
+		</navigation>
+<!-- 		<restrict>#{s:hasRole('Q.A')}</restrict> -->
+	</page>
+
+
+	<page view-id="/view/*" login-required="true" />
+
+	<!-- ============================== outcomes ======================================= -->
+	<page view-id="/*">
+		<navigation>
+			<rule if-outcome="home">
+				<end-conversation before-redirect="true" root="true" />
+				<redirect view-id="/view/home.xhtml" />
+			</rule>
+			<rule if-outcome="logout">
+				<end-conversation before-redirect="true" root="true" />
+				<redirect view-id="/login.xhtml" />
+			</rule>
+
+			<rule if-outcome="analista">
+				<end-conversation before-redirect="true" root="true" />
+				<redirect view-id="/view/analista/analistaList.xhtml" />
+			</rule>
+
+			<rule if-outcome="usuario">
+				<end-conversation before-redirect="true" root="true" />
+				<redirect view-id="/view/usuario/usuarioList.xhtml" />
+			</rule>
+			<rule if-outcome="empresa">
+				<end-conversation before-redirect="true" root="true" />
+				<redirect view-id="/view/empresa/empresaList.xhtml" />
+			</rule>
+			<rule if-outcome="sistema">
+				<end-conversation before-redirect="true" root="true" />
+				<redirect view-id="/view/sistema/sistemaList.xhtml" />
+			</rule>
+			<rule if-outcome="fatorEquivalencia">
+				<end-conversation before-redirect="true" root="true" />
+				<redirect view-id="/view/fatorEquivalencia/fatorEquivalenciaList.xhtml" />
+			</rule>
+
+
+			<rule if-outcome="entidade">
+				<end-conversation before-redirect="true" root="true" />
+				<redirect view-id="/view/entidade/entidadeList.xhtml" />
+			</rule>
+
+			<rule if-outcome="filtroRelatorioDVS">
+				<end-conversation before-redirect="true" root="true" />
+				<redirect view-id="/view/relatorio/dvs/filtroDVS.xhtml" />
+			</rule>
+
+			<rule if-outcome="relatorioFPA">
+				<end-conversation before-redirect="true" root="true" />
+				<redirect view-id="/view/relatorio/fpa/filtroPlanilhaFPA.xhtml" />
+			</rule>
+
+			<rule if-outcome="projeto">
+				<end-conversation before-redirect="true" root="true" />
+				<redirect view-id="/view/contagemProjeto/projetoList.xhtml" />
+			</rule>
+
+			<rule if-outcome="funcaoDados">
+				<end-conversation before-redirect="true" root="true" />
+				<redirect view-id="/view/contagemProjeto/funcaoDadosProjetoList.xhtml" />
+			</rule>
+
+			<rule if-outcome="funcaoTransacao">
+				<end-conversation before-redirect="true" root="true" />
+				<redirect view-id="/view/contagemProjeto/funcaoTransacaoProjetoList.xhtml" />
+			</rule>
+
+		</navigation>
+	</page>
+
+
+	<exception class="br.com.sgpf.metrica.core.exception.DaoException"
+		log="true">
+		<end-conversation />
+		<redirect view-id="/view/home.xhtml">
+			<message severity="error">#{mensagemBean.messagemErroPadrao}</message>
+		</redirect>
+	</exception>
+
+	<exception class="org.jboss.seam.RequiredException" log="true">
+		<end-conversation />
+		<redirect view-id="/view/home.xhtml">
+			<message severity="warn">#{messages['mensagem.alerta.acessar.pagina.menu']}</message>
+		</redirect>
+	</exception>
+
+	<exception class="javax.faces.application.ViewExpiredException"
+		log="false">
+		<end-conversation />
+		<redirect view-id="/view/login.xhtml">
+			<message severity="warn">#{messages['mensagem.alerta.sessao.expirada']}</message>
+		</redirect>
+	</exception>
+
+	<exception class="java.lang.RuntimeException" log="true">
+		<end-conversation />
+		<redirect view-id="/view/home.xhtml">
+			<message severity="error">#{mensagemBean.messagemErroPadrao}</message>
+		</redirect>
+	</exception>
+
+</pages>

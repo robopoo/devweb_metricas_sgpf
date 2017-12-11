@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+
+<ui:composition template="/templates/template-form.xhtml">
+
+	<ui:define name="breadcrumb">
+		<div id="breadcrumb">
+			<ul class="crumbs">
+				<li class="first"><a href="#" style="z-index: 3"> <span></span>#{messages['label.home']}
+				</a></li>
+				<li><a href="#" style="z-index: 2">#{messages['label.sistema']}</a></li>
+				<li><a href="#" style="z-index: 1"> <h:outputText
+							value="#{messages['label.visualizacao']}"
+							rendered="#{sistemaBean.operacao == 'VISUALIZACAO'}" /> <h:outputText
+							value="#{messages['label.inclusao']}"
+							rendered="#{sistemaBean.operacao == 'INSERCAO'}" /> <h:outputText
+							value="#{messages['label.alteracao']}"
+							rendered="#{sistemaBean.operacao == 'ALTERACAO'}" />
+				</a></li>
+			</ul>
+		</div>
+	</ui:define>
+
+
+	<ui:define name="camposFormularioBase">
+		<a4j:outputPanel id="panelFormulario">
+			<div id="conteudo">
+				<h1 class="tituloForm">
+					<h:outputText value="#{messages['label.visualizar.sistema']}"
+						rendered="#{sistemaBean.operacao == 'VISUALIZACAO'}" />
+					<h:outputText value="#{messages['label.incluir.sistema']}"
+						rendered="#{sistemaBean.operacao == 'INSERCAO'}" />
+					<h:outputText value="#{messages['label.alterar.sistema']}"
+						rendered="#{sistemaBean.operacao == 'ALTERACAO'}" />
+				</h1>
+				<table border="0">
+
+					<tr>
+
+						<td><pdvix:label for="empresasAtiva"
+								value="#{messages['label.empresas']}"
+								required="#{sistemaBean.operacao == 'INSERCAO'}" /> <h:selectOneMenu
+								id="empresas" value="#{sistemaTO.empresaTO}"
+								styleClass="selectOneMenu" label="#{messages['label.empresa']}"
+								disabled="true" rendered="#{sistemaBean.operacao != 'INSERCAO'}"
+								required="true">
+								<s:selectItems value="#{factoryEmpresas}" var="f"
+									label="#{f.nmEmpresa}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEntity />
+							</h:selectOneMenu> <h:selectOneMenu id="empresasAtiva"
+								value="#{sistemaTO.empresaTO}" styleClass="selectOneMenu"
+								label="#{messages['label.empresa']}"
+								rendered="#{sistemaBean.operacao == 'INSERCAO'}" required="true">
+								<s:selectItems value="#{factoryEmpresasAtiva}" var="f"
+									label="#{f.nmEmpresa}" styleClass="rich-text-general"
+									noSelectionLabel="#{messages['label.selecione']}" />
+								<s:convertEntity />
+							</h:selectOneMenu></td>
+					</tr>
+
+					<tr>
+						<td colspan="2"><pdvix:label for="codigo"
+								value="#{messages['label.codigo']}" styleClass="labelForm"
+								required="#{sistemaBean.operacao == 'INSERCAO' or sistemaBean.operacao == 'ALTERACAO'}" />
+							<h:inputText id="codigo" value="#{sistemaTO.cdSistema}"
+								label="#{messages['label.codigo']}" size="10"
+								styleClass="inputText" maxlength="5" required="true"
+								disabled="#{sistemaBean.operacao != 'INSERCAO' and sistemaBean.operacao != 'ALTERACAO'}" />
+						</td>
+					</tr>
+
+
+					<tr>
+						<td colspan="2"><pdvix:label for="desc"
+								value="#{messages['label.sistema']}"
+								required="#{sistemaBean.operacao == 'INSERCAO' or sistemaBean.operacao == 'ALTERACAO'}" />
+							<h:inputText id="desc" value="#{sistemaTO.dsSistema}"
+								label="#{messages['label.nome']}" size="100"
+								styleClass="inputText" maxlength="100" required="true"
+								disabled="#{sistemaBean.operacao != 'INSERCAO' and sistemaBean.operacao != 'ALTERACAO'}" />
+						</td>
+					</tr>
+
+
+				</table>
+
+				<table width="100%">
+					<tr>
+						<td align="center"><a4j:commandButton id="salvar"
+								value="#{messages['label.salvar']}" type="submit"
+								action="#{sistemaBean.gravar()}" styleClass="inputBtn"
+								reRender="panelFormulario" status="indicator"
+								onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+								rendered="#{sistemaBean.operacao == 'INSERCAO' or sistemaBean.operacao == 'ALTERACAO'}" />
+
+							<a4j:commandButton id="abandonar"
+								value="#{messages['label.abandonar']}" type="submit"
+								action="#{sistemaBean.cancelar()}" styleClass="inputBtn"
+								reRender="panelFormulario" status="indicator"
+								onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+								immediate="true" /></td>
+					</tr>
+				</table>
+
+			</div>
+		</a4j:outputPanel>
+	</ui:define>
+
+</ui:composition>
+</html>

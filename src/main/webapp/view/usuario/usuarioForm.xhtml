@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+
+<ui:composition template="/templates/template-form.xhtml">
+
+	<ui:define name="script">
+		<script type="text/javascript">
+			function aplicaMascara() {
+				mascaraFormulario('formulario', 'matricula', 'TEXTONUMERO');
+				mascaraFormulario('formulario', 'nome', 'TEXTONUMERO');				
+			}			
+		</script>
+		<a4j:outputPanel id="pnlJS" ajaxRendered="true">
+			<script type="text/javascript">
+				aplicaMascara();
+			</script>
+		</a4j:outputPanel>
+	</ui:define>
+
+	<ui:define name="breadcrumb">
+		<div id="breadcrumb">
+			<ul class="crumbs">
+				<li class="first"><a href="#" style="z-index: 3"><span></span>#{messages['label.home']}</a></li>
+				<li><a href="#" style="z-index: 2">#{messages['label.menu.usuario']}</a></li>
+				<li><a href="#" style="z-index: 1"> <h:outputText
+							value="#{messages['label.visualizacao']}"
+							rendered="#{usuarioBean.operacao == 'VISUALIZACAO'}" /> <h:outputText
+							value="#{messages['label.inclusao']}"
+							rendered="#{usuarioBean.operacao == 'INSERCAO'}" /> <h:outputText
+							value="#{messages['label.alteracao']}"
+							rendered="#{usuarioBean.operacao == 'ALTERACAO'}" />
+				</a></li>
+			</ul>
+		</div>
+	</ui:define>
+
+	<ui:define name="camposFormularioBase">
+		<a4j:outputPanel id="panelFormulario">
+			<div id="conteudo">
+				<h1 class="tituloForm">
+					<h:outputText value="#{messages['label.visualizar.usuario']}"
+						rendered="#{usuarioBean.operacao == 'VISUALIZACAO'}" />
+					<h:outputText value="#{messages['label.incluir.usuario']}"
+						rendered="#{usuarioBean.operacao == 'INSERCAO'}" />
+					<h:outputText value="#{messages['label.alterar.usuario']}"
+						rendered="#{usuarioBean.operacao == 'ALTERACAO' and !usuarioBean.resetaSenha}" />
+					<h:outputText value="#{messages['label.resetar.senha']}"
+						rendered="#{usuarioBean.operacao == 'ALTERACAO' and usuarioBean.resetaSenha}" />
+				</h1>
+				<table border="0">
+					<tr>
+						<td><pdvix:label for="login"
+								value="#{messages['label.login']}"
+								required="#{usuarioBean.operacao == 'INSERCAO' or (usuarioBean.operacao == 'ALTERACAO' and !usuarioBean.resetaSenha)}" />
+							<h:inputText id="login" value="#{usuario.login}"
+								label="#{messages['label.login']}" maxlength="10" size="20"
+								styleClass="inputText" required="true"
+								disabled="#{(usuarioBean.operacao != 'INSERCAO' and usuarioBean.operacao != 'ALTERACAO') or usuarioBean.resetaSenha}" />
+						</td>
+						<td><pdvix:label for="matricula"
+								value="#{messages['label.matricula']}"
+								required="#{usuarioBean.operacao == 'INSERCAO' or (usuarioBean.operacao == 'ALTERACAO' and !usuarioBean.resetaSenha)}" />
+							<h:inputText id="matricula" value="#{usuario.matricula}"
+								label="#{messages['label.login']}" maxlength="15" size="20"
+								styleClass="inputText" required="true"
+								disabled="#{(usuarioBean.operacao != 'INSERCAO' and usuarioBean.operacao != 'ALTERACAO') or usuarioBean.resetaSenha}" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2"><pdvix:label for="nome"
+								value="#{messages['label.nome']}"
+								required="#{usuarioBean.operacao == 'INSERCAO' or (usuarioBean.operacao == 'ALTERACAO' and !usuarioBean.resetaSenha)}" />
+							<h:inputText id="nome" value="#{usuario.nome}"
+								label="#{messages['label.nome']}" size="60"
+								styleClass="inputText" maxlength="60" required="true"
+								disabled="#{(usuarioBean.operacao != 'INSERCAO' and usuarioBean.operacao != 'ALTERACAO') or usuarioBean.resetaSenha}" />
+						</td>
+					</tr>
+					<h:panelGroup
+						rendered="#{usuarioBean.operacao == 'INSERCAO' or (usuarioBean.operacao == 'ALTERACAO' and usuarioBean.resetaSenha)}">
+						<tr>
+							<td colspan="2"><pdvix:label for="senha"
+									value="#{messages['label.senha']}" required="true" /> <h:inputSecret
+									id="senha" required="true" redisplay="true"
+									value="#{usuario.senha}" label="#{messages['label.senha']}"
+									maxlength="40" size="40" styleClass="inputText" /></td>
+						</tr>
+					</h:panelGroup>
+					<h:panelGroup
+						rendered="#{usuarioBean.operacao == 'INSERCAO' or usuarioBean.operacao == 'ALTERACAO'}">
+						<tr>
+							<td colspan="2"><pdvix:label for="tipoPerfil"
+									value="#{messages['label.tipo.perfil']}" required="true" /> <h:selectOneMenu
+									id="tipoPerfil" value="#{usuario.tipoPerfil}"
+									styleClass="selectOneMenu"
+									label="#{messages['label.tipo.perfil']}" required="true"
+									disabled="#{usuarioBean.resetaSenha}">
+									<s:selectItems value="#{tipoPerfilEnum}" var="p"
+										label="#{p.descricao}" styleClass="rich-text-general"
+										noSelectionLabel="#{messages['label.selecione']}" />
+									<s:convertEnum />
+								</h:selectOneMenu></td>
+						</tr>
+					</h:panelGroup>
+					<h:panelGroup
+						rendered="#{usuarioBean.operacao != 'INSERCAO' and usuarioBean.operacao != 'ALTERACAO'}">
+						<tr>
+							<td><h:outputLabel for="tipoPerfil1"
+									value="#{messages['label.tipo.perfil']}" styleClass="labelForm" />
+								<h:selectOneMenu id="tipoPerfil1" value="#{usuario.tipoPerfil}"
+									styleClass="selectOneMenu"
+									label="#{messages['label.tipo.perfil']}" disabled="true">
+									<s:selectItems value="#{tipoPerfilEnum}" var="p"
+										label="#{p.descricao}" styleClass="rich-text-general"
+										noSelectionLabel="#{messages['label.selecione']}" />
+									<s:convertEnum />
+								</h:selectOneMenu></td>
+							<td><h:outputLabel for="status1"
+									value="#{messages['label.status']}" styleClass="labelForm" />
+								<h:selectOneMenu id="status1" value="#{usuario.status}"
+									styleClass="selectOneMenu" label="#{messages['label.status']}"
+									disabled="true">
+									<s:selectItems value="#{statusEnum}" var="s"
+										label="#{s.descricao}" styleClass="rich-text-general"
+										noSelectionLabel="#{messages['label.selecione']}" />
+									<s:convertEnum />
+								</h:selectOneMenu></td>
+						</tr>
+					</h:panelGroup>
+				</table>
+
+				<table width="100%">
+					<tr>
+						<td align="center"><a4j:commandButton id="salvar"
+								value="#{messages['label.salvar']}" type="submit"
+								action="#{usuarioBean.gravar()}" styleClass="inputBtn"
+								reRender="panelFormulario" status="indicator"
+								onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+								rendered="#{usuarioBean.operacao == 'INSERCAO' or usuarioBean.operacao == 'ALTERACAO'}" />
+
+							<a4j:commandButton id="abandonar"
+								value="#{messages['label.abandonar']}" type="submit"
+								action="#{usuarioBean.cancelar()}" styleClass="inputBtn"
+								reRender="panelFormulario" status="indicator"
+								onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+								immediate="true" /></td>
+					</tr>
+				</table>
+
+			</div>
+		</a4j:outputPanel>
+	</ui:define>
+
+</ui:composition>
+</html>

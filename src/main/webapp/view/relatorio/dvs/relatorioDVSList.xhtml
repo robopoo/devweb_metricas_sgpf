@@ -1,0 +1,787 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+<f:view contentType="text/html" locale="pt_BR">
+	<ui:composition template="/templates/template-lista.xhtml">
+
+		<ui:define name="breadcrumb">
+		</ui:define>
+
+		<ui:define name="resultadotabela">
+			<a4j:outputPanel id="pnlResultado">
+				<a4j:outputPanel id="renderResultado"
+					rendered="#{relatorioDVSBean.consultou}">
+					<div id="conteudo">
+						<h1 class="tituloForm">#{messages['label.menu.dvs']}</h1>
+						<h1 class="itemForm">
+							<h:outputLabel value="#{messages['label.resumo.contagem']}" />
+						</h1>
+
+
+						<table>
+							<tr>
+								<td nowrap="nowrap"><h:outputLabel
+										style="font-weight: bold;"
+										value="#{messages['label.fornecedor']}" /> <h:outputLabel
+										value=" #{relatorioDVSBean.projetoTO.fornecedor}" /></td>
+								<td nowrap="nowrap"><h:outputLabel
+										style="font-weight: bold;"
+										value="#{messages['label.gestor.principal']}" /> <h:outputLabel
+										value=" #{relatorioDVSBean.projetoTO.gestorPrincipalTO.nomeAnalista}" /></td>
+							</tr>
+
+							<tr>
+								<td><h:outputLabel style="font-weight: bold;"
+										value="#{messages['label.ssi.titulo']}" /> <h:outputLabel
+										value=" #{projetoTO.projeto}/#{projetoTO.subProjeto} - #{projetoTO.titulo}" /></td>
+								<td nowrap="nowrap"><h:outputLabel
+										style="font-weight: bold;"
+										value="#{messages['label.gestor.envolvido']}" /> <h:outputLabel
+										value=" #{projetoTO.gestorEnvolvidoTO.nomeAnalista}" /></td>
+							</tr>
+
+							<tr>
+								<td nowrap="nowrap"><h:outputLabel
+										style="font-weight: bold;"
+										value="#{messages['label.sistemas']} " /> <h:outputLabel
+										value="#{projetoTO.sistemaTO.sistema}" /></td>
+								<td nowrap="nowrap"><h:outputLabel
+										style="font-weight: bold;"
+										value="#{messages['label.analista.sgpf.principal']}" /> <h:outputLabel
+										value=" #{projetoTO.responsavelPrincipalClienteTO.nomeAnalista}" /></td>
+							</tr>
+
+							<tr>
+								<td nowrap="nowrap"><h:outputLabel
+										style="font-weight: bold;"
+										value="#{messages['label.sistemas.envolvido']}" /> <h:outputLabel
+										value="#{projetoTO.dsSistemasEnvolvidos}" /></td>
+								<td nowrap="nowrap"><h:outputLabel
+										style="font-weight: bold;"
+										value="#{messages['label.analista.sgpf.envolvido']}" /> <h:outputLabel
+										value=" #{projetoTO.responsavelEnvolvidoClientTO.nomeAnalista}" /></td>
+							</tr>
+
+							<tr>
+								<td nowrap="nowrap"><h:outputLabel
+										style="font-weight: bold;"
+										value="#{messages['label.responsavel.analista.fornecedor']}" />
+									<h:outputLabel
+										value=" #{projetoTO.responsavelPDCaseTO.nomeAnalista}" /></td>
+								<td nowrap="nowrap"><h:outputLabel
+										style="font-weight: bold;"
+										value="#{messages['label.data.criacao']}" /> <h:outputText
+										value="#{projetoTO.dtCriacao}" styleClass="inputText">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText></td>
+							</tr>
+
+						</table>
+
+						<h1 class="itemForm">
+							<h:outputLabel value="#{messages['label.visao.geral.solucao']}" />
+						</h1>
+
+						<table>
+							<tr>
+								<td><h:outputLabel value=" #{projetoTO.visaoGeralSolucao}" />
+								</td>
+							</tr>
+						</table>
+
+						<h1 class="itemForm">
+							<h:outputLabel value="#{messages['label.levantamento.funcoes']}" />
+						</h1>
+
+						<h2 class="itemForm">
+							<h:outputLabel value="#{messages['label.funcoes.transacao']}" />
+						</h2>
+
+						<table>
+							<tr>
+								<td><h:dataTable cellpadding="3" cellspacing="1" border="0"
+										width="100%" var="registro"
+										value="#{relatorioDVSBean.funcoesTransacaoVOListIncluidas}">
+
+										<f:facet name="header">
+											<h:panelGroup>
+												<h3 class="itemForm">
+													<h:outputLabel value="#{messages['label.incluidas']}" />
+												</h3>
+											</h:panelGroup>
+										</f:facet>
+
+
+										<h:column>
+											<table>
+												<tr>
+													<td><h:outputLabel value="#{registro.nome}"
+															style="font-weight: bold; color: #800000" /></td>
+												</tr>
+												
+												<tr>
+													<td><h:outputLabel value="#{registro.descricao}" /></td>
+												</tr>
+												<tr>
+													<h:panelGroup rendered="#{registro.funcaoTransacaoTP == 'SE'}">
+														<td>
+															<h:outputLabel style="font-weight: bold;" 
+																value="#{messages['label.justificativa']}:" />
+															<h:outputLabel value="#{registro.justificativaSe}"/>
+														</td>
+													</h:panelGroup>
+												</tr>
+												<h:panelGroup rendered="#{!registro.elementoQuantidade}">
+													<tr>
+
+														<td><h:outputLabel style="font-weight: bold;"
+																value="#{messages['label.arquivos.logicos']}" /> <h:outputLabel
+																value="#{registro.arquivosReferenciados}" /></td>
+													</tr>
+													<tr>
+														<td><h:outputLabel style="font-weight: bold;"
+																value="#{messages['label.tipo.dados']}" /> <h:outputLabel
+																value="#{registro.tipoDados}" /></td>
+													</tr>
+												</h:panelGroup>
+
+
+												<h:panelGroup rendered="#{registro.elementoQuantidade}">
+													<tr>
+														<td><h:outputLabel style="font-weight: bold;"
+																value="Quantidade" /> <h:outputLabel
+																value="#{registro.qtItem}" /></td>
+													</tr>
+												</h:panelGroup>
+
+											</table>
+										</h:column>
+
+										<f:facet name="footer">
+											<h:outputText value="Registro não encontrado"
+												rendered="#{relatorioDVSBean.funcoesTransacaoVOListIncluidas.size() == 0}" />
+										</f:facet>
+
+									</h:dataTable></td>
+							</tr>
+							<tr>
+								<td><h:dataTable cellpadding="3" cellspacing="1" border="0"
+										width="100%" var="registro"
+										value="#{relatorioDVSBean.funcoesTransacaoVOListAlteras}">
+
+										<f:facet name="header">
+											<h:panelGroup>
+												<h3 class="itemForm">
+													<h:outputLabel value="#{messages['label.alteradas']}" />
+												</h3>
+											</h:panelGroup>
+										</f:facet>
+
+										<h:column>
+											<table>
+												<tr>
+													<td><h:outputLabel value="#{registro.nome}"
+															style="font-weight: bold; color: #800000" /></td>
+												</tr>
+												<tr>
+													<td><h:outputLabel value="#{registro.descricao}" /></td>
+												</tr>
+												<tr>
+													<td><h:outputLabel value="Manutenção: "
+															style="font-weight: bold;" /> <h:outputLabel
+															value="#{registro.dsManutencao}" /></td>
+												</tr>
+												<h:panelGroup rendered="#{!registro.elementoQuantidade}">
+													<tr>
+
+														<td><h:outputLabel style="font-weight: bold;"
+																value="#{messages['label.arquivos.logicos']}" /> <h:outputLabel
+																value="#{registro.arquivosReferenciados}" /></td>
+													</tr>
+													<tr>
+														<td><h:outputLabel style="font-weight: bold;"
+																value="#{messages['label.tipo.dados']}" /> <h:outputLabel
+																value="#{registro.tipoDados}" /></td>
+													</tr>
+												</h:panelGroup>
+
+
+												<h:panelGroup rendered="#{registro.elementoQuantidade}">
+													<tr>
+														<td><h:outputLabel style="font-weight: bold;"
+																value="Quantidade" /> <h:outputLabel
+																value="#{registro.qtItem}" /></td>
+													</tr>
+												</h:panelGroup>
+											</table>
+										</h:column>
+
+
+										<f:facet name="footer">
+											<h:outputText value="Registro não encontrado"
+												rendered="#{relatorioDVSBean.funcoesTransacaoVOListAlteras.size() == 0}" />
+										</f:facet>
+
+									</h:dataTable></td>
+							</tr>
+							<tr>
+								<td><h:dataTable cellpadding="3" cellspacing="1" border="0"
+										width="100%" var="registro"
+										value="#{relatorioDVSBean.funcoesTransacaoVOListExcluidas}">
+
+										<f:facet name="header">
+											<h:panelGroup>
+												<h3 class="itemForm">
+													<h:outputLabel value="#{messages['label.excluida']}" />
+												</h3>
+											</h:panelGroup>
+										</f:facet>
+
+										<h:column>
+											<table>
+												<tr>
+													<td><h:outputLabel value="#{registro.nome}"
+															style="font-weight: bold; color: #800000" /></td>
+												</tr>
+												<tr>
+													<td><h:outputLabel value="#{registro.descricao}" /></td>
+												</tr>
+												<tr>
+													<td><h:outputLabel value="Manutenção: "
+															style="font-weight: bold;" /> <h:outputLabel
+															value="#{registro.dsManutencao}" /></td>
+												</tr>
+												<h:panelGroup rendered="#{!registro.elementoQuantidade}">
+													<tr>
+
+														<td><h:outputLabel style="font-weight: bold;"
+																value="#{messages['label.arquivos.logicos']}" /> <h:outputLabel
+																value="#{registro.arquivosReferenciados}" /></td>
+													</tr>
+													<tr>
+														<td><h:outputLabel style="font-weight: bold;"
+																value="#{messages['label.tipo.dados']}" /> <h:outputLabel
+																value="#{registro.tipoDados}" /></td>
+													</tr>
+												</h:panelGroup>
+
+
+												<h:panelGroup rendered="#{registro.elementoQuantidade}">
+													<tr>
+														<td><h:outputLabel style="font-weight: bold;"
+																value="Quantidade" /> <h:outputLabel
+																value="#{registro.qtItem}" /></td>
+													</tr>
+												</h:panelGroup>
+											</table>
+										</h:column>
+
+
+										<f:facet name="footer">
+											<h:outputText value="Registro não encontrado"
+												rendered="#{relatorioDVSBean.funcoesTransacaoVOListExcluidas.size() == 0}" />
+										</f:facet>
+
+									</h:dataTable></td>
+							</tr>
+						</table>
+
+
+						<h2 class="itemForm">
+							<h:outputLabel value="#{messages['label.funcoes.dados']}" />
+						</h2>
+
+						<table>
+							<tr>
+								<td><h:dataTable cellpadding="3" cellspacing="1" border="0"
+										width="100%" var="registro"
+										value="#{relatorioDVSBean.funcoesDadosVOListIncluidas}">
+
+										<f:facet name="header">
+											<h:panelGroup>
+												<h3 class="itemForm">
+													<h:outputLabel value="#{messages['label.incluidas']}" />
+												</h3>
+											</h:panelGroup>
+										</f:facet>
+
+										<f:facet name="footer">
+											<h:outputText value="Registro não encontrado"
+												rendered="#{relatorioDVSBean.funcoesDadosVOListIncluidas.size() == 0}" />
+										</f:facet>
+
+
+										<h:column>
+											<table>
+												<tr>
+													<td><h:outputLabel
+															style="font-weight: bold; color: #800000"
+															value="#{registro.nome}" /></td>
+												</tr>
+												<tr>
+													<td><h:outputLabel value="#{registro.descricao}" /></td>
+												</tr>
+												<tr>
+													<td><h:outputLabel value="Manutenção: "
+															style="font-weight: bold;" /> <h:outputLabel
+															value="#{registro.descricaoManutencao}" /></td>
+												</tr>
+												<tr>
+													<td><rich:dataTable cellpadding="3" cellspacing="1"
+															border="0" width="100%" id="listagem" var="atributo"
+															value="#{registro.atributoTOs}">
+															<f:facet name="header">
+																<rich:columnGroup>
+																	<rich:column style="text-align:left;">
+																		<h:outputText
+																			value="#{messages['label.tipo.registro']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.nome.campo']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.formato']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.tamanho']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.decimais']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.validades']}" />
+																	</rich:column>
+																</rich:columnGroup>
+															</f:facet>
+
+
+															<f:facet name="footer">
+																<h:outputText value="Registro não encontrado"
+																	rendered="#{registro.atributoTOs.size() == 0}" />
+															</f:facet>
+
+															<rich:columnGroup>
+																<rich:column style="text-align:left;">
+
+
+
+																	<h:outputText value="#{atributo.entidadeTO.nmEntidade}"
+																		style="color: red"
+																		rendered="#{!atributo.entidadeTO.hasNomeLogico}" />
+
+																	<h:outputText value="#{atributo.entidadeTO.dsEntidade}"
+																		rendered="#{atributo.entidadeTO.hasNomeLogico}" />
+
+
+
+																</rich:column>
+
+
+
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.nmAtributo}"
+																		style="color: red"
+																		rendered="#{!atributo.hasDescricao}" />
+
+																	<h:outputText value="#{atributo.dsAtributo}"
+																		rendered="#{atributo.hasDescricao}" />
+
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.tpFormato}" />
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.nrTamanho}" />
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.precisao}" />
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="-" />
+																</rich:column>
+															</rich:columnGroup>
+
+
+														</rich:dataTable></td>
+												</tr>
+											</table>
+										</h:column>
+									</h:dataTable></td>
+							</tr>
+
+							<tr>
+								<td><h:dataTable cellpadding="3" cellspacing="1" border="0"
+										width="100%" var="registro"
+										value="#{relatorioDVSBean.funcoesDadosVOListAlteras}">
+
+										<f:facet name="header">
+											<h:panelGroup>
+												<h3 class="itemForm">
+													<h:outputLabel value="#{messages['label.alteradas']}" />
+												</h3>
+											</h:panelGroup>
+										</f:facet>
+
+										<f:facet name="footer">
+											<h:outputText value="Registro não encontrado"
+												rendered="#{relatorioDVSBean.funcoesDadosVOListAlteras.size() == 0}" />
+										</f:facet>
+
+
+										<h:column>
+											<table>
+												<tr>
+													<td><h:outputLabel
+															style="font-weight: bold;  color: #800000"
+															value="#{registro.nome}" /></td>
+												</tr>
+												<tr>
+													<td><h:outputLabel value="#{registro.descricao}" /></td>
+												</tr>
+
+												<tr>
+													<td><h:outputLabel value="Manutenção: "
+															style="font-weight: bold;" /> <h:outputLabel
+															value="#{registro.descricaoManutencao}" /></td>
+												</tr>
+
+												<tr>
+													<td><rich:dataTable cellpadding="3" cellspacing="1"
+															border="0" width="100%" id="listagem" var="atributo"
+															value="#{registro.atributoTOs}">
+															<f:facet name="header">
+																<rich:columnGroup>
+																	<rich:column style="text-align:left;">
+																		<h:outputText
+																			value="#{messages['label.tipo.registro']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.nome.campo']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.formato']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.tamanho']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.decimais']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.validades']}" />
+																	</rich:column>
+																</rich:columnGroup>
+															</f:facet>
+
+															<f:facet name="footer">
+																<h:outputText value="Registro não encontrado"
+																	rendered="#{registro.atributoTOs.size() == 0}" />
+															</f:facet>
+
+
+															<rich:columnGroup>
+																<rich:column style="text-align:left;">
+
+																	<h:outputText value="#{atributo.entidadeTO.nmEntidade}"
+																		style="color: red"
+																		rendered="#{!atributo.entidadeTO.hasNomeLogico}" />
+
+																	<h:outputText value="#{atributo.entidadeTO.dsEntidade}"
+																		rendered="#{atributo.entidadeTO.hasNomeLogico}" />
+
+																</rich:column>
+																<rich:column style="text-align:left;">
+
+																	<h:outputText value="#{atributo.nmAtributo}"
+																		style="color: red"
+																		rendered="#{!atributo.hasDescricao}" />
+
+																	<h:outputText value="#{atributo.dsAtributo}"
+																		rendered="#{atributo.hasDescricao}" />
+
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.tpFormato}" />
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.nrTamanho}" />
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.precisao}" />
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="-" />
+																</rich:column>
+															</rich:columnGroup>
+
+
+														</rich:dataTable></td>
+												</tr>
+											</table>
+										</h:column>
+									</h:dataTable></td>
+							</tr>
+
+
+							<tr>
+								<td><h:dataTable cellpadding="3" cellspacing="1" border="0"
+										width="100%" var="registro"
+										value="#{relatorioDVSBean.funcoesDadosVOListExcluidas}">
+
+										<f:facet name="header">
+											<h:panelGroup>
+												<h3 class="itemForm">
+													<h:outputLabel value="#{messages['label.excluida']}" />
+												</h3>
+											</h:panelGroup>
+										</f:facet>
+
+										<f:facet name="footer">
+											<h:outputText value="Registro não encontrado"
+												rendered="#{relatorioDVSBean.funcoesDadosVOListExcluidas.size() == 0}" />
+										</f:facet>
+
+
+										<h:column>
+											<table>
+												<tr>
+													<td><h:outputLabel
+															style="font-weight: bold; color: #800000"
+															value="#{registro.nome}" /></td>
+												</tr>
+												<tr>
+													<td><h:outputLabel value="#{registro.descricao}" /></td>
+												</tr>
+												<tr>
+													<td><h:outputLabel value="Manutenção: "
+															style="font-weight: bold;" /> <h:outputLabel
+															value="#{registro.descricaoManutencao}" /></td>
+												</tr>
+												<tr>
+													<td><rich:dataTable cellpadding="3" cellspacing="1"
+															border="0" width="100%" id="listagem" var="atributo"
+															value="#{registro.atributoTOs}">
+															<f:facet name="header">
+																<rich:columnGroup>
+																	<rich:column style="text-align:left;">
+																		<h:outputText
+																			value="#{messages['label.tipo.registro']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.nome.campo']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.formato']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.tamanho']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.decimais']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.validades']}" />
+																	</rich:column>
+																</rich:columnGroup>
+															</f:facet>
+
+
+															<f:facet name="footer">
+																<h:outputText value="Registro não encontrado"
+																	rendered="#{registro.atributoTOs.size() == 0}" />
+															</f:facet>
+
+															<rich:columnGroup>
+																<rich:column style="text-align:left;">
+
+																	<h:outputText value="#{atributo.entidadeTO.nmEntidade}"
+																		style="color: red"
+																		rendered="#{!atributo.entidadeTO.hasNomeLogico}" />
+
+																	<h:outputText value="#{atributo.entidadeTO.dsEntidade}"
+																		rendered="#{atributo.entidadeTO.hasNomeLogico}" />
+
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.nmAtributo}"
+																		style="color: red"
+																		rendered="#{!atributo.hasDescricao}" />
+
+																	<h:outputText value="#{atributo.dsAtributo}"
+																		rendered="#{atributo.hasDescricao}" />
+
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.tpFormato}" />
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.nrTamanho}" />
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.precisao}" />
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="-" />
+																</rich:column>
+															</rich:columnGroup>
+
+
+														</rich:dataTable></td>
+												</tr>
+											</table>
+										</h:column>
+									</h:dataTable></td>
+							</tr>
+
+
+
+						</table>
+
+						<h1 class="itemForm">
+							<h:outputLabel
+								value="#{messages['label.levantamento.funcoes.nao.mensuraveis']}" />
+						</h1>
+
+						<table>
+
+							<tr>
+								<td><h:dataTable cellpadding="3" cellspacing="1" border="0"
+										width="100%" var="registro"
+										value="#{relatorioDVSBean.funcoesDadosVOListNaoMensuraveis}">
+
+										<f:facet name="header">
+											<h:panelGroup>
+												<h3 class="itemForm">
+													<h:outputLabel value="Função de Dados" />
+												</h3>
+											</h:panelGroup>
+										</f:facet>
+
+										<f:facet name="footer">
+											<h:outputText value="Registro não encontrado"
+												rendered="#{relatorioDVSBean.funcoesDadosVOListNaoMensuraveis.size() == 0}" />
+										</f:facet>
+
+
+										<h:column>
+											<table>
+												<tr>
+													<td><h:outputLabel
+															style="font-weight: bold; color: #800000"
+															value="#{registro.nome}" /></td>
+												</tr>
+												<tr>
+													<td><h:outputLabel value="#{registro.descricao}" /></td>
+												</tr>
+												<tr>
+													<td><h:outputLabel value="Manutenção: "
+															style="font-weight: bold;" /> <h:outputLabel
+															value="#{registro.descricaoManutencao}" /></td>
+												</tr>
+												<tr>
+													<td><rich:dataTable cellpadding="3" cellspacing="1"
+															border="0" width="100%" id="listagem" var="atributo"
+															value="#{registro.atributoTOs}">
+															<f:facet name="header">
+																<rich:columnGroup>
+																	<rich:column style="text-align:left;">
+																		<h:outputText
+																			value="#{messages['label.tipo.registro']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.nome.campo']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.formato']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.tamanho']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.decimais']}" />
+																	</rich:column>
+																	<rich:column style="text-align:left;">
+																		<h:outputText value="#{messages['label.validades']}" />
+																	</rich:column>
+																</rich:columnGroup>
+															</f:facet>
+
+
+															<f:facet name="footer">
+																<h:outputText value="Registro não encontrado"
+																	rendered="#{registro.atributoTOs.size() == 0}" />
+															</f:facet>
+
+															<rich:columnGroup>
+																<rich:column style="text-align:left;">
+
+																	<h:outputText value="#{atributo.entidadeTO.nmEntidade}" />
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.nmAtributo}"
+																		style="color: red"
+																		rendered="#{!atributo.hasDescricao}" />
+
+																	<h:outputText value="#{atributo.dsAtributo}"
+																		rendered="#{atributo.hasDescricao}" />
+
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.tpFormato}" />
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.nrTamanho}" />
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="#{atributo.precisao}" />
+																</rich:column>
+																<rich:column style="text-align:left;">
+																	<h:outputText value="-" />
+																</rich:column>
+															</rich:columnGroup>
+
+
+														</rich:dataTable></td>
+												</tr>
+											</table>
+										</h:column>
+									</h:dataTable></td>
+							</tr>
+
+
+
+
+
+
+						</table>
+
+						<table width="100%">
+							<tr>
+								<td align="center"><h:commandButton id="expWord"
+										value="#{messages['label.exp.doc']}" type="submit"
+										actionListener="#{relatorioDVSBean.gerarDoc()}"
+										styleClass="inputBtn" /> <h:commandButton rendered="false"
+										id="incluir"
+										actionListener="#{relatorioDVSBean.gerarRelatorio()}"
+										value="#{messages['label.imprimir']}" type="submit"
+										styleClass="inputBtn" /> <a4j:commandButton id="limpar"
+										onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+										value="#{messages['label.abandonar']}" type="submit"
+										action="filtro" reRender="pnlResultado, panelFiltro"
+										styleClass="inputBtn" /></td>
+							</tr>
+						</table>
+					</div>
+				</a4j:outputPanel>
+			</a4j:outputPanel>
+		</ui:define>
+	</ui:composition>
+</f:view>
+</html>

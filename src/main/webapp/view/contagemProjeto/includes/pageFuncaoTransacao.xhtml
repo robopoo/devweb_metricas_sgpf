@@ -1,0 +1,25 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+	<a4j:outputPanel id="pnlFormularioVisaoGeralSolucao">
+		<table border="0" width="100%">
+			<tr>
+				<td><a4j:commandLink id="incluir"
+						action="#{paramBean.funcaoTransacaoController.incluirContagemFuncaoTransacao()}"
+						type="submit"
+						rendered="#{paramBean.operacao == 'INSERCAO' or paramBean.operacao == 'ALTERACAO'}"
+						immediate="true" ajaxSingle="true">
+						<h:graphicImage value="/img/ico_plus.png"
+							styleClass="imgBtnImageText">
+						</h:graphicImage>
+						<h:outputText value="#{messages['label.funcao.transacao.incluir']}" />
+					</a4j:commandLink></td>
+			</tr>
+		</table>
+	</a4j:outputPanel>
+</ui:composition>

@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition
+	template="/templates/template-form-composto-botoes.xhtml">
+	<ui:define name="breadcrumb">
+		<div id="breadcrumb">
+			<ul class="crumbs">
+				<li class="first"><a href="#" style="z-index: 4"> <span></span>#{messages['label.home']}
+				</a></li>
+				<li><a href="#" style="z-index: 3">#{messages['label.contagem.projeto']}</a></li>
+				<li><a href="#" style="z-index: 2">#{messages['label.inclusao']}</a></li>
+				<li><a href="#" style="z-index: 1">#{messages['label.contagem.projeto.funcao.transacao']}</a></li>
+			</ul>
+		</div>
+	</ui:define>
+	<ui:define name="camposFormularioBase">
+		<a4j:outputPanel id="panelFormulario">
+			<div id="conteudo">
+				<h1 class="tituloForm">#{messages['label.contagem']} -
+					#{messages['label.contagem.projeto.funcao.transacao']}</h1>
+				<table border="0">
+					<tr>
+						<td><pdvix:label
+								value="#{messages['label.contagem.incluir.al']}" required="true"
+								for="tipoContagemAL" /></td>
+					</tr>
+					<tr>
+						<td><h:selectOneRadio id="tipoContagemAL"
+								value="#{contagemProjetoBean.funcaoDadosController.tipoContagem}"
+								label="#{messages['label.contagem.incluir.al']}"
+								disabled="#{contagemProjetoBean.operacaoInclusaoFuncao == 'ALTERACAO'}">
+								<f:selectItem
+									itemLabel="#{messages['label.contagem.projeto.novo.da.baseline']}"
+									itemValue="#{tipoContagemEnum[0]}" />
+								<f:selectItem
+									itemLabel="#{messages['label.contagem.projeto.nova.transacao']}"
+									itemValue="#{tipoContagemEnum[1]}" />
+								<s:convertEnum />
+								<a4j:support event="onclick" ajaxSingle="true"
+									reRender="panelFormularioDetalhe,pnlBotoes,listagemAR,listagemTD" />
+							</h:selectOneRadio></td>
+					</tr>
+				</table>
+			</div>
+		</a4j:outputPanel>
+	</ui:define>
+	<ui:define name="camposFormularioDetalhe">
+		<a4j:outputPanel id="panelFormularioDetalhe">
+
+			<a4j:outputPanel id="renderPanelFormularioDetalhe"
+				rendered="#{contagemProjetoBean.funcaoDadosController.tipoContagem != null or contagemProjetoBean.operacaoInclusaoFuncao == 'ALTERACAO'}">
+				<div id="conteudo">
+					<h2 class="itemForm">
+						<h:outputText value="#{messages['label.funcao.dados.transacao']}" />
+					</h2>
+					<rich:separator />
+					<a4j:outputPanel id="pnlDetalhesContagem">
+						<table border="0">
+							<tr>
+								<td>
+									<table border="0" width="70%">
+										<tr>
+											<td><pdvix:label value="#{messages['label.transacao']}"
+													required="true" for="nomeTransacao" /> <h:inputText
+													id="nomeTransacao" label="#{messages['label.transacao']}"
+													value="#{projetoTO.funcadoTrasacaoProjetoTOTransient.nome}"
+													rendered="#{contagemProjetoBean.funcaoDadosController.tipoContagem == 'ARQUIVO_LOGICO'}"
+													size="80">
+													<f:validateLength maximum="80" />
+												</h:inputText> <h:selectOneMenu
+													value="#{contagemProjetoBean.funcaoTransacaoController.tipoDadosFuncaoTransacaoProjetoTOListDataModel}"
+													rendered="#{contagemProjetoBean.funcaoDadosController.tipoContagem == 'BASELINE'}"
+													disabled="#{contagemProjetoBean.operacaoInclusaoFuncao == 'ALTERACAO'}">
+													<s:selectItems
+														value="#{contagemProjetoBean.funcaoTransacaoController.funcaoTransacaoBaseLinePorSistema}"
+														var="c" label="#{c.nome}" styleClass="rich-text-general"
+														noSelectionLabel="#{messages['label.selecione']}" />
+													<s:convertEntity />
+													<a4j:support event="onchange"
+														actionListener="#{contagemProjetoBean.funcaoTransacaoController.actionAlteraTransacao}"
+														reRender="panelSistemaFuncaoDados,tipoArquivoLogico"
+														bypassUpdates="false" ajaxSingle="true" />
+
+												</h:selectOneMenu> <pdvix:label value="#{messages['label.transacao.tipo']}"
+													required="true" for="tipoTransacao" /> <h:selectOneMenu
+													id="tipoTransacao"
+													label="#{messages['label.transacao.tipo']}"
+													value="#{projetoTO.funcadoTrasacaoProjetoTOTransient.funcaoTransacaoTP}"
+													styleClass="selectOneMenu">
+													<s:selectItems value="#{tipoFuncaoTransacaoProjetoEnum}"
+														var="c" label="#{c.descricao}"
+														styleClass="rich-text-general"
+														noSelectionLabel="#{messages['label.selecione']}" />
+													<s:convertEnum />
+													<a4j:support event="onchange"
+														reRender="panelSistemaFuncaoDados" bypassUpdates="false"
+														ajaxSingle="true" />
+												</h:selectOneMenu></td>
+										</tr>
+										<tr>
+											<td><pdvix:label
+													value="#{messages['label.descricao.detalhada']}"
+													required="true" for="descricaoDetalhada" /> <h:inputTextarea
+													id="descricaoDetalhada"
+													value="#{projetoTO.funcadoTrasacaoProjetoTOTransient.descricao}"
+													rows="3" cols="110">
+													<f:validateLength maximum="250" />
+												</h:inputTextarea></td>
+										</tr>
+										<tr>
+											<td><pdvix:label for="elementoContagem"
+													value="#{messages['label.elemento.contagem']}"
+													required="true" /> <h:selectOneMenu id="elementoContagem"
+													label="#{messages['label.elemento.contagem']}"
+													value="#{projetoTO.funcadoTrasacaoProjetoTOTransient.elementoContagemTO}"
+													styleClass="selectOneMenu" style="width:400px">
+													<s:selectItems
+														value="#{contagemProjetoBean.funcaoTransacaoController.elementoContagemTOList}"
+														var="c" label="#{c.descricaoVisual}"
+														styleClass="rich-text-general"
+														noSelectionLabel="#{messages['label.selecione']}" />
+													<s:convertEntity />
+												</h:selectOneMenu></td>
+										</tr>
+										<tr>
+											<td><pdvix:label
+													value="#{messages['label.descricao.da.manutencao']}"
+													required="true" for="descricaoDaManutencao" /> <h:inputTextarea
+													id="descricaoDaManutencao"
+													value="#{projetoTO.funcadoTrasacaoProjetoTOTransient.descricaoManutencao}"
+													rows="3" cols="110">
+													<f:validateLength maximum="500" />
+												</h:inputTextarea></td>
+										</tr>
+									</table>
+								</td>
+								<!--  QUADRO DE INFORMACOES GERAIS -->
+								<td><a4j:outputPanel id="totais">
+										<table
+											style="border: 1px solid #9A9A9A; margin: 0 0 200px 5px; font-size: 16px; font-weight: bold; color: #666666;"
+											width="250px" align="right">
+											<tr>
+												<td><h:outputLabel
+														value="#{messages['label.total.de.ars']}: #{projetoTO.funcadoTrasacaoProjetoTOTransient.qtArquivoReferenciado}" /></td>
+											</tr>
+											<tr>
+												<td><h:outputLabel
+														value="#{messages['label.total.de.tds']}: #{projetoTO.funcadoTrasacaoProjetoTOTransient.qtTipoDados}" /></td>
+											</tr>
+											<tr>
+												<td><h:outputLabel
+														value="#{messages['label.total.de.pf']}: #{projetoTO.funcadoTrasacaoProjetoTOTransient.valorPontoFuncao}" /></td>
+											</tr>
+										</table>
+									</a4j:outputPanel></td>
+							</tr>
+						</table>
+						<table width="100%">
+							<tr>
+								<td>
+									<h2 class="itemForm">
+										<h:outputText
+											value="#{messages['label.arquivo.referenciado']}" />
+									</h2> <rich:separator /> <!-- 	************************************************** PAINEL INICIO ************************************************************* -->
+
+									<a4j:outputPanel id="panelSistemaFuncaoDados">
+										<table border="0" width="100%">
+											<tr>
+												<td><h:outputLabel value="* " style="color: red;" /> <h:outputLabel
+														value="#{messages['msg.requerido.funcao.transacao.ar.td']}" /></td>
+											</tr>
+
+
+											<tr>
+												<td><h:outputLabel styleClass="labelForm"
+														value="#{messages['label.sistema']}" for="sistema"
+														rendered="#{contagemProjetoBean.funcaoTransacaoController.sistemasEmpresaTOList != null}" />
+													<h:selectOneMenu id="sistema"
+														label="#{messages['label.sistema']}"
+														value="#{contagemProjetoBean.sistemaFuncaoDados}"
+														valueChangeListener="#{contagemProjetoBean.funcaoTransacaoController.valueChangedSistemaFuncaoDados}"
+														rendered="#{contagemProjetoBean.funcaoTransacaoController.sistemasEmpresaTOList != null}"
+														styleClass="selectOneMenu" style="width:400px">
+														<s:selectItems
+															value="#{contagemProjetoBean.funcaoTransacaoController.sistemasEmpresaTOList}"
+															var="c" label="#{c.descricaoVisual}"
+															styleClass="rich-text-general"
+															noSelectionLabel="#{messages['label.selecione']}" />
+														<s:convertEntity />
+														<a4j:support event="onchange"
+															reRender="panelSistemaFuncaoDados" bypassUpdates="false"
+															ajaxSingle="true" />
+													</h:selectOneMenu></td>
+
+												<td><h:outputLabel
+														value="#{messages['label.funcao.dados.sem.sistema.aie']}"
+														rendered="#{contagemProjetoBean.funcaoTransacaoController.sistemasEmpresaTOList != null and contagemProjetoBean.funcaoTransacaoController.sistemasEmpresaTOList.size() != 0}"
+														style="text-align:left;" /></td>
+											</tr>
+											<tr>
+												<td>
+												<pdvix:label
+														value="#{messages['label.funcao.dados']}" for="funcDados" />
+
+													<h:selectOneMenu id="funcDados"
+														label="#{messages['label.funcao.dados']}"
+														value="#{contagemProjetoBean.funcaoTransacaoController.funcaoDadoProjetoTO}"
+														disabled="#{contagemProjetoBean.funcaoTransacaoController.funcaoDadosProjetoTOList == null}"
+														styleClass="selectOneMenu" style="width:400px">
+
+														<s:selectItems
+															value="#{contagemProjetoBean.funcaoTransacaoController.funcaoDadosProjetoTOList}"
+															var="c" label="#{c.nome}"
+															styleClass="rich-text-general"
+															noSelectionLabel="#{messages['label.selecione']}" />
+														<s:convertEntity />
+
+														<a4j:support event="onchange"
+															reRender="panelSistemaFuncaoDados" bypassUpdates="false"
+															ajaxSingle="true" />
+
+													</h:selectOneMenu> <a4j:commandLink id="incluir"
+														action="#{contagemProjetoBean.funcaoTransacaoController.incluirArquivoLogico()}"
+														type="submit" immediate="true" ajaxSingle="true"
+														reRender="panelTRs,panelTDs,totais,entidade"
+														rendered="true">
+														<h:graphicImage value="/img/ico_plus.png"
+															styleClass="imgBtnImageText">
+														</h:graphicImage>
+														<h:outputText
+															value="#{messages['label.incluir.arquivo.logico']}" />
+													</a4j:commandLink></td>
+											</tr>
+										</table>
+									</a4j:outputPanel> <!-- *********************************************************** PAINEL FIM ************************************************************* -->
+
+
+									<rich:spacer height="30px" /> <a4j:outputPanel id="panelTRs">
+										<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3"
+											cellspacing="1" border="0" width="100%" id="listagemAR"
+											rows="10" var="registro"
+											value="#{tipoRegistroProjetoTOListDataModel}">
+											<f:facet name="header">
+												<rich:columnGroup>
+													<rich:column style="text-align:center;" width="2%" />
+													<rich:column style="text-align:left;">
+														<h:outputText value="#{messages['label.sistema']}" />
+													</rich:column>
+													<rich:column style="text-align:left;">
+														<h:outputText value="#{messages['label.entidade']}" />
+													</rich:column>
+													<rich:column style="text-align:left;">
+														<h:outputText value="#{messages['label.descricao']}" />
+													</rich:column>
+													<rich:column style="text-align:left;">
+														<h:outputText
+															value="#{messages['label.entidade.quantidade.td']}" />
+													</rich:column>
+													<rich:column style="text-align:right;">
+														<h:outputText
+															value="#{messages['label.entidade.subgrupo.de.dados.interrogacao']}" />
+													</rich:column>
+												</rich:columnGroup>
+											</f:facet>
+											<rich:columnGroup>
+												<rich:column style="text-align:right;">
+													<a4j:commandLink title="#{messages['label.excluir']}"
+														actionListener="#{contagemProjetoBean.funcaoDadosController.excluirTipoRegistro()}"
+														reRender="panelTRs,totais,panelTDs"
+														onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+														<h:graphicImage value="/img/ico_del.png"
+															styleClass="acoes" />
+													</a4j:commandLink>
+												</rich:column>
+												<rich:column style="text-align:left;">
+													<h:outputText
+														value="#{registro.entidadeTO.sistemaTO.descricaoVisual}" />
+												</rich:column>
+												<rich:column style="text-align:left;">
+													<h:outputText
+														value="#{registro.entidadeTO.descricaoVisual}" />
+												</rich:column>
+												<rich:column style="text-align:left;">
+													<h:outputText value="#{registro.entidadeTO.dsEntidade}" />
+												</rich:column>
+												<rich:column style="text-align:right;">
+													<h:outputText value="#{registro.entidadeTO.qtTd}" />
+												</rich:column>
+												<rich:column>
+													<h:selectBooleanCheckbox value="#{registro.subgrupoDados}"
+														disabled="false" styleClass="rich-input" type="input">
+														<a4j:support event="onchange" reRender="totais"
+															ajaxSingle="true"
+															action="#{contagemProjetoBean.funcaoDadosController.atualizarTotalTRs()}" />
+													</h:selectBooleanCheckbox>
+												</rich:column>
+											</rich:columnGroup>
+										</rich:dataTable>
+										<ui:include src="/templates/paginacao.xhtml">
+											<ui:param name="lista"
+												value="#{tipoRegistroProjetoTOListDataModel}" />
+											<ui:param name="id" value="listagemAR" />
+										</ui:include>
+									</a4j:outputPanel>
+								</td>
+							</tr>
+						</table>
+						<rich:spacer height="10px" />
+
+
+						<a4j:outputPanel id="panelTDs">
+							<h2 class="itemForm">
+								<h:outputText value="#{messages['label.tipo.dado']}" />
+							</h2>
+							<rich:separator />
+
+
+							<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3"
+								cellspacing="1" border="0" width="100%" id="listagemTD"
+								rows="10" var="registro"
+								value="#{tipoDadosFuncaoTransacaoProjetoTOListDataModel}">
+								<f:facet name="header">
+									<rich:columnGroup>
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.sistema']}" />
+										</rich:column>
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.entidade']}" />
+										</rich:column>
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.entidade.descricao']}" />
+										</rich:column>
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.atributo']}" />
+										</rich:column>
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.atributo.descricao']}" />
+										</rich:column>
+										<rich:column style="text-align:right;">
+											<h:panelGrid columns="2">
+												<h:outputText
+													value="#{messages['label.atributo.referencia.para.aplicacao.interrogacao']}" />
+												<h:selectBooleanCheckbox title="Selecionar todos">
+													<a4j:support event="onclick" reRender="listagemTD,totais"
+														actionListener="#{contagemProjetoBean.funcaoTransacaoController.selecionarTodosTipoDados}"></a4j:support>
+												</h:selectBooleanCheckbox>
+											</h:panelGrid>
+										</rich:column>
+									</rich:columnGroup>
+								</f:facet>
+								<rich:columnGroup>
+									<rich:column style="text-align:left;">
+										<h:outputText
+											value="#{registro.tipoRegistroFuncaoDadosProjetoTO.entidadeTO.sistemaTO.descricaoVisual}" />
+									</rich:column>
+									<rich:column style="text-align:left;">
+										<h:outputText
+											value="#{registro.tipoRegistroFuncaoDadosProjetoTO.entidadeTO.descricaoVisual}" />
+									</rich:column>
+									<rich:column style="text-align:left;">
+										<h:outputText
+											value="#{registro.tipoRegistroFuncaoDadosProjetoTO.entidadeTO.dsEntidade}" />
+									</rich:column>
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.atributoTO.nmAtributo}" />
+									</rich:column>
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.atributoTO.dsAtributo}" />
+									</rich:column>
+									<rich:column>
+										<h:selectBooleanCheckbox
+											value="#{registro.referenciaAplicacao}" disabled="false"
+											styleClass="rich-input" type="input">
+											<a4j:support event="onclick" reRender="totais"
+												ajaxSingle="true"
+												action="#{contagemProjetoBean.funcaoDadosController.atualizarTotalTDs()}" />
+										</h:selectBooleanCheckbox>
+									</rich:column>
+								</rich:columnGroup>
+							</rich:dataTable>
+							<ui:include src="/templates/paginacao.xhtml">
+								<ui:param name="lista"
+									value="#{tipoDadosFuncaoTransacaoProjetoTOListDataModel}" />
+								<ui:param name="id" value="listagemTD" />
+							</ui:include>
+						</a4j:outputPanel>
+					</a4j:outputPanel>
+				</div>
+			</a4j:outputPanel>
+		</a4j:outputPanel>
+	</ui:define>
+	<ui:define name="botoesAcao">
+		<a4j:outputPanel id="pnlBotoes">
+			<table border="0" width="100%">
+				<tr>
+					<td align="center"><a4j:commandButton id="salvar"
+							value="#{messages['label.salvar']}" type="submit"
+							action="#{contagemProjetoBean.salvarFuncaoTransacao()}"
+							styleClass="inputBtn" status="indicator"
+							rendered="#{(contagemProjetoBean.funcaoTransacaoController.tipoContagem != null and contagemProjetoBean.operacao eq 'INSERCAO') or contagemProjetoBean.operacao eq 'ALTERACAO'}"
+							onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;" />
+						<a4j:commandButton id="abandonar"
+							value="#{messages['label.abandonar']}" type="submit"
+							action="#{contagemProjetoBean.cancelar()}" styleClass="inputBtn"
+							status="indicator" immediate="true"
+							onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;" />
+					</td>
+				</tr>
+			</table>
+		</a4j:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

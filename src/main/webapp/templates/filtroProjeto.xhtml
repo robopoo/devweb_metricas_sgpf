@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt" lang="pt"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:pdvix="http://pdvix.com/facelets">
+
+<body>
+	<f:view contentType="text/html" locale="pt_BR">
+		<ui:composition>
+			<table border="0">
+				<tr>
+					<td>
+						<table border="0" width="70%">
+							<tr>
+								<td><pdvix:label value="#{messages['label.empresa']}"
+										required="true" for="empresa" /> <h:selectOneMenu
+										required="true" id="empresa"
+										value="#{funcaoProjetoFiltroBean.empresaFiltro}"
+										styleClass="selectOneMenu"
+										label="#{messages['label.empresa']}" style="width:400px">
+										<a4j:support event="onchange" reRender="contrato, sistema"
+											bypassUpdates="false" ajaxSingle="true" />
+										<s:selectItems value="#{factoryEmpresasAtiva}" var="c"
+											label="#{c.nmEmpresa}" styleClass="rich-text-general"
+											noSelectionLabel="#{messages['label.selecione']}" />
+										<s:convertEntity />
+									</h:selectOneMenu></td>
+								<td><pdvix:label value="#{messages['label.contrato']}"
+										required="true" for="contrato" /> <h:selectOneMenu
+										id="contrato"
+										value="#{funcaoProjetoFiltroBean.filtroContrato}"
+										styleClass="selectOneMenu" required="true"
+										label="#{messages['label.contrato']}" style="width:400px"
+										disabled="#{funcaoProjetoFiltroBean.empresaFiltro == null}">
+
+										<a4j:support event="onchange" reRender="projeto"
+											bypassUpdates="false" ajaxSingle="true"
+											actionListener="#{funcaoProjetoFiltroBean.carregarProjetos()}" />
+
+										<s:selectItems
+											value="#{funcaoProjetoFiltroBean.empresaFiltro.contratosAtivos}"
+											var="c" label="#{c.codigoContrato}"
+											styleClass="rich-text-general"
+											noSelectionLabel="#{messages['label.selecione']}" />
+										<s:convertEntity />
+									</h:selectOneMenu></td>
+							</tr>
+						</table>
+						<table border="0">
+							<tr>
+								<td><pdvix:label value="#{messages['label.sistema']}"
+										required="true" for="sistema" /> <h:selectOneMenu
+										id="sistema" value="#{funcaoProjetoFiltroBean.filtroSistema}"
+										styleClass="selectOneMenu" required="true"
+										label="#{messages['label.sistema']}" style="width:400px"
+										disabled="#{funcaoProjetoFiltroBean.empresaFiltro == null}">
+
+										<a4j:support event="onchange" reRender="projeto"
+											bypassUpdates="false" ajaxSingle="true"
+											actionListener="#{funcaoProjetoFiltroBean.carregarProjetos()}" />
+										<s:selectItems
+											value="#{funcaoProjetoFiltroBean.empresaFiltro.sistemaTOlist}"
+											var="c" label="#{c.cdSistema} - #{c.dsSistema}"
+											styleClass="rich-text-general"
+											noSelectionLabel="#{messages['label.selecione']}" />
+										<s:convertEntity />
+									</h:selectOneMenu></td>
+								<td id="tdProjeto"><pdvix:label value="#{messages['label.projeto']}"
+										required="#{requiredProjeto == null ? true : requiredProjeto}" for="projeto" /> <h:selectOneMenu
+										id="projeto"
+										value="#{funcaoProjetoFiltroBean.projetoSelecionado}"
+										styleClass="selectOneMenu" required="#{requiredProjeto == null ? true : requiredProjeto}"
+										label="#{messages['label.projeto']}"
+										disabled="#{funcaoProjetoFiltroBean.filtroSistema == null or funcaoProjetoFiltroBean.filtroContrato == null}">
+										<a4j:support event="onchange" reRender="subprojeto"
+											bypassUpdates="false" ajaxSingle="true"
+											actionListener="#{funcaoProjetoFiltroBean.carregarSubProjetos()}" />
+										<s:selectItems
+											value="#{funcaoProjetoFiltroBean.selecaoProjetos}" var="p"
+											label="#{p}" styleClass="rich-text-general"
+											noSelectionLabel="#{messages['label.selecione']}">
+										</s:selectItems>
+									</h:selectOneMenu></td>
+								<td id="tdSubprojeto"><pdvix:label value="#{messages['label.subprojeto']}"
+										required="#{requiredSubprojeto == null ? true : requiredSubprojeto}" for="subprojeto" /> <h:selectOneMenu
+										id="subprojeto"
+										value="#{funcaoProjetoFiltroBean.projetoFiltro}"
+										styleClass="selectOneMenu" required="#{requiredSubprojeto == null ? true : requiredSubprojeto}"
+										label="#{messages['label.subprojeto']}"
+										disabled="#{funcaoProjetoFiltroBean.projetoSelecionado == null}">
+										<s:selectItems
+											value="#{funcaoProjetoFiltroBean.projetosFiltrados}" var="p"
+											label="#{p.subProjeto}" styleClass="rich-text-general"
+											noSelectionLabel="#{messages['label.selecione']}">
+										</s:selectItems>
+										<s:convertEntity />
+									</h:selectOneMenu></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</ui:composition>
+
+	</f:view>
+</body>
+</html>

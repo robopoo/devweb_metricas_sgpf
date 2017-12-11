@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:pdvix="http://pdvix.com/facelets">
+
+<ui:composition template="/templates/template-form.xhtml">
+
+	<ui:define name="script">
+		<script type="text/javascript">
+			function aplicaMascara() {
+				mascaraFormulario('formulario', 'versao', 'PORCENTAGEM');		
+				mascaraFormulario('formulario', 'fator', 'PORCENTAGEM');		
+						
+			}			
+		</script>
+		<a4j:outputPanel id="pnlJS" ajaxRendered="true">
+			<script type="text/javascript">
+				aplicaMascara();
+			</script>
+		</a4j:outputPanel>
+	</ui:define>
+
+
+	<ui:define name="breadcrumb">
+		<div id="breadcrumb">
+			<ul class="crumbs">
+				<li class="first"><a href="#" style="z-index: 3"> <span></span>#{messages['label.home']}
+				</a></li>
+				<li><a href="#" style="z-index: 2">#{messages['label.fator.equivalencia']}</a></li>
+				<li><a href="#" style="z-index: 1"> <h:outputText
+							value="#{messages['label.visualizacao']}"
+							rendered="#{fatorEquivalenciaBean.operacao == 'VISUALIZACAO'}" />
+						<h:outputText value="#{messages['label.inclusao']}"
+							rendered="#{fatorEquivalenciaBean.operacao == 'INSERCAO'}" /> <h:outputText
+							value="#{messages['label.alteracao']}"
+							rendered="#{fatorEquivalenciaBean.operacao == 'ALTERACAO'}" />
+				</a></li>
+			</ul>
+		</div>
+	</ui:define>
+
+
+	<ui:define name="camposFormularioBase">
+		<a4j:outputPanel id="panelFormulario">
+			<div id="conteudo">
+				<h1 class="tituloForm">
+					<h:outputText
+						value="#{messages['label.visualizar.fator.equivalencia']}"
+						rendered="#{fatorEquivalenciaBean.operacao == 'VISUALIZACAO'}" />
+					<h:outputText
+						value="#{messages['label.incluir.fator.equivalencia']}"
+						rendered="#{fatorEquivalenciaBean.operacao == 'INSERCAO'}" />
+					<h:outputText
+						value="#{messages['label.alterar.fator.equivalencia']}"
+						rendered="#{fatorEquivalenciaBean.operacao == 'ALTERACAO'}" />
+				</h1>
+
+				<h1 class="itemForm">#{messages['label.versao.Planilha']}</h1>
+				<table style="width: 100%">
+					<tr>
+						<td width="60%">
+							<table id="tbCmb">
+								<tr>
+									<td><pdvix:label for="empresas"
+											value="#{messages['label.empresa']}"
+											rendered="#{fatorEquivalenciaBean.operacao != 'INSERCAO' and fatorEquivalenciaBean.operacao != 'ALTERACAO'}" />
+										<h:selectOneMenu id="empresas" value="#{filtroEmpresa}"
+											disabled="true"
+											rendered="#{fatorEquivalenciaBean.operacao != 'INSERCAO' and fatorEquivalenciaBean.operacao != 'ALTERACAO'}"
+											required="false" styleClass="selectOneMenu"
+											label="#{messages['label.empresa']}">
+
+											<s:selectItems value="#{factoryEmpresas}" var="f"
+												label="#{f.nmEmpresa}" styleClass="rich-text-general"
+												noSelectionLabel="#{messages['label.selecione']}" />
+
+											<s:convertEntity />
+
+										</h:selectOneMenu> <pdvix:label for="empresasAtivas"
+											value="#{messages['label.empresa']}"
+											rendered="#{fatorEquivalenciaBean.operacao == 'INSERCAO' or fatorEquivalenciaBean.operacao == 'ALTERACAO'}"
+											required="true" /> <h:selectOneMenu id="empresasAtivas"
+											value="#{filtroEmpresa}"
+											valueChangeListener="#{fatorEquivalenciaBean.valueChangedEmpresa}"
+											disabled="#{fatorEquivalenciaBean.operacao != 'INSERCAO' }"
+											rendered="#{fatorEquivalenciaBean.operacao == 'INSERCAO' or fatorEquivalenciaBean.operacao == 'ALTERACAO'}"
+											styleClass="selectOneMenu"
+											label="#{messages['label.empresa']}">
+
+											<a4j:support event="onchange" reRender="contratos"
+												bypassUpdates="false" ajaxSingle="true" />
+
+
+											<s:selectItems value="#{factoryEmpresasAtiva}" var="f"
+												label="#{f.nmEmpresa}" styleClass="rich-text-general"
+												noSelectionLabel="#{messages['label.selecione']}" />
+											<s:convertEntity />
+										</h:selectOneMenu></td>
+								</tr>
+
+								<tr>
+									<td><pdvix:label for="contratos"
+											value="#{messages['label.contrato']}"
+											required="#{fatorEquivalenciaBean.operacao == 'INSERCAO' or fatorEquivalenciaBean.operacao == 'ALTERACAO'}" />
+										<h:selectOneMenu id="contratos"
+											value="#{fatorEquivalenciaTO.contratoTO}"
+											valueChangeListener="#{fatorEquivalenciaBean.valueChangedContrato}"
+											disabled="#{fatorEquivalenciaBean.operacao != 'INSERCAO'}"
+											styleClass="selectOneMenu" required="true"
+											label="#{messages['label.contrato']}">
+
+											<a4j:support event="onchange" bypassUpdates="false"
+												ajaxSingle="true" />
+
+											<s:selectItems
+												value="#{fatorEquivalenciaBean.contratosTOlist}" var="c"
+												label="#{c.impressaoContrato()}"
+												styleClass="rich-text-general"
+												noSelectionLabel="#{messages['label.selecione']}" />
+
+											<s:convertEntity />
+
+										</h:selectOneMenu></td>
+
+								</tr>
+							</table>
+						</td>
+
+						<td style="padding-left: 20%; padding-right: 5%;"><s:div
+								rendered="#{fatorEquivalenciaBean.operacao != 'INSERCAO'}">
+								<table
+									style="width: 200px; float: left; display: block; borde: 2px solid gray;"
+									styleclass="rich-table" border="0" cellpadding="0"
+									cellspacing="0">
+									<thead styleclass="rich-table-thead">
+										<!-- 										<colgroup span="2"></colgroup> -->
+										<tr class="rich-table-header">
+											<th colspan="2" class="rich-table-headercell "><h:outputText
+													value="#{messages['label.data.vigencia']}"
+													styleClass="labelForm" /></th>
+										</tr>
+									</thead>
+									<tr class="rich-table-firstrow row-odd">
+										<td class="rich-table-cell "><h:outputText
+												value="#{messages['label.data.inicial']}:"
+												styleClass="labelForm" /></td>
+										<td class="rich-table-cell "><h:outputText id="dtInicio"
+												value="#{fatorEquivalenciaTO.dtVigenciaInicio}"
+												label="#{messages['label.data.inicial']}"
+												styleClass="inputText">
+												<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+											</h:outputText></td>
+									</tr>
+									<tr class="rich-tablerow row-even">
+										<td class="rich-table-cell "><h:outputText
+												value="#{messages['label.data.final']}:"
+												styleClass="labelForm" /></td>
+										<td class="rich-table-cell "><h:outputText id="dtFim"
+												value="#{fatorEquivalenciaTO.dtVigenciaFim}"
+												label="#{messages['label.data.final']}"
+												styleClass="inputText">
+												<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+											</h:outputText></td>
+									</tr>
+								</table>
+							</s:div></td>
+					</tr>
+					<tr>
+						<td colspan="2"><pdvix:label for="versao"
+								value="#{messages['label.versao.Planilha']}" required="true"
+								rendered="#{fatorEquivalenciaBean.operacao == 'INSERCAO' or fatorEquivalenciaBean.operacao == 'ALTERACAO'}" />
+							<h:outputLabel for="versao"
+								value="#{messages['label.versao.Planilha']}"
+								styleClass="labelForm"
+								rendered="#{fatorEquivalenciaBean.operacao != 'INSERCAO' and fatorEquivalenciaBean.operacao != 'ALTERACAO'}" />
+
+							<h:inputText id="versao"
+								value="#{fatorEquivalenciaTO.versaoFatorEquivalencia}"
+								label="#{messages['label.versao.Planilha']}" size="10"
+								styleClass="inputText" maxlength="5" required="true"
+								disabled="#{fatorEquivalenciaBean.operacao != 'INSERCAO' }">
+
+								<f:converter converterId="decimalConverter" />
+
+							</h:inputText></td>
+
+					</tr>
+
+
+
+				</table>
+
+
+
+
+				<div id="subconteudo"
+					rendered="#{fatorEquivalenciaBean.operacao == 'INSERCAO' or fatorEquivalenciaBean.operacao == 'ALTERACAO'}">
+
+					<h1 class="itemForm">#{messages['label.elemento.contagem']}</h1>
+					<a4j:outputPanel id="panelCamposElemento"
+						rendered="#{fatorEquivalenciaBean.operacao == 'INSERCAO' or fatorEquivalenciaBean.operacao == 'ALTERACAO'}">
+						<table>
+							<tr>
+								<td><pdvix:label for="codigoElemento"
+										value="#{messages['label.codigo']}" required="true" /> <h:inputText
+										id="codigoElemento"
+										value="#{elementoContagemTO.codElementoContagem}"
+										label="#{messages['label.contrato.codigo']}" size="10"
+										maxlength="8" styleClass="inputText" /></td>
+
+
+								<td><pdvix:label for="tipoElemento"
+										value="#{messages['label.tipo.elemento']}" required="true" />
+
+
+									<h:selectOneMenu id="tipoElemento"
+										value="#{elementoContagemTO.tpElementoContagem}"
+										valueChangeListener="#{fatorEquivalenciaBean.valueChangedFator}"
+										styleClass="selectOneMenu" label="#{messages['label.status']}">
+										<s:selectItems value="#{tipoElementoContagemEnum}" var="t"
+											label="#{t.descricao}" styleClass="rich-text-general"
+											noSelectionLabel="#{messages['label.selecione']}" />
+										<s:convertEnum />
+
+										<a4j:support event="onchange" reRender="pnlAjuda, lblAjuda"
+											bypassUpdates="false" ajaxSingle="true" />
+
+
+									</h:selectOneMenu> <a onclick="Richfaces.showModalPanel('pnlAjuda');"
+									title="#{messages['label.ajuda']}"> <h:graphicImage
+											value="/img/help16.png" styleClass="acoes"
+											style="cursor:help" />
+								</a> <a4j:form>
+
+										<rich:modalPanel id="pnlAjuda" styleClass="popupContainer"
+											height="100" width="850"
+											onmaskclick="Richfaces.hideModalPanel('pnlAjuda');">
+
+											<h:outputText id="lblAjuda"
+												value="#{fatorEquivalenciaBean.ajudaTipoFatorEquivalencia}"
+												style="font-family: verdana, tahoma; font-weight: bold; font-size:16px; font-color: black;"
+												styleClass="popupControls" />
+
+										</rich:modalPanel>
+
+									</a4j:form></td>
+
+							</tr>
+
+							<tr>
+								<td colspan="2"><pdvix:label for="descricaoResumida"
+										value="#{messages['label.descricao.resumida']}"
+										required="true" /> <h:inputText id="descricaoResumida"
+										value="#{elementoContagemTO.descResumida}"
+										label="#{messages['label.descricao.resumida']}" size="100"
+										maxlength="80" styleClass="inputText" /></td>
+
+							</tr>
+
+							<tr>
+								<td colspan="2"><pdvix:label for="descDetalhado"
+										value="#{messages['label.descricao.detalhada']}"
+										required="true" /> <h:inputTextarea id="descDetalhado"
+										value="#{elementoContagemTO.descDetalhada}"
+										label="#{messages['label.descricao']}" cols="80" rows="5"
+										styleClass="inputText">
+										<f:validateLength maximum="4000" />
+									</h:inputTextarea></td>
+							</tr>
+
+							<tr>
+								<td><pdvix:label for="fator"
+										value="#{messages['label.fator.equivalencia']}"
+										required="true"
+										rendered="#{fatorEquivalenciaBean.operacao == 'INSERCAO' or fatorEquivalenciaBean.operacao == 'ALTERACAO'}" />
+
+									<h:inputText id="fator"
+										value="#{elementoContagemTO.vlrFatorEquivalencia}"
+										label="#{messages['label.fator.equivalencia']}" size="10"
+										styleClass="inputText" maxlength="5"
+										disabled="#{fatorEquivalenciaBean.operacao != 'INSERCAO' and fatorEquivalenciaBean.operacao != 'ALTERACAO'}">
+										<f:converter converterId="decimalConverter" />
+									</h:inputText></td>
+
+								<td><pdvix:label for="itemMensuravel"
+										value="#{messages['label.item.mensuravel']}" required="true" />
+
+									<h:selectOneMenu id="itemMensuravel"
+										value="#{elementoContagemTO.indItemMensuravel}"
+										styleClass="selectOneMenu"
+										label="#{messages['label.item.mensuravel']}"
+										disabled="#{fatorEquivalenciaBean.operacao != 'INSERCAO' and fatorEquivalenciaBean.operacao != 'ALTERACAO'}"
+										required="false">
+
+										<s:selectItems value="#{tipoItemMensuraveisEnum}" var="t"
+											label="#{t.descricao}" styleClass="rich-text-general"
+											noSelectionLabel="#{messages['label.selecione']}" />
+										<s:convertEnum />
+									</h:selectOneMenu></td>
+							</tr>
+
+
+						</table>
+
+
+					</a4j:outputPanel>
+					<table width="100%">
+						<tr>
+							<td align="center"><a4j:commandButton id="incluir"
+									rendered="#{fatorEquivalenciaBean.operacao == 'INSERCAO' or fatorEquivalenciaBean.operacao == 'ALTERACAO'}"
+									value="#{messages['label.incluir.elemento.contagem']}"
+									type="submit" ajaxSingle="true" process="panelCamposElemento"
+									reRender="panelCamposElemento, pnlResultadoElemento"
+									actionListener="#{fatorEquivalenciaBean.addElemento()}"
+									styleClass="inputBtn" /></td>
+						</tr>
+					</table>
+				</div>
+
+				<a4j:outputPanel id="pnlResultadoElemento">
+					<a4j:outputPanel id="renderResultadoElemento">
+						<div id="conteudoElemento">
+
+							<h:outputText
+								value="#{messages['msg.nenhum.registro.encontrado']}"
+								rendered="#{elementoContagemTOList.rowCount == 0}" />
+
+							<rich:dataTable rowClasses="row-odd, row-even" cellpadding="3"
+								cellspacing="1" border="0" width="100%" id="listagemElemento"
+								rows="10" var="registro" value="#{elementoContagemTOList}"
+								rendered="#{elementoContagemTOList.rowCount > 0}">
+								<f:facet name="header">
+									<rich:columnGroup>
+
+										<rich:column style="text-align:center;" width="10%"
+											rendered="#{fatorEquivalenciaBean.operacao == 'INSERCAO' or fatorEquivalenciaBean.operacao == 'ALTERACAO'}">
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.codigo']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.descricao']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.tipo.elemento']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.fator.equivalencia']}" />
+										</rich:column>
+
+										<rich:column style="text-align:left;">
+											<h:outputText value="#{messages['label.item.mensuravel']}" />
+										</rich:column>
+
+
+									</rich:columnGroup>
+								</f:facet>
+
+								<rich:columnGroup>
+
+									<rich:column style="text-align:center;"
+										rendered="#{fatorEquivalenciaBean.operacao == 'INSERCAO' or fatorEquivalenciaBean.operacao == 'ALTERACAO'}">
+
+										<a4j:commandLink title="#{messages['label.alterar']}"
+											rendered="#{fatorEquivalenciaBean.operacao == 'INSERCAO' or fatorEquivalenciaBean.operacao == 'ALTERACAO'}"
+											actionListener="#{fatorEquivalenciaBean.editarElemento()}"
+											reRender="panelCamposElemento"
+											onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+											<h:graphicImage value="/img/ico_edit.png" styleClass="acoes" />
+										</a4j:commandLink>
+
+										<a4j:commandLink title="#{messages['label.excluir']}"
+											actionListener="#{fatorEquivalenciaBean.removerElemento()}"
+											reRender="pnlResultadoElemento"
+											rendered="#{fatorEquivalenciaBean.operacao == 'INSERCAO' or fatorEquivalenciaBean.operacao == 'ALTERACAO'}"
+											onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;">
+											<h:graphicImage value="/img/ico_del.png" styleClass="acoes" />
+										</a4j:commandLink>
+
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.codElementoContagem}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.descResumida}" />
+									</rich:column>
+
+
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.tpElementoContagem.descricao}" />
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.vlrFatorEquivalencia}">
+											<f:converter converterId="decimalConverter" />
+										</h:outputText>
+									</rich:column>
+
+									<rich:column style="text-align:left;">
+										<h:outputText value="#{registro.indItemMensuravel.descricao}" />
+									</rich:column>
+
+								</rich:columnGroup>
+							</rich:dataTable>
+
+							<ui:include src="/templates/paginacao.xhtml">
+								<ui:param name="lista" value="#{elementoContagemTOList}" />
+								<ui:param name="id" value="listagemElemento" />
+							</ui:include>
+						</div>
+					</a4j:outputPanel>
+				</a4j:outputPanel>
+
+				<table width="100%">
+					<tr>
+						<td align="center"><a4j:commandButton id="salvar"
+								value="#{messages['label.salvar']}" type="submit"
+								action="#{fatorEquivalenciaBean.gravar()}" styleClass="inputBtn"
+								reRender="panelFormulario" status="indicator"
+								onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+								rendered="#{fatorEquivalenciaBean.operacao == 'INSERCAO' or fatorEquivalenciaBean.operacao == 'ALTERACAO'}" />
+							<a4j:commandButton id="abandonar"
+								value="#{messages['label.abandonar']}" type="submit"
+								action="#{fatorEquivalenciaBean.cancelar()}"
+								styleClass="inputBtn" reRender="panelFormulario"
+								status="indicator"
+								onclick="if (!confirma('#{messages['mensagem.confirmacao.operacao']}',this)) return false;"
+								immediate="true" /></td>
+					</tr>
+				</table>
+
+			</div>
+		</a4j:outputPanel>
+	</ui:define>
+
+</ui:composition>
+</html>

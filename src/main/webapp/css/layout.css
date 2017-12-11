@@ -1,0 +1,103 @@
+@CHARSET "ISO-8859-1";
+
+BODY {
+	margin: 0px;
+	font-family: verdana, tahoma;
+    font-size: 11px;
+}
+
+#main {
+	position: absolute;
+	width: 100%;
+	height: auto;
+	min-height: 100%;
+    background-color: #F9F9F9;
+}
+
+#menu {
+    width: 100%;
+    margin: 0 auto;
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-image: -moz-linear-gradient(center top , #FFFFFF, #DEDEDE);
+    background: -webkit-gradient(linear, center top, center bottom, from(#FFFFFF), to(#DEDEDE));
+    background-color: #DEDEDE;
+    border-top: 1px solid #CFCFCF;
+    border-bottom: 1px solid #CFCFCF;
+    color: #333333;
+}
+
+
+#topo {
+    background-color: #F6F4F0;
+    background-image: url('../img/cbg.png');
+    border-image-repeat: repeat;
+    width: 100%;
+    height: 120px;
+}
+
+#topo #bemVindo {
+    background-color: #000000;
+    color: #FFFFFF;
+    padding-top: 10px;
+    height: 20px;
+    width: 100%;
+}
+
+#topo #logo {
+    padding-top: 10px;
+    margin-left: 10px;   
+}
+
+/* Abas */
+#abas {
+	width: 92%;
+	margin: 0 auto;
+	margin-top: 15px;
+	margin-bottom: 55px;
+} 
+
+
+#conteudo {
+    width: 87%;
+    border: 1px solid #9A9A9A;
+    border-radius: 5px;
+    margin: 0 auto;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    box-shadow: 0 8px 9px rgba(0, 0, 0, 0.14), 0 0 0 0 rgba(0, 0, 0, 0.07);
+    background-color: #FFFFFF;
+    padding-bottom: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+#rodape {
+    background-color: #CCCCCC;
+    bottom: 0 !important;
+    color: #666666;
+    font-size: 11px;
+    height: 24px;
+    left: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    border-top: 1px dashed #BBBBBB;
+}
+
+.conteudoMiniCrud {
+	width: 87%;
+    border: 1px solid #9A9A9A;
+    border-radius: 5px;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 9px rgba(0, 0, 0, 0.14), 0 0 0 0 rgba(0, 0, 0, 0.07);
+    background-color: #FFFFFF;
+    padding-bottom: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
